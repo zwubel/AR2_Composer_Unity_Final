@@ -61,6 +61,7 @@ public class setupScene : MonoBehaviour{
             Debug.LogError("No calibration has been selected, but no valid text file has been read.");
             SceneManager.UnloadSceneAsync(SceneManager.GetSceneByName("CalibrateOrNot"));
             SceneManager.LoadScene("SelectCalibrationTarget", LoadSceneMode.Additive);
+
         }
         else{
             Vector3 lowerLeft = new Vector3();
