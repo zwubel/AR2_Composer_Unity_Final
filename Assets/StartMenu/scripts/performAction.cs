@@ -8,13 +8,13 @@ public class performAction : MonoBehaviour {
 
     public void setState(int state){
         FindObjectOfType<setupScene>().setState(state);
-    }
-
-    public void setSliderValue(){
-        FindObjectOfType<setupScene>().setScale((int)scaleSlider.value);
-    }
+    }    
 
     public void noCalibration(){
         FindObjectOfType<setupScene>().noCalibration();
+    }
+
+    public void setGlobalBuildingScale(){        
+        FindObjectOfType<setupScene>().setGlobalBuildingScale(1f/scaleSlider.value);
     }
 }

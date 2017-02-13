@@ -24,9 +24,10 @@ public class setupScene : MonoBehaviour{
     [Header("Scene Settings")]
     // Maximum number of markers that can be displayed (virtual markers)
     private int markersToRender;
+    public float globalBuildingScale;
 
     // Global scale of each marker to fit size of virtual to real markers
-    public float markerScale = 0.05f;    
+    //public float markerScale = 0.05f;
     public float planeHeightOffset = -0.023f;
     public float markerHeightOffset = -0.023f;
 
@@ -49,9 +50,13 @@ public class setupScene : MonoBehaviour{
         Debug.Log("[STATE LOOP] State changed to: " + Enum.GetName(typeof(state), state));
     }
 
-    // Is called by the menu that lets the user set the scale
-    public void setScale(int scale){
-        markerScale = 10 / (float)scale;
+    public float getGlobalBuildingScale(){
+        return globalBuildingScale;
+    }
+
+    public void setGlobalBuildingScale(float value){
+        globalBuildingScale = value * 200; // Value mapped to 1:200 being the
+                                          // "original" size of the markers        
     }
 
     public void noCalibration(){
@@ -122,18 +127,20 @@ public class setupScene : MonoBehaviour{
         // Create parent object (plane and cubes are attached to this)
         parent = new GameObject();
         parent.transform.name = "TableObject";
+        createMarkers();
+    }
 
-        // Create markers (cubes)
+    // Create markers (cubes)
+    private void createMarkers(){        
         GameObject MarkerMaster = GameObject.Find("MarkerMaster");
-        for (int i = 0; i < markersToRender; i++) {
+        for (int i = 1; i < markersToRender; i++)
+        {
             markerCubes[i] = Instantiate(MarkerMaster);
             markerCubes[i].transform.SetParent(parent.transform);
             markerCubes[i].SetActive(false);
             markerCubes[i].transform.name = "Marker" + i;
-           // markerCubes[i].transform.FindChild("Pivot").transform.FindChild("Cube").GetComponent<Renderer>().material.color = new Color(0, 255, 0);
-            markerCubes[i].transform.localScale = new Vector3(markerScale, markerScale, markerScale);
         }
-        MarkerMaster.SetActive(false);        
+        MarkerMaster.SetActive(false);
     }
 
     // Set whether the marker array has been filled
@@ -165,9 +172,7 @@ public class setupScene : MonoBehaviour{
             // Pull markers for current frame from readInNetworkData script
             networkMarkers = networkData.getMarkers();
 
-            Debug.Log("networkMarkers.Length: " + networkMarkers.Length);
-
-            for (int i = 0; i < networkMarkers.Length; i++){
+            for (int i = 1; i < networkMarkers.Length; i++){
                 Marker cur = networkMarkers[i];
                 if (cur == null) // Not necessary any more, but can't hurt
                     continue;
