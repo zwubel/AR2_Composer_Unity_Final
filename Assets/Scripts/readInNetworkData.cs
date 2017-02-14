@@ -31,7 +31,7 @@ public class readInNetworkData : MonoBehaviour {
 
     // TCP status enum for sending AND receiving statuses
     public enum TCPstatus { planeAndPoseCalib, planeOnlyCalib, sceneStart, planeCalibDone,
-        poseCalibDone, controllerButtonPressed, arucoFound1, arucoFound2, arucoNotFound };
+        poseCalibDone, controllerButtonPressed, arucoFound1, arucoFound2, arucoNotFound, reCalib };
     private bool sceneStarted;
 
     // Return markers array (is called by setupScene.cs)

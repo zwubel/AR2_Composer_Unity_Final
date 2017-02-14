@@ -1,5 +1,4 @@
 ﻿using System.Collections;
-using UnityEditor;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
@@ -26,10 +25,11 @@ public class TableCalibration : MonoBehaviour{
         calibrateBoth = status;
     }
 
-    void Start(){
-        calibrateBoth = false;
-        LLset = false;
-        URset = false;
+    void Start(){        
+        if(trackedObj == null){
+            Debug.LogError("[TABLE CALIBRATION] Controller (right) not found, please connect device and try again!");
+            loadPreviousScene();
+        }
     }
 
     // This is called by ControllerPos.cs when the trigger on
@@ -73,6 +73,45 @@ public class TableCalibration : MonoBehaviour{
         }
     }
 
+    private void loadNextScene(){
+        if (calibrateBoth){
+            if (networkData.receiveTCPstatus() == (int)readInNetworkData.TCPstatus.planeCalibDone){
+                setupScene.setState((int)setupScene.state.poseAndPlaneCalib);
+                SceneManager.UnloadSceneAsync(SceneManager.GetSceneByName("doPlaneCalibInVS"));
+                SceneManager.LoadScene("doPoseCalibInVS", LoadSceneMode.Additive);
+                setupScene.setState((int)setupScene.state.waitForPoseCalibDone);
+            }
+        }else if (networkData.receiveTCPstatus() == (int)readInNetworkData.TCPstatus.planeCalibDone){
+            SceneManager.UnloadSceneAsync(SceneManager.GetSceneByName("doPlaneCalibInVS"));
+            SceneManager.LoadScene("CalibDone", LoadSceneMode.Additive);
+        }
+
+        // Disable controller position script
+        controllerPos.enabled = false;
+
+        // Disable this script
+        this.enabled = false;
+
+        calibrateBoth = false;
+        LLset = false;
+        URset = false;
+    }
+
+    private void loadPreviousScene(){
+        SceneManager.UnloadSceneAsync(SceneManager.GetSceneByName("doPlaneCalibInVS"));
+        SceneManager.LoadScene("SelectCalibrationTarget", LoadSceneMode.Additive);        
+
+        // Disable controller position script
+        controllerPos.enabled = false;
+
+        // Disable this script
+        this.enabled = false;
+
+        calibrateBoth = false;
+        LLset = false;
+        URset = false;
+    }
+
     void Update(){
         // Needed for haptic feedback
         controllerdevice = SteamVR_Controller.Input((int)trackedObj.index);
@@ -92,21 +131,7 @@ public class TableCalibration : MonoBehaviour{
                 }
             }
 
-            if (calibrateBoth){
-                setupScene.setState((int)setupScene.state.poseAndPlaneCalibDone);
-                SceneManager.UnloadSceneAsync(SceneManager.GetSceneByName("doPlaneCalibInVS"));
-                SceneManager.LoadScene("doPoseCalibInVS", LoadSceneMode.Additive);
-            }
-            else if(networkData.receiveTCPstatus() == (int)readInNetworkData.TCPstatus.planeCalibDone){
-                SceneManager.UnloadSceneAsync(SceneManager.GetSceneByName("doPlaneCalibInVS"));
-                SceneManager.LoadScene("CalibDone", LoadSceneMode.Additive);
-            }
-
-            // Disable controller position script
-            controllerPos.enabled = false;
-
-            // Disable this script
-            this.enabled = false;
+            loadNextScene();            
         }                
     }
 }

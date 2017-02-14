@@ -19,12 +19,14 @@ public class setupScene : MonoBehaviour{
     // TableCalibration script input
     public TableCalibration tableCalib;
     private readInNetworkData networkData;
+    public ControllerPos controllerPos;
 
     // This is overwritten by inspector input
     [Header("Scene Settings")]
     // Maximum number of markers that can be displayed (virtual markers)
     private int markersToRender;
     public float globalBuildingScale;
+    public float floorHeight;
 
     // Global scale of each marker to fit size of virtual to real markers
     //public float markerScale = 0.05f;
@@ -37,7 +39,7 @@ public class setupScene : MonoBehaviour{
     private bool calibDone;
 
     // State for the main loop
-    public enum state { planeCalib, poseAndPlaneCalib, poseAndPlaneCalibDone, startScene }
+    public enum state { planeCalib, poseAndPlaneCalib, waitForPoseCalibDone, startScene }
     bool statusChanged;
     int currentState;
     bool doRender;
@@ -57,6 +59,10 @@ public class setupScene : MonoBehaviour{
     public void setGlobalBuildingScale(float value){
         globalBuildingScale = value * 200; // Value mapped to 1:200 being the
                                           // "original" size of the markers        
+    }
+
+    public float getFloorHeight(){
+        return floorHeight;
     }
 
     public void noCalibration(){
@@ -93,6 +99,10 @@ public class setupScene : MonoBehaviour{
         // Make marker positions available globally
         calibratedLL = lowerLeft;
         calibratedUR = upperRight;
+
+        GameObject alreadyCalibrated = GameObject.Find("TablePlane");
+        if (alreadyCalibrated != null)
+            Destroy(alreadyCalibrated);
 
         // Create plane (table surface)
         table = GameObject.CreatePrimitive(PrimitiveType.Plane);
@@ -211,18 +221,20 @@ public class setupScene : MonoBehaviour{
                 case (int)state.planeCalib:
                     Debug.Log("Entered state: planeCalib");
                     tableCalib.enabled = true;
+                    controllerPos.enabled = true;
                     networkData.sendTCPstatus((int)readInNetworkData.TCPstatus.planeOnlyCalib);
-                    // Continue in TableCalibration.cs, when done set currentState to get cracking
+                    // Continue in TableCalibration.cs
                     break;
                 case (int)state.poseAndPlaneCalib:
                     Debug.Log("Entered state: poseAndPlaneCalib");
                     tableCalib.enabled = true;
+                    controllerPos.enabled = true;
                     tableCalib.setCalibrateBoth(true);
+                    // Continue in TableCalibration.cs
                     networkData.sendTCPstatus((int)readInNetworkData.TCPstatus.planeAndPoseCalib);
                     break;
-                case (int)state.poseAndPlaneCalibDone:
+                case (int)state.waitForPoseCalibDone:
                     Debug.Log("Entered state: poseAndPlaneCalibDone");
-                   
                     if (networkData.receiveTCPstatus() == (int)readInNetworkData.TCPstatus.poseCalibDone){
                         SceneManager.UnloadSceneAsync(SceneManager.GetSceneByName("doPoseCalibInVS"));
                         SceneManager.LoadScene("CalibDone", LoadSceneMode.Additive);

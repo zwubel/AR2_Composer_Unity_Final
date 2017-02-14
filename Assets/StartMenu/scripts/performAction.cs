@@ -17,4 +17,8 @@ public class performAction : MonoBehaviour {
     public void setGlobalBuildingScale(){        
         FindObjectOfType<setupScene>().setGlobalBuildingScale(1f/scaleSlider.value);
     }
+
+    public void setRecalibrationBreak(){
+        FindObjectOfType<readInNetworkData>().sendTCPstatus((int)readInNetworkData.TCPstatus.reCalib);
+    }
 }
