@@ -121,7 +121,13 @@ public class setupScene : MonoBehaviour{
         GameObject tableMenue = GameObject.Find("TableMenuParent");
         //tableMenue.transform.parent = table.transform;
         //tableMenue.transform.position = new Vector3(position.x+width/2, position.y, position.z + height/2); 
+
+        //MeshCollider tableCollider = table.AddComponent(typeof(MeshCollider)) as MeshCollider;
+
+        //Rigidbody tableRigidBody = table.AddComponent<Rigidbody>();
+        //tableRigidBody.useGravity = false;
         
+
         calibDone = true;
     }
 
@@ -195,7 +201,7 @@ public class setupScene : MonoBehaviour{
 
                 // This makes no sense, but is a temporary fix
                 // for a problem perhaps caused by the Vive HMD
-                Vector3 position = new Vector3(1 - cur.getPosY(), 0.0f, 1 - cur.getPosX());
+                Vector3 position = new Vector3(cur.getPosX(), 0.0f, cur.getPosY());
 
                 if (calibDone)
                     markerCubes[i].transform.position = getCalibratedMarkerPos(position);

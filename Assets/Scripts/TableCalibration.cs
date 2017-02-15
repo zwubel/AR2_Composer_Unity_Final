@@ -20,6 +20,7 @@ public class TableCalibration : MonoBehaviour{
     public Vector3 lowerLeft;
     public Vector3 upperRight;
     private bool calibrateBoth;
+    public Vector2 positionOffsetAruco;
 
     public void setCalibrateBoth(bool status){
         calibrateBoth = status;
@@ -39,7 +40,7 @@ public class TableCalibration : MonoBehaviour{
         switch (statusReceived){
             case (int)readInNetworkData.TCPstatus.arucoFound1:
                 if(!LLset && !URset) {
-                    lowerLeft = position;
+                    lowerLeft = new Vector3(position.x + positionOffsetAruco.x, position.y, position.z + positionOffsetAruco.y);
                     LLset = true;
                     StartCoroutine(LongVibration(0.2f, 3999));
                     Debug.Log("[PLANE CALIBRATION] Lower left corner calibrated to " + position);
