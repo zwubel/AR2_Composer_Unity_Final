@@ -2,12 +2,14 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class contextMenuTrigger : MonoBehaviour {
+public class contextMenuTrigger : MonoBehaviour
+{
     public GameObject pivot;
     private bool triggering;
     private Collider triggerCollider;
     // Use this for initialization
-    void Start() {
+    void Start()
+    {
         triggering = false;
     }
 
@@ -27,21 +29,27 @@ public class contextMenuTrigger : MonoBehaviour {
     }
 
     // Update is called once per frame
-    void Update() {
+    void Update()
+    {
 
-        if (triggerCollider != null){
+        if (triggerCollider != null)
+        {
             if (triggerCollider.gameObject.name == "bone3" || triggerCollider.gameObject.name == "bone2" || triggerCollider.gameObject.name == "bone1" && triggering == true)
             {
-                
-                if (gameObject.transform.parent.name == "CylinderX")
+                Vector3 oldPosition = gameObject.transform.parent.transform.position;
+                gameObject.transform.parent.transform.position = triggerCollider.transform.position;
+
+
+                Debug.Log("triggering " + gameObject.name);
+
+                if (gameObject.name == "CylinderX")
                 {
-                    gameObject.transform.parent.position = triggerCollider.transform.position;
-                    gameObject.transform.parent.localPosition = new Vector3(gameObject.transform.parent.localPosition.x, gameObject.transform.parent.position.y, gameObject.transform.parent.position.z);
+                    
+                    gameObject.transform.parent.transform.localPosition = new Vector3(gameObject.transform.parent.transform.localPosition.x + 0.825f, oldPosition.y, oldPosition.z);
                 }
-                else if (gameObject.transform.parent.name == "CylinderY")
+                else if (gameObject.transform.name == "CylinderY")
                 {
-                    gameObject.transform.parent.position = triggerCollider.transform.position;
-                    gameObject.transform.parent.localPosition = new Vector3(gameObject.transform.parent.position.x, gameObject.transform.parent.position.y, gameObject.transform.parent.localPosition.z);
+                    gameObject.transform.parent.transform.localPosition = new Vector3(oldPosition.x, oldPosition.y, gameObject.transform.parent.localPosition.z+0.825f);
 
                 }
                 else if (gameObject.transform.parent.name == "Plus")
