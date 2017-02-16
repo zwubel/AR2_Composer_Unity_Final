@@ -7,23 +7,102 @@ public class contextMenuTrigger : MonoBehaviour
     public GameObject pivot;
     private bool triggering;
     private Collider triggerCollider;
+    private bool showContextMenu;
+    float lastContactGreenCube;
+    float lastContactZ;
+    float lastContactX;
+    float lastContactY;
+    Vector3 oldPosition;
+    Vector3 startPosition;
+
+    Vector3 handStartPosition;
+
     // Use this for initialization
     void Start()
     {
+        startPosition = gameObject.transform.parent.transform.localPosition;
+        lastContactGreenCube = Time.timeSinceLevelLoad;
+        lastContactZ = Time.timeSinceLevelLoad;
+        lastContactX = Time.timeSinceLevelLoad;
+        lastContactY = Time.timeSinceLevelLoad;
+
         triggering = false;
+        showContextMenu = false;
+        if (gameObject.name == "greenCube")
+        {
+            gameObject.transform.parent.transform.FindChild("X_Handle").gameObject.SetActive(false);
+            gameObject.transform.parent.transform.FindChild("Y_Handle").gameObject.SetActive(false);
+            gameObject.transform.parent.transform.FindChild("Z_Handle").gameObject.SetActive(false);
+            gameObject.transform.parent.transform.FindChild("CanvasTransform").gameObject.SetActive(false);
+        }
     }
 
     void OnTriggerEnter(Collider trigger)
     {
+       Debug.Log("showContextMenu: " + showContextMenu);
         if (!triggering)
         {
             triggering = true;
+            if (trigger.gameObject.name == "bone3" || trigger.gameObject.name == "bone2" || trigger.gameObject.name == "bone1" )
+            //if(trigger.gameObject.transform.parent.transform.parent.name== "RigidRoundHand_R" )
+            {
+            handStartPosition = trigger.transform.position;    
             triggerCollider = trigger;
+                
+
+                if (gameObject.transform.name == "greenCube")
+                {
+                   
+                   float actualMilis = Time.timeSinceLevelLoad;
+
+                    Debug.Log("Actual: " + actualMilis + "last: " + lastContactGreenCube);
+
+                    if (actualMilis - lastContactGreenCube >= 1) {
+                        if (showContextMenu == false)
+                        {
+                            showContextMenu = true;
+                            gameObject.transform.parent.transform.FindChild("X_Handle").gameObject.SetActive(true);
+                            gameObject.transform.parent.transform.FindChild("Y_Handle").gameObject.SetActive(true);
+                            gameObject.transform.parent.transform.FindChild("Z_Handle").gameObject.SetActive(true);
+                            gameObject.transform.parent.transform.FindChild("CanvasTransform").gameObject.SetActive(true);
+                            lastContactGreenCube = Time.timeSinceLevelLoad;
+                        }
+                        else if (showContextMenu == true)
+                        {
+                            showContextMenu = false;
+                            gameObject.transform.parent.transform.FindChild("X_Handle").gameObject.SetActive(false);
+                            gameObject.transform.parent.transform.FindChild("Y_Handle").gameObject.SetActive(false);
+                            gameObject.transform.parent.transform.FindChild("Z_Handle").gameObject.SetActive(false);
+                            gameObject.transform.parent.transform.FindChild("CanvasTransform").gameObject.SetActive(false);
+                            lastContactGreenCube = Time.timeSinceLevelLoad;
+                        }
+
+                    }
+                }
+
+               else if (gameObject.transform.name == "Plus")
+                {
+                    float actualMilis = Time.timeSinceLevelLoad;
+                    if (actualMilis - lastContactZ >= 0.2f)
+                    {
+                        pivot.GetComponent<MarkerScale>().extrudeBuilding();
+                        lastContactZ = Time.timeSinceLevelLoad;
+                    }
+                }
+                else if (gameObject.transform.name == "Minus")
+                {
+                    float actualMilis = Time.timeSinceLevelLoad;
+                    if (actualMilis - lastContactZ >= 0.2f)
+                    {
+                        pivot.GetComponent<MarkerScale>().deExtrudeBuilding();
+                        lastContactZ = Time.timeSinceLevelLoad;
+                    }
+                } 
+            }
         }
     }
 
-    void OnTriggerExit(Collider trigger)
-    {
+    void OnTriggerExit(Collider trigger){
         triggering = false;
         triggerCollider = null;
     }
@@ -31,37 +110,29 @@ public class contextMenuTrigger : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-
-        if (triggerCollider != null)
+        if (triggerCollider != null && triggering)
         {
             if (triggerCollider.gameObject.name == "bone3" || triggerCollider.gameObject.name == "bone2" || triggerCollider.gameObject.name == "bone1" && triggering == true)
-            {
-                Vector3 oldPosition = gameObject.transform.parent.transform.position;
-                gameObject.transform.parent.transform.position = triggerCollider.transform.position;
-
-
-                Debug.Log("triggering " + gameObject.name);
-
+            {                
                 if (gameObject.name == "CylinderX")
                 {
-                    
-                    gameObject.transform.parent.transform.localPosition = new Vector3(gameObject.transform.parent.transform.localPosition.x + 0.825f, oldPosition.y, oldPosition.z);
+                    Vector3 goPosition = gameObject.transform.parent.transform.InverseTransformVector(triggerCollider.gameObject.transform.position);
+                    Vector3 hoPosition = gameObject.transform.parent.transform.InverseTransformVector(handStartPosition);
+                    //Vector3 localDifference = gameObject.transform.parent.transform.InverseTransformVector(difference);
+                    Vector3 localDifference = ( hoPosition - goPosition);
+                    //startPosition = gameObject.transform.parent.transform.localPosition;
+                    gameObject.transform.parent.transform.localPosition = new Vector3((startPosition.x - localDifference.y)/2 , startPosition.y, startPosition.z);
+                    lastContactX = Time.timeSinceLevelLoad;                    
                 }
                 else if (gameObject.transform.name == "CylinderY")
                 {
-                    gameObject.transform.parent.transform.localPosition = new Vector3(oldPosition.x, oldPosition.y, gameObject.transform.parent.localPosition.z+0.825f);
-
-                }
-                else if (gameObject.transform.parent.name == "Plus")
-                {
-
-                    pivot.GetComponent<MarkerScale>().extrudeBuilding();
-
-                }
-                else if (gameObject.transform.parent.name == "Minus")
-                {
-                    pivot.GetComponent<MarkerScale>().deExtrudeBuilding();
-
+                    float actualMilis = Time.timeSinceLevelLoad;
+                    if (actualMilis - lastContactY >= 0.1f)
+                    {
+                        oldPosition = gameObject.transform.parent.transform.position;
+                        gameObject.transform.parent.transform.localPosition = new Vector3(startPosition.x, startPosition.y, gameObject.transform.parent.localPosition.z - gameObject.transform.localPosition.z/2 );
+                        lastContactY = Time.timeSinceLevelLoad;
+                    }
                 }
             }
         }

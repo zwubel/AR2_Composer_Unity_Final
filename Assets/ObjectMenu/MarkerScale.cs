@@ -38,8 +38,8 @@ public class MarkerScale : MonoBehaviour {
     }
     public void deExtrudeBuilding(){
         float newHeight = gameObject.transform.localScale.y - floorHeight;
-        if (newHeight < 0.5f)
-            newHeight = 0.5f;
+        if (newHeight < floorHeight)
+            newHeight = floorHeight;
         gameObject.transform.localScale = new Vector3( gameObject.transform.localScale.x, newHeight, gameObject.transform.localScale.z );
     }
 
