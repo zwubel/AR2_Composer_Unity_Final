@@ -105,6 +105,13 @@ public class contextMenuTrigger : MonoBehaviour
     void OnTriggerExit(Collider trigger){
         triggering = false;
         triggerCollider = null;
+        if (gameObject.name == "CylinderX" ||gameObject.name == "CylinderY")
+             startPosition = gameObject.transform.parent.transform.localPosition;
+        if (gameObject.name == "CylinderX")
+            startPosition.x *= 2;
+        if(gameObject.name == "CylinderY")
+            startPosition.z *= 2;
+
     }
 
     // Update is called once per frame
@@ -113,28 +120,24 @@ public class contextMenuTrigger : MonoBehaviour
         if (triggerCollider != null && triggering)
         {
             if (triggerCollider.gameObject.name == "bone3" || triggerCollider.gameObject.name == "bone2" || triggerCollider.gameObject.name == "bone1" && triggering == true)
-            {                
-                if (gameObject.name == "CylinderX")
+            {
+                if (gameObject.transform.name == "CylinderX")
                 {
                     Vector3 goPosition = gameObject.transform.parent.transform.InverseTransformVector(triggerCollider.gameObject.transform.position);
                     Vector3 hoPosition = gameObject.transform.parent.transform.InverseTransformVector(handStartPosition);
-                    //Vector3 localDifference = gameObject.transform.parent.transform.InverseTransformVector(difference);
-                    Vector3 localDifference = ( hoPosition - goPosition);
-                    //startPosition = gameObject.transform.parent.transform.localPosition;
-                    gameObject.transform.parent.transform.localPosition = new Vector3((startPosition.x - localDifference.y)/2 , startPosition.y, startPosition.z);
-                    lastContactX = Time.timeSinceLevelLoad;                    
+                    Vector3 localDifference = (hoPosition - goPosition);
+                    gameObject.transform.parent.transform.localPosition = new Vector3((startPosition.x - localDifference.y) / 2, startPosition.y, startPosition.z);
+
                 }
                 else if (gameObject.transform.name == "CylinderY")
                 {
-                    float actualMilis = Time.timeSinceLevelLoad;
-                    if (actualMilis - lastContactY >= 0.1f)
-                    {
-                        oldPosition = gameObject.transform.parent.transform.position;
-                        gameObject.transform.parent.transform.localPosition = new Vector3(startPosition.x, startPosition.y, gameObject.transform.parent.localPosition.z - gameObject.transform.localPosition.z/2 );
-                        lastContactY = Time.timeSinceLevelLoad;
-                    }
+
+                    Vector3 goPosition = gameObject.transform.parent.transform.InverseTransformVector(triggerCollider.gameObject.transform.position);
+                    Vector3 hoPosition = gameObject.transform.parent.transform.InverseTransformVector(handStartPosition);
+                    Vector3 localDifference = (hoPosition - goPosition);
+                    gameObject.transform.parent.transform.localPosition = new Vector3(startPosition.x, startPosition.y, (startPosition.z - localDifference.y) / 2);
                 }
-            }
+           }
         }
     }
 }
