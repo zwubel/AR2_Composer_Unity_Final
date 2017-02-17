@@ -34,6 +34,11 @@ public class readInNetworkData : MonoBehaviour {
         poseCalibDone, controllerButtonPressed, arucoFound1, arucoFound2, arucoNotFound, reCalib };
     private bool sceneStarted;
 
+    public void setHostIP(string ipAddress){
+        Host = ipAddress;
+        Debug.Log("NEW ip: " + ipAddress);
+    }
+
     // Return markers array (is called by setupScene.cs)
     public Marker[] getMarkers() {
         return markers;

@@ -118,15 +118,9 @@ public class setupScene : MonoBehaviour{
         table.transform.position = position;
         table.transform.localScale = new Vector3(width / 10, 1, height / 10);
 
-        GameObject tableMenue = GameObject.Find("TableMenuParent");
-        //tableMenue.transform.parent = table.transform;
-        //tableMenue.transform.position = new Vector3(position.x+width/2, position.y, position.z + height/2); 
-
-        //MeshCollider tableCollider = table.AddComponent(typeof(MeshCollider)) as MeshCollider;
-
-        //Rigidbody tableRigidBody = table.AddComponent<Rigidbody>();
-        //tableRigidBody.useGravity = false;
-        
+        GameObject tableMenuParent = GameObject.Find("TableMenuParent");
+        tableMenuParent.transform.parent    = table.transform;
+        tableMenuParent.transform.position = new Vector3(position.x  +width / 2 , position.y, position.z - height / 2  );
 
         calibDone = true;
     }
