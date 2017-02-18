@@ -14,12 +14,10 @@ public class contextMenuTrigger : MonoBehaviour
     float lastContactY;
     Vector3 oldPosition;
     Vector3 startPosition;
-
     Vector3 handStartPosition;
 
     // Use this for initialization
-    void Start()
-    {
+    void Start(){
         startPosition = gameObject.transform.parent.transform.localPosition;
         lastContactGreenCube = Time.timeSinceLevelLoad;
         lastContactZ = Time.timeSinceLevelLoad;
@@ -28,8 +26,7 @@ public class contextMenuTrigger : MonoBehaviour
 
         triggering = false;
         showContextMenu = false;
-        if (gameObject.name == "greenCube")
-        {
+        if (gameObject.name == "greenCube"){
             gameObject.transform.parent.transform.FindChild("X_Handle").gameObject.SetActive(false);
             gameObject.transform.parent.transform.FindChild("Y_Handle").gameObject.SetActive(false);
             gameObject.transform.parent.transform.FindChild("Z_Handle").gameObject.SetActive(false);
@@ -37,38 +34,23 @@ public class contextMenuTrigger : MonoBehaviour
         }
     }
 
-    void OnTriggerEnter(Collider trigger)
-    {
-       Debug.Log("showContextMenu: " + showContextMenu);
-        if (!triggering)
-        {
+    void OnTriggerEnter(Collider trigger){
+        if (!triggering){
             triggering = true;
-            if (trigger.gameObject.name == "bone3" || trigger.gameObject.name == "bone2" || trigger.gameObject.name == "bone1" )
-            //if(trigger.gameObject.transform.parent.transform.parent.name== "RigidRoundHand_R" )
-            {
-            handStartPosition = trigger.transform.position;    
-            triggerCollider = trigger;
-                
-
-                if (gameObject.transform.name == "greenCube")
-                {
-                   
+            if (trigger.gameObject.name == "bone3" || trigger.gameObject.name == "bone2" || trigger.gameObject.name == "bone1" ){
+                handStartPosition = trigger.transform.position;    
+                triggerCollider = trigger;
+                if (gameObject.transform.name == "greenCube"){
                    float actualMilis = Time.timeSinceLevelLoad;
-
-                    Debug.Log("Actual: " + actualMilis + "last: " + lastContactGreenCube);
-
                     if (actualMilis - lastContactGreenCube >= 1) {
-                        if (showContextMenu == false)
-                        {
+                        if (showContextMenu == false){
                             showContextMenu = true;
                             gameObject.transform.parent.transform.FindChild("X_Handle").gameObject.SetActive(true);
                             gameObject.transform.parent.transform.FindChild("Y_Handle").gameObject.SetActive(true);
                             gameObject.transform.parent.transform.FindChild("Z_Handle").gameObject.SetActive(true);
                             gameObject.transform.parent.transform.FindChild("CanvasTransform").gameObject.SetActive(true);
                             lastContactGreenCube = Time.timeSinceLevelLoad;
-                        }
-                        else if (showContextMenu == true)
-                        {
+                        }else if (showContextMenu == true){
                             showContextMenu = false;
                             gameObject.transform.parent.transform.FindChild("X_Handle").gameObject.SetActive(false);
                             gameObject.transform.parent.transform.FindChild("Y_Handle").gameObject.SetActive(false);
@@ -76,7 +58,6 @@ public class contextMenuTrigger : MonoBehaviour
                             gameObject.transform.parent.transform.FindChild("CanvasTransform").gameObject.SetActive(false);
                             lastContactGreenCube = Time.timeSinceLevelLoad;
                         }
-
                     }
                 }
 
