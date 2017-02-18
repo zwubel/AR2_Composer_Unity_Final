@@ -39,7 +39,7 @@ public class setupScene : MonoBehaviour{
     private bool calibDone;
 
     // State for the main loop
-    public enum state { planeCalib, poseAndPlaneCalib, waitForPoseCalibDone, startScene }
+    public enum state { planeCalib, poseAndPlaneCalib, startScene }
     bool statusChanged;
     int currentState;
     bool doRender;
@@ -66,10 +66,10 @@ public class setupScene : MonoBehaviour{
     }
 
     public void noCalibration(){
-        Debug.Log("No Calibration is done. Loading old information.");
+        Debug.Log("[SETUP SCENE] No Calibration has been selected. Loading saved information.");
         string[] planeCalibDatText = System.IO.File.ReadAllLines(Application.dataPath + "/Resources/planeCalibData.txt");
         if (planeCalibDatText.Length != 6){
-            Debug.LogError("No calibration has been selected, but no valid text file has been read.");
+            Debug.LogError("[SETUP SCENE] 'No calibration' has been selected, but no valid text file has been read.");
             SceneManager.UnloadSceneAsync(SceneManager.GetSceneByName("CalibrateOrNot"));
             SceneManager.LoadScene("SelectCalibrationTarget", LoadSceneMode.Additive);
 
@@ -218,35 +218,39 @@ public class setupScene : MonoBehaviour{
         else if (statusChanged) {
             statusChanged = false;
             switch (currentState){
+
+                // MENU SELECTION: 'Workspace' in 'SelectCalibrationTarget' scene
                 case (int)state.planeCalib:
-                    Debug.Log("Entered state: planeCalib");
+                    Debug.Log("[STATE LOOP] Entered state: planeCalib");
                     tableCalib.enabled = true;
                     controllerPos.enabled = true;
                     networkData.sendTCPstatus((int)readInNetworkData.TCPstatus.planeOnlyCalib);
                     // Continue in TableCalibration.cs
                     break;
+                
+                // MENU SELECTION: 'Workspace and camera' in 'SelectCalibrationTarget' scene
                 case (int)state.poseAndPlaneCalib:
-                    Debug.Log("Entered state: poseAndPlaneCalib");
+                    Debug.Log("[STATE LOOP] Entered state: poseAndPlaneCalib");
+                    networkData.sendTCPstatus((int)readInNetworkData.TCPstatus.planeAndPoseCalib);
                     tableCalib.enabled = true;
                     controllerPos.enabled = true;
                     tableCalib.setCalibrateBoth(true);
-                    // Continue in TableCalibration.cs
-                    networkData.sendTCPstatus((int)readInNetworkData.TCPstatus.planeAndPoseCalib);
+                    // Continue in TableCalibration.cs                    
                     break;
-                case (int)state.waitForPoseCalibDone:
-                    Debug.Log("Entered state: poseAndPlaneCalibDone");
-                    if (networkData.receiveTCPstatus() == (int)readInNetworkData.TCPstatus.poseCalibDone){
-                        SceneManager.UnloadSceneAsync(SceneManager.GetSceneByName("doPoseCalibInVS"));
-                        SceneManager.LoadScene("CalibDone", LoadSceneMode.Additive);
-                    }
-                    break;
+                //case (int)state.waitForPoseCalibDone:
+                //    Debug.Log("[STATE LOOP] Entered state: poseAndPlaneCalibDone");
+                //    if (networkData.receiveTCPstatus() == (int)readInNetworkData.TCPstatus.poseCalibDone){
+                //        SceneManager.UnloadSceneAsync(SceneManager.GetSceneByName("doPoseCalibInVS"));
+                //        SceneManager.LoadScene("CalibDone", LoadSceneMode.Additive);
+                //    }
+                //    break;
                 case (int)state.startScene:
-                    Debug.Log("Entered state: startScene");
+                    Debug.Log("[STATE LOOP] Entered state: startScene");
                     networkData.sendTCPstatus((int)readInNetworkData.TCPstatus.sceneStart);
                     networkData.setSceneStarted(true);
                     doRender = true;                  
                     break;
-                default: Debug.Log("setupScene state loop: no state specified."); break;
+                default: Debug.Log("[STATE LOOP] State loop: no state specified."); break;
             }
         }
     }    

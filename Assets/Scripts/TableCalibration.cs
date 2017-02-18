@@ -11,6 +11,7 @@ public class TableCalibration : MonoBehaviour{
     public setupScene setupScene;
     public readInNetworkData networkData;
     public ControllerPos controllerPos;
+    private bool controllerExceptionThrown;
 
     // Needed for haptic feedback
     public SteamVR_TrackedObject trackedObj;
@@ -26,11 +27,8 @@ public class TableCalibration : MonoBehaviour{
         calibrateBoth = status;
     }
 
-    void Start(){        
-        if(trackedObj == null){
-            Debug.LogError("[TABLE CALIBRATION] Controller (right) not found, please connect device and try again!");
-            loadPreviousScene();
-        }
+    void Start(){
+        //controllerExceptionThrown = false;
     }
 
     // This is called by ControllerPos.cs when the trigger on
@@ -61,7 +59,8 @@ public class TableCalibration : MonoBehaviour{
                         " but either lower left has not been set yet or upper right already has been.");
                 }
                 break;
-            case (int)readInNetworkData.TCPstatus.arucoNotFound: Debug.LogError("[PLANE CALIBRATION] AruCo marker not found, please try again."); break;
+            case (int)readInNetworkData.TCPstatus.arucoNotFound: Debug.LogError("[PLANE CALIBRATION] " +
+                "AruCo marker not found, please try again."); break;
             case -1: Debug.LogError("[PLANE CALIBRATION] Failed, because of a socket error."); break;
             default: Debug.LogError("[PLANE CALIBRATION] Unknown status received: " + statusReceived); break;
         }
@@ -75,14 +74,7 @@ public class TableCalibration : MonoBehaviour{
     }
 
     private void loadNextScene(){
-        if (calibrateBoth){
-            if (networkData.receiveTCPstatus() == (int)readInNetworkData.TCPstatus.planeCalibDone){
-                setupScene.setState((int)setupScene.state.poseAndPlaneCalib);
-                SceneManager.UnloadSceneAsync(SceneManager.GetSceneByName("doPlaneCalibInVS"));
-                SceneManager.LoadScene("doPoseCalibInVS", LoadSceneMode.Additive);
-                setupScene.setState((int)setupScene.state.waitForPoseCalibDone);
-            }
-        }else if (networkData.receiveTCPstatus() == (int)readInNetworkData.TCPstatus.planeCalibDone){
+        if (networkData.receiveTCPstatus() == (int)readInNetworkData.TCPstatus.planeCalibDone){
             SceneManager.UnloadSceneAsync(SceneManager.GetSceneByName("doPlaneCalibInVS"));
             SceneManager.LoadScene("CalibDone", LoadSceneMode.Additive);
         }
@@ -100,7 +92,7 @@ public class TableCalibration : MonoBehaviour{
 
     private void loadPreviousScene(){
         SceneManager.UnloadSceneAsync(SceneManager.GetSceneByName("doPlaneCalibInVS"));
-        SceneManager.LoadScene("SelectCalibrationTarget", LoadSceneMode.Additive);        
+        SceneManager.LoadScene("SelectCalibrationTarget", LoadSceneMode.Additive);
 
         // Disable controller position script
         controllerPos.enabled = false;
@@ -113,26 +105,42 @@ public class TableCalibration : MonoBehaviour{
         URset = false;
     }
 
-    void Update(){
-        // Needed for haptic feedback
-        controllerdevice = SteamVR_Controller.Input((int)trackedObj.index);
-
-        if (LLset && URset){ // Calibration successful
-            Debug.Log("Plane calibration: completed successfully.");
-
-            // Tell setupScene that the calibration has been
-            // completed and load / unload corresponding scenes
-            setupScene.calibrationDone(lowerLeft, upperRight);
-
-            // Write text file            
-            string[] CalibPos = { "" + lowerLeft.x, "" + lowerLeft.y, "" + lowerLeft.z, "" + upperRight.x, "" + upperRight.y, "" + upperRight.z };            
-            using (System.IO.StreamWriter file = new System.IO.StreamWriter(Application.dataPath + "/Resources/planeCalibData.txt")){
-                foreach (string line in CalibPos){
-                    file.WriteLine(line);
-                }
+    void Update() {
+        // If both calibrations have been selected, do pose calibration first
+        if (calibrateBoth) {
+            if (networkData.receiveTCPstatus() == (int)readInNetworkData.TCPstatus.poseCalibDone) {
+                SceneManager.UnloadSceneAsync(SceneManager.GetSceneByName("doPoseCalibInVS"));
+                SceneManager.LoadScene("doPlaneCalibInVS", LoadSceneMode.Additive);
+                calibrateBoth = false;
             }
+            // and then the workspace calibration
+        } else {
+            // Needed for haptic feedback
+            if (trackedObj == null) {// && !controllerExceptionThrown){
+                Debug.LogError("[TABLE CALIBRATION] Controller (right) not found, please connect device and try again!");
+                loadPreviousScene();
+                //controllerExceptionThrown = true;
+            }//else{
+                controllerdevice = SteamVR_Controller.Input((int)trackedObj.index);
+            //}
+            if (LLset && URset){ // Workspace calibration successful
+                Debug.Log("Plane calibration: completed successfully.");
 
-            loadNextScene();            
-        }                
+                // Tell setupScene that the calibration has been
+                // completed and load / unload corresponding scenes
+                setupScene.calibrationDone(lowerLeft, upperRight);
+
+                // Write text file            
+                string[] CalibPos = { "" + lowerLeft.x, "" + lowerLeft.y, "" + lowerLeft.z, "" + upperRight.x, "" + upperRight.y, "" + upperRight.z };
+                using (System.IO.StreamWriter file = new System.IO.StreamWriter(Application.dataPath + "/Resources/planeCalibData.txt"))
+                {
+                    foreach (string line in CalibPos)
+                    {
+                        file.WriteLine(line);
+                    }
+                }
+                loadNextScene();
+            }
+        }                        
     }
 }
