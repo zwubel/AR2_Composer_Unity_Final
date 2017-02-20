@@ -249,9 +249,6 @@ public class setupScene : MonoBehaviour{
                     networkData.sendTCPstatus((int)readInNetworkData.TCPstatus.sceneStart);
                     networkData.setSceneStarted(true);
                     doRender = true;
-                    OutputNormalizedControllerPos normalizedControllerPos = gameObject.GetComponent<OutputNormalizedControllerPos>();
-                    normalizedControllerPos.enabled = true;
-                    normalizedControllerPos.setCalibratedPositions(calibratedLL, calibratedUR);
                     break;
                 default: Debug.Log("[STATE LOOP] State loop: no state specified."); break;
             }

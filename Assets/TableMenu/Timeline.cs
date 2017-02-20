@@ -10,7 +10,7 @@ public class Timeline : MonoBehaviour {
 
 	public void initTimeline(){
 
-        string dir = Application.dataPath + "/resources/saves/"; //This is our std. timeline path
+        string dir = Application.dataPath + "/Resources/saves/"; //This is our std. timeline path
         prefabButton.SetActive (true);
         currentDirectory = new DirectoryInfo(dir);
 		FileInfo[] fia = currentDirectory.GetFiles();
@@ -20,9 +20,9 @@ public class Timeline : MonoBehaviour {
         //We crawl the file array and create buttons for all the ".xml" file
 		for(int f=0;f<fia.Length;f++){
 			files[f] = new FileInformation(fia[f]);
-			if(!files[f].fi.Name.Contains("meta")&&files[f].fi.Name.Contains(".xml")){
+			if(!files[f].fi.Name.Contains("meta") && files[f].fi.Name.Contains(".xml")){
 				count++;
-				GameObject button = (GameObject)Instantiate(prefabButton.gameObject);
+				GameObject button = Instantiate(prefabButton.gameObject);
 				button.name = files [f].fi.Name;
 				button.GetComponentInChildren<Text>().text =button.name.Remove(button.name.Length - 4);
 				button.transform.SetParent(TimeLineScrollView.transform, false);

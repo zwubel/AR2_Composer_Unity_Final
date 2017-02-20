@@ -11,7 +11,6 @@ public class TableCalibration : MonoBehaviour{
     public setupScene setupScene;
     public readInNetworkData networkData;
     public ControllerPos controllerPos;
-    //private bool controllerExceptionThrown;
 
     // Needed for haptic feedback
     public SteamVR_TrackedObject trackedObj;
@@ -116,7 +115,7 @@ public class TableCalibration : MonoBehaviour{
             // and then the workspace calibration
         } else {
             // Needed for haptic feedback
-            if (!trackedObj.gameObject.activeSelf){
+            if (!trackedObj.gameObject.activeSelf){ // Check whether controller is switched on
                 Debug.LogError("[TABLE CALIBRATION] Controller (right) not found, please connect device and try again!");
                 loadPreviousScene();
             }else{
