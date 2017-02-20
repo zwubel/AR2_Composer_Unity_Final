@@ -11,7 +11,7 @@ public class TableCalibration : MonoBehaviour{
     public setupScene setupScene;
     public readInNetworkData networkData;
     public ControllerPos controllerPos;
-    private bool controllerExceptionThrown;
+    //private bool controllerExceptionThrown;
 
     // Needed for haptic feedback
     public SteamVR_TrackedObject trackedObj;
@@ -116,13 +116,12 @@ public class TableCalibration : MonoBehaviour{
             // and then the workspace calibration
         } else {
             // Needed for haptic feedback
-            if (trackedObj == null) {// && !controllerExceptionThrown){
+            if (!trackedObj.gameObject.activeSelf){
                 Debug.LogError("[TABLE CALIBRATION] Controller (right) not found, please connect device and try again!");
                 loadPreviousScene();
-                //controllerExceptionThrown = true;
-            }//else{
+            }else{
                 controllerdevice = SteamVR_Controller.Input((int)trackedObj.index);
-            //}
+            }
             if (LLset && URset){ // Workspace calibration successful
                 Debug.Log("Plane calibration: completed successfully.");
 
