@@ -9,9 +9,9 @@ using System.IO;
 public class open : MonoBehaviour {
 
     public bool debug = false;
-	private String projectPath;
+	private String projectPath;    
 
-	void Start () {
+    void Start () {
         projectPath = Application.dataPath + "/Resources/";
     }
 
@@ -52,7 +52,7 @@ public class open : MonoBehaviour {
             if (originalCube != null){
                 if (debug)
                     Debug.Log("Instanciating marker: " + originalID);
-                GameObject newMarker = Instantiate(originalCube); 
+                GameObject newMarker = Instantiate(originalCube);
                 newMarker.name = "Marker" + (originalID + 100);
                 newMarker.transform.parent = GameObject.Find("TableObject").transform;                                
 
@@ -83,7 +83,7 @@ public class open : MonoBehaviour {
                 float handleXPosX = float.Parse(handleX.ChildNodes.Item(2).InnerText, System.Globalization.CultureInfo.CurrentCulture);
                 float handleXPosY = float.Parse(handleX.ChildNodes.Item(3).InnerText, System.Globalization.CultureInfo.CurrentCulture);
                 float handleXPosZ = float.Parse(handleX.ChildNodes.Item(4).InnerText, System.Globalization.CultureInfo.CurrentCulture);
-                GameObject xHandle = newMarker.transform.FindChild("X_Handle").gameObject;                
+                GameObject xHandle = newMarker.transform.FindChild("X_Handle").gameObject;              
                 xHandle.transform.localPosition = new Vector3(handleXPosX, handleXPosY, handleXPosZ);
 
                 // Position Y_Handle

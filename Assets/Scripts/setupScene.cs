@@ -230,6 +230,7 @@ public class setupScene : MonoBehaviour{
                 
                 // MENU SELECTION: 'Workspace and camera' in 'SelectCalibrationTarget' scene
                 case (int)state.poseAndPlaneCalib:
+                    SceneManager.LoadScene("doPoseCalibInVS", LoadSceneMode.Additive);
                     Debug.Log("[STATE LOOP] Entered state: poseAndPlaneCalib");
                     networkData.sendTCPstatus((int)readInNetworkData.TCPstatus.planeAndPoseCalib);
                     tableCalib.enabled = true;
@@ -237,6 +238,8 @@ public class setupScene : MonoBehaviour{
                     tableCalib.setCalibrateBoth(true);
                     // Continue in TableCalibration.cs                    
                     break;
+
+                // MENU SELECTION: 'Start' in 'SetScale' scene
                 case (int)state.startScene:
                     Debug.Log("[STATE LOOP] Entered state: startScene");
                     networkData.sendTCPstatus((int)readInNetworkData.TCPstatus.sceneStart);
@@ -246,5 +249,10 @@ public class setupScene : MonoBehaviour{
                 default: Debug.Log("[STATE LOOP] State loop: no state specified."); break;
             }
         }
-    }    
+    }
+
+    private void SceneManager_sceneLoaded(Scene arg0, LoadSceneMode arg1)
+    {
+        throw new NotImplementedException();
+    }
 }

@@ -8,10 +8,12 @@ public class MatchMode : MonoBehaviour {
 	private Renderer rend;
     public GameObject Cube;
 	private bool matchMode;
+    private GameObject tableObject;
 
-	void Start () {
+    void Start () {
 		rend = gameObject.GetComponent<Renderer>();
-	}
+        tableObject = GameObject.Find("TableObject");
+    }
 
     public void setMatchMode(bool state){
         matchMode = state;
@@ -30,7 +32,7 @@ public class MatchMode : MonoBehaviour {
             //transform.parent.gameObject.SetActive (false);
             gameObject.GetComponent<BoxCollider>().enabled = true;
             transform.gameObject.SetActive(false);
-           Cube.gameObject.SetActive(true);
+            Cube.gameObject.SetActive(true);
         }
 	}
 }

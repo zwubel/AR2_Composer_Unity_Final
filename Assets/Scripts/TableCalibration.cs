@@ -107,10 +107,10 @@ public class TableCalibration : MonoBehaviour{
     void Update() {
         // If both calibrations have been selected, do pose calibration first
         if (calibrateBoth) {
+            calibrateBoth = false;            
             if (networkData.receiveTCPstatus() == (int)readInNetworkData.TCPstatus.poseCalibDone) {
                 SceneManager.UnloadSceneAsync(SceneManager.GetSceneByName("doPoseCalibInVS"));
-                SceneManager.LoadScene("doPlaneCalibInVS", LoadSceneMode.Additive);
-                calibrateBoth = false;
+                SceneManager.LoadScene("doPlaneCalibInVS", LoadSceneMode.Additive);                
             }
             // and then the workspace calibration
         } else {
