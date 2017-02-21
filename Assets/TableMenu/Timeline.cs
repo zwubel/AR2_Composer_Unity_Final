@@ -7,6 +7,7 @@ public class Timeline : MonoBehaviour {
 	public FileInformation[] files;
 	public GameObject TimeLineScrollView;
 	public GameObject prefabButton;
+    public bool debug = false;
 
 	public void initTimeline(){
 
@@ -27,7 +28,8 @@ public class Timeline : MonoBehaviour {
 				button.GetComponentInChildren<Text>().text =button.name.Remove(button.name.Length - 4);
 				button.transform.SetParent(TimeLineScrollView.transform, false);
 				button.transform.localPosition = new Vector3 (0,prefabButton.transform.localPosition.y +( 4 - count *4 ) , 0 );
-				Debug.Log ("reading file: " + button.name);
+                if(debug)
+                    Debug.Log ("reading file: " + button.name);
 			}
 
 		}

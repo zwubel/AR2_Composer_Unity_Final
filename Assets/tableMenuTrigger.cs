@@ -10,7 +10,7 @@ public class tableMenuTrigger: MonoBehaviour
     float lastContactLoad;
     float lastContactSave;
     float lastContactCancel;
-
+    float lastContactXML;
 
     // Use this for initialization
     void Start()
@@ -18,6 +18,7 @@ public class tableMenuTrigger: MonoBehaviour
         lastContactLoad = Time.timeSinceLevelLoad;
         lastContactSave = Time.timeSinceLevelLoad;
         lastContactCancel = Time.timeSinceLevelLoad;
+        lastContactXML = Time.timeSinceLevelLoad;
         triggering = false;
     }
 
@@ -62,9 +63,12 @@ public class tableMenuTrigger: MonoBehaviour
                     }
                 }
                 
-                else if (gameObject.transform.name.Contains("xml"))
-                {
-                    gameObject.GetComponent<open>().setPath();
+                else if (gameObject.transform.name.Contains("xml")){
+                    float actualMilis = Time.timeSinceLevelLoad;
+                    if (actualMilis - lastContactXML >= 2f){
+                        gameObject.GetComponent<open>().setPath();
+                        lastContactXML = Time.timeSinceLevelLoad;
+                    }
                 }
 
             }

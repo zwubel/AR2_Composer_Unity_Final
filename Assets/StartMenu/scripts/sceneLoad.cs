@@ -20,7 +20,13 @@ public class sceneLoad : MonoBehaviour {
         SceneManager.LoadScene("AR2_Composer_Unity_Final", LoadSceneMode.Single);
         SceneManager.LoadScene("CalibrateOrNot", LoadSceneMode.Additive);
         SceneManager.UnloadSceneAsync("Welcome");
+    }
 
+    public void loadWithSocketCheck(string target){
+        if (FindObjectOfType<readInNetworkData>().getSocketReady())
+            Open(target);
+        else
+            Open("SocketNotReady");
     }
 }
 

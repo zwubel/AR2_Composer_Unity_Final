@@ -9,7 +9,7 @@ public class save : MonoBehaviour {
 	private String timeStamp;  // We will save date and time
 	string filepath; 
 	public XmlNode root; //Root node of the XML document
-
+    public bool debug = false;
 
 	// Use this for initialization
 	void Start () {
@@ -17,7 +17,7 @@ public class save : MonoBehaviour {
 	}
 
 	public void saveScene	(){
-		/*
+	    /*
          *First of all we take the current system date and time, this will be used in the XML document name. We will also have 
          *have a node at the beginning where date and time are saved.
         */
@@ -26,13 +26,13 @@ public class save : MonoBehaviour {
 		timeStamp = timeStamp.Replace("/", "-");
 		timeStamp = timeStamp.Replace(":", "-");
 
-      Directory.CreateDirectory(Application.dataPath + "/Resources/saves/");
+        Directory.CreateDirectory(Application.dataPath + "/Resources/saves/");
 
         filepath  = Application.dataPath + "/Resources/saves/" + timeStamp +".xml";
-
-
-        Debug.Log("TimeStamp: " + timeStamp);
-		Debug.Log("Path: " + filepath);
+        if (debug){
+            Debug.Log("TimeStamp: " + timeStamp);
+            Debug.Log("Path: " + filepath);
+        }
 		doc = new XmlDocument();
 		doc.LoadXml("<AR2COMPOSER_SCENE>" +
 					"<time>" +  
@@ -44,9 +44,11 @@ public class save : MonoBehaviour {
 		Console.WriteLine(doc.OuterXml);
         GameObject tableObject = GameObject.Find("TableObject"); //We start with the "TableObject"...
         traverseHirarchy(tableObject, root); //.. and recursive traverse all the childs
-		Debug.Log ("Objects crawled!");
-		Debug.Log ( "Saving at path: " + filepath ); 
-		doc.Save ( filepath );
+        if (debug) { 
+            Debug.Log ("Objects crawled!");
+		    Debug.Log ( "Saving at path: " + filepath );
+        }
+        doc.Save ( filepath );
 	}
 
 	void traverseHirarchy(GameObject obj, XmlNode parentNode){
@@ -89,14 +91,13 @@ public class save : MonoBehaviour {
 
             active.InnerText = obj.activeSelf.ToString();
 
-            //recursion
-            foreach (Transform child in obj.transform)
-            {
+            // Recursion
+            foreach (Transform child in obj.transform){
                 if (!obj.name.Contains("TablePlane"))
                     traverseHirarchy(child.gameObject, newElem);
             }
 
-            //Here append the childs to the root node and set the parent node to the root node to the given parent node of the function
+            // Here append the childs to the root node and set the parent node to the root node to the given parent node of the function
             newElem.AppendChild(newName);
 
             newElem.AppendChild(newPosX);
@@ -114,15 +115,9 @@ public class save : MonoBehaviour {
             newElem.AppendChild(active);
 
             parentNode.AppendChild(newElem);
-
         }
-
 	}
 
-
-	// Update is called once per fram
-	void Update () {
-	
-		
-	}
+    // Update is called once per fram
+    void Update() { }
 }

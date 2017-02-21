@@ -1,4 +1,5 @@
 ﻿using UnityEngine;
+using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 
 public class performAction : MonoBehaviour {
@@ -11,7 +12,12 @@ public class performAction : MonoBehaviour {
     }    
 
     public void noCalibration(){
-        FindObjectOfType<setupScene>().noCalibration();
+        if (FindObjectOfType<readInNetworkData>().getSocketReady())
+            FindObjectOfType<setupScene>().noCalibration();
+        else {
+            FindObjectOfType<sceneLoad>().Close("CalibrateOrNot");
+            FindObjectOfType<sceneLoad>().Open("SocketNotReady");
+        }
     }
 
     public void setGlobalBuildingScale(){        

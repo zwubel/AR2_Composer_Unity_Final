@@ -7,11 +7,15 @@ public class MatchMode : MonoBehaviour {
 	public float duration = 1.0F;
 	private Renderer rend;
     public GameObject Cube;
-	public bool matchMode;
+	private bool matchMode;
 
 	void Start () {
 		rend = gameObject.GetComponent<Renderer>();
 	}
+
+    public void setMatchMode(bool state){
+        matchMode = state;
+    }
 	
 	// Update is called once per frame
 	void Update () {

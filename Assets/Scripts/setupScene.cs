@@ -58,7 +58,7 @@ public class setupScene : MonoBehaviour{
 
     public void setGlobalBuildingScale(float value){
         globalBuildingScale = value * 200; // Value mapped to 1:200 being the
-                                          // "original" size of the markers        
+                                           // "original" size of the markers        
     }
 
     public float getFloorHeight(){
@@ -122,7 +122,7 @@ public class setupScene : MonoBehaviour{
         tableMenuParent.transform.parent    = table.transform;
         tableMenuParent.transform.position = new Vector3(position.x  +width / 2 , position.y, position.z - height / 2  );
 
-        calibDone = true;
+        calibDone = true;        
     }
 
     void Start() {
@@ -237,13 +237,6 @@ public class setupScene : MonoBehaviour{
                     tableCalib.setCalibrateBoth(true);
                     // Continue in TableCalibration.cs                    
                     break;
-                //case (int)state.waitForPoseCalibDone:
-                //    Debug.Log("[STATE LOOP] Entered state: poseAndPlaneCalibDone");
-                //    if (networkData.receiveTCPstatus() == (int)readInNetworkData.TCPstatus.poseCalibDone){
-                //        SceneManager.UnloadSceneAsync(SceneManager.GetSceneByName("doPoseCalibInVS"));
-                //        SceneManager.LoadScene("CalibDone", LoadSceneMode.Additive);
-                //    }
-                //    break;
                 case (int)state.startScene:
                     Debug.Log("[STATE LOOP] Entered state: startScene");
                     networkData.sendTCPstatus((int)readInNetworkData.TCPstatus.sceneStart);

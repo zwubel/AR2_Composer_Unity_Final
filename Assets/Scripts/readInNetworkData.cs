@@ -49,6 +49,10 @@ public class readInNetworkData : MonoBehaviour {
         return markersToReceive;
     }
 
+    public bool getSocketReady(){
+        return socketReady;
+    }
+
     // Initialization
     void Start(){
         readBufferLength = bytesPerMarker * markersToReceive + 4; // +4 because ID=-1 marks end of frame
