@@ -6,6 +6,7 @@ public class TableCalibration : MonoBehaviour{
     private int markerCounter;
     private bool LLset;
     private bool URset;
+    private bool additionalLRset;
 
     [Header("Dependencies")]
     public setupScene setupScene;
@@ -19,8 +20,9 @@ public class TableCalibration : MonoBehaviour{
     [Header("Calibration")]
     public Vector3 lowerLeft;
     public Vector3 upperRight;
+    public Vector3 additionalLowerRight;
     private bool calibrateBoth;
-    public Vector2 positionOffsetAruco;
+    public Vector3 positionOffsetAruco;
 
     public void setCalibrateBoth(bool status){
         calibrateBoth = status;
@@ -30,36 +32,82 @@ public class TableCalibration : MonoBehaviour{
         //controllerExceptionThrown = false;
     }
 
+    //// This is called by ControllerPos.cs when the trigger on
+    //// the right vive controller is pressed during calibration
+    //public void setPosition(Vector3 position){
+    //    int statusReceived = networkData.receiveTCPstatus();
+    //    switch (statusReceived){
+    //        case (int)readInNetworkData.TCPstatus.arucoFound1:
+    //            if(!LLset && !URset) {
+    //                lowerLeft = position;
+    //                LLset = true;
+    //                StartCoroutine(LongVibration(0.2f, 3999));
+    //                Debug.Log("[PLANE CALIBRATION] Lower left corner calibrated to " + position);
+    //            }else{
+    //                Debug.LogError("[PLANE CALIBRATION] Lower left corner: received status arucoFound1," +
+    //                    " but one position has already been set.");
+    //            }
+    //            break;
+    //        case (int)readInNetworkData.TCPstatus.arucoFound2:
+    //            if (LLset && !URset){
+    //                upperRight = position;
+    //                URset = true;
+    //                StartCoroutine(LongVibration(0.5f, 3999));
+    //                System.Threading.Thread.Sleep(2000);
+    //                Debug.Log("[PLANE CALIBRATION] Upper right corner calibrated to " + position);
+    //            }else{
+    //                Debug.LogError("[PLANE CALIBRATION] Upper right corner: received status arucoFound2," +
+    //                    " but either lower left has not been set yet or upper right already has been.");
+    //            }
+    //            break;
+    //        case (int)readInNetworkData.TCPstatus.arucoNotFound: Debug.LogError("[PLANE CALIBRATION] " +
+    //            "AruCo marker not found, please try again."); break;
+    //        case -1: Debug.LogError("[PLANE CALIBRATION] Failed, because of a socket error."); break;
+    //        default: Debug.LogError("[PLANE CALIBRATION] Unknown status received: " + statusReceived); break;
+    //    }
+    //}
+
     // This is called by ControllerPos.cs when the trigger on
     // the right vive controller is pressed during calibration
     public void setPosition(Vector3 position){
         int statusReceived = networkData.receiveTCPstatus();
         switch (statusReceived){
             case (int)readInNetworkData.TCPstatus.arucoFound1:
-                if(!LLset && !URset) {
-                    lowerLeft = position;
+                if (!LLset && !URset && !additionalLRset){
+                    lowerLeft = position + positionOffsetAruco;
                     LLset = true;
                     StartCoroutine(LongVibration(0.2f, 3999));
-                    Debug.Log("[PLANE CALIBRATION] Lower left corner calibrated to " + position);
+                    Debug.Log("[PLANE CALIBRATION] Lower left corner calibrated to (raw)" + position);
+                    Debug.Log("[PLANE CALIBRATION] Lower left corner calibrated to " + lowerLeft);
                 }else{
-                    Debug.LogError("[PLANE CALIBRATION] Lower left corner: received status arucoFound1," +
-                        " but one position has already been set.");
+                    Debug.LogError("[PLANE CALIBRATION] Lower left corner: error!");
                 }
                 break;
             case (int)readInNetworkData.TCPstatus.arucoFound2:
-                if (LLset && !URset){
-                    upperRight = position;
+                if (LLset && !URset && !additionalLRset){
+                    upperRight = position + positionOffsetAruco;
                     URset = true;
-                    StartCoroutine(LongVibration(0.5f, 3999));
-                    System.Threading.Thread.Sleep(2000);
-                    Debug.Log("[PLANE CALIBRATION] Upper right corner calibrated to " + position);
+                    StartCoroutine(LongVibration(0.2f, 3999));
+                    Debug.Log("[PLANE CALIBRATION] Upper right corner calibrated to (raw)" + position);
+                    Debug.Log("[PLANE CALIBRATION] Upper right corner calibrated to " + upperRight);
                 }else{
-                    Debug.LogError("[PLANE CALIBRATION] Upper right corner: received status arucoFound2," +
-                        " but either lower left has not been set yet or upper right already has been.");
+                    Debug.LogError("[PLANE CALIBRATION] Upper right corner: error!");
                 }
                 break;
-            case (int)readInNetworkData.TCPstatus.arucoNotFound: Debug.LogError("[PLANE CALIBRATION] " +
-                "AruCo marker not found, please try again."); break;
+            case (int)readInNetworkData.TCPstatus.arucoFound3:
+                if (LLset && URset && !additionalLRset){
+                    additionalLowerRight = position + positionOffsetAruco;
+                    additionalLRset = true;
+                    StartCoroutine(LongVibration(0.5f, 3999));
+                    System.Threading.Thread.Sleep(2000);
+                    Debug.Log("[PLANE CALIBRATION] Additional lower right corner calibrated to (raw)" + position);
+                    Debug.Log("[PLANE CALIBRATION] Additional lower right corner calibrated to " + additionalLowerRight);
+                }else{
+                    Debug.LogError("[PLANE CALIBRATION] Additional lower right corner: error!");
+                }
+                break;
+            case (int)readInNetworkData.TCPstatus.arucoNotFound:
+                Debug.LogError("[PLANE CALIBRATION] AruCo marker not found, please try again."); break;
             case -1: Debug.LogError("[PLANE CALIBRATION] Failed, because of a socket error."); break;
             default: Debug.LogError("[PLANE CALIBRATION] Unknown status received: " + statusReceived); break;
         }
@@ -87,6 +135,7 @@ public class TableCalibration : MonoBehaviour{
         calibrateBoth = false;
         LLset = false;
         URset = false;
+        additionalLRset = false;
     }
 
     private void loadPreviousScene(){
@@ -102,6 +151,7 @@ public class TableCalibration : MonoBehaviour{
         calibrateBoth = false;
         LLset = false;
         URset = false;
+        additionalLRset = false;
     }
 
     void Update() {
@@ -121,19 +171,39 @@ public class TableCalibration : MonoBehaviour{
             }else{
                 controllerdevice = SteamVR_Controller.Input((int)trackedObj.index);
             }
-            if (LLset && URset){ // Workspace calibration successful
+            //if (LLset && URset){ // Workspace calibration successful
+            //    Debug.Log("Plane calibration: completed successfully.");
+
+            //    // Tell setupScene that the calibration has been
+            //    // completed and load / unload corresponding scenes
+            //    setupScene.calibrationDone(lowerLeft, upperRight);
+
+            //    // Write text file            
+            //    string[] CalibPos = { "" + lowerLeft.x, "" + lowerLeft.y, "" + lowerLeft.z, "" + upperRight.x, "" + upperRight.y, "" + upperRight.z };
+            //    using (System.IO.StreamWriter file = new System.IO.StreamWriter(Application.dataPath + "/Resources/planeCalibData.txt"))
+            //    {
+            //        foreach (string line in CalibPos)
+            //        {
+            //            file.WriteLine(line);
+            //        }
+            //    }
+            //    loadNextScene();
+            //}
+            if (LLset && URset && additionalLRset){ // Workspace calibration successful
                 Debug.Log("Plane calibration: completed successfully.");
 
                 // Tell setupScene that the calibration has been
                 // completed and load / unload corresponding scenes
-                setupScene.calibrationDone(lowerLeft, upperRight);
+                Vector3 heightDeviations = networkData.receiveHeightDeviations();
+                setupScene.calibrationDone(lowerLeft, upperRight, additionalLowerRight, heightDeviations);
 
-                // Write text file            
-                string[] CalibPos = { "" + lowerLeft.x, "" + lowerLeft.y, "" + lowerLeft.z, "" + upperRight.x, "" + upperRight.y, "" + upperRight.z };
-                using (System.IO.StreamWriter file = new System.IO.StreamWriter(Application.dataPath + "/Resources/planeCalibData.txt"))
-                {
-                    foreach (string line in CalibPos)
-                    {
+                // Write text file
+                string[] CalibPos = {   "" + lowerLeft.x, "" + lowerLeft.y, "" + lowerLeft.z,
+                                        "" + upperRight.x, "" + upperRight.y, "" + upperRight.z,
+                                        "" + additionalLowerRight.x, "" + additionalLowerRight.y, "" + additionalLowerRight.z,
+                                        "" + heightDeviations.x, "" + heightDeviations.y, "" + heightDeviations.z};
+                using (System.IO.StreamWriter file = new System.IO.StreamWriter(Application.dataPath + "/Resources/planeCalibData.txt")){
+                    foreach (string line in CalibPos){
                         file.WriteLine(line);
                     }
                 }

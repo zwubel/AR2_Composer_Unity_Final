@@ -17,6 +17,7 @@ public class ControllerPos : MonoBehaviour
         if (controllerdevice.GetPressDown(SteamVR_Controller.ButtonMask.Trigger)){
             networkData.sendTCPstatus((int)readInNetworkData.TCPstatus.controllerButtonPressed);
             tableCalib.GetComponent<TableCalibration>().setPosition(controllerdevice.transform.pos);
+
         }
     }
 }

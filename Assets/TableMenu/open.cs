@@ -1,10 +1,7 @@
 ﻿using UnityEngine;
 using System;
 using System.Collections;
-using System.Collections.Generic;
 using System.Xml;
-using System.Xml.Serialization;
-using System.IO;
 
 public class open : MonoBehaviour {
 
@@ -53,6 +50,9 @@ public class open : MonoBehaviour {
                 if (debug)
                     Debug.Log("Instanciating marker: " + originalID);
                 GameObject newMarker = Instantiate(originalCube);
+
+                GameObject.Find("TableMenuButtons_Apply").GetComponent<tableMenuTrigger>().increaseSavedCubesCounter();
+
                 newMarker.name = "Marker" + (originalID + 100);
                 newMarker.transform.parent = GameObject.Find("TableObject").transform;                                
 
@@ -104,11 +104,14 @@ public class open : MonoBehaviour {
                 GameObject greenCube = newMarker.transform.FindChild("greenCube").gameObject;
                 greenCube.SetActive(true);
                 MatchMode matchMode = greenCube.GetComponent<MatchMode>();
+                greenCube.GetComponent<BoxCollider>().enabled = false;
                 matchMode.setMatchMode(true);
                 matchMode.enabled = true;
 
                 // TODO: The scale has to be saved in XML, then the following function can be used...
-                //GameObject.FindObjectOfType<setupScene>().setGlobalBuildingScale();
+                float buildingScale = float.Parse(nodes[2].InnerText, System.Globalization.CultureInfo.CurrentCulture);
+                Debug.Log("loaded scale: " + buildingScale);
+                GameObject.FindObjectOfType<setupScene>().setGlobalBuildingScale(buildingScale);
             }
         }
     }
@@ -118,6 +121,8 @@ public class open : MonoBehaviour {
             Debug.Log ("Opening: "+ gameObject.name);
 		openXml(gameObject.name);
 	}
+
+   
 
 	public void openXml(String filePath){		
 		String fullFilePath = projectPath + "/saves/" + filePath;
@@ -136,5 +141,8 @@ public class open : MonoBehaviour {
 
 
 	void Update () {		
+       
+
+
 	}
 }

@@ -31,7 +31,7 @@ public class readInNetworkData : MonoBehaviour {
 
     // TCP status enum for sending AND receiving statuses
     public enum TCPstatus { planeAndPoseCalib, planeOnlyCalib, sceneStart, planeCalibDone,
-        poseCalibDone, controllerButtonPressed, arucoFound1, arucoFound2, arucoNotFound, reCalib };
+        poseCalibDone, controllerButtonPressed, arucoFound1, arucoFound2, arucoFound3, arucoNotFound, reCalib };
     private bool sceneStarted;
 
     public void setHostIP(string ipAddress){
@@ -103,6 +103,30 @@ public class readInNetworkData : MonoBehaviour {
         }
         Debug.LogError("[TCP] Failed to receive status, because the socket is not ready.");
         return -1;
+    }
+
+    // Receive height values of calibrated positions over TCP
+    public Vector3 receiveHeightDeviations(){
+        if (socketReady){
+            while (!theStream.DataAvailable){
+                Debug.Log("[TCP] Waiting for height values to be received.");
+                System.Threading.Thread.Sleep(1000);
+            }
+            byte[] receivedBytes = new byte[12];
+            theStream.Read(receivedBytes, 0, 12);
+            float heightLL = System.BitConverter.ToSingle(receivedBytes, 0);
+            float heightUR = System.BitConverter.ToSingle(receivedBytes, 4);
+            float heightLR = System.BitConverter.ToSingle(receivedBytes, 8);
+            Debug.Log("[TCP] Height deviations received: " + new Vector3(heightLL, heightUR, heightLR));
+            heightLL /= heightLR;
+            heightUR /= heightLR;
+            heightLR /= heightLR;
+            Vector3 heightDeviations = new Vector3(heightLL, heightUR, heightLR);
+            Debug.Log("[TCP] Height deviations normalized: (" + heightDeviations.x + ", " + heightDeviations.y + ", " + heightDeviations.z + ")");
+            return heightDeviations;
+        }
+        Debug.LogError("[TCP] Failed to receive height values, because the socket is not ready.");
+        return new Vector3();
     }
 
     // Returns the number of bytes that have been read from the stream in int

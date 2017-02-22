@@ -12,6 +12,10 @@ public class tableMenuTrigger: MonoBehaviour
     float lastContactCancel;
     float lastContactXML;
 
+    //TODO
+
+    ArrayList activeCubes;
+
     // Use this for initialization
     void Start()
     {
@@ -20,7 +24,31 @@ public class tableMenuTrigger: MonoBehaviour
         lastContactCancel = Time.timeSinceLevelLoad;
         lastContactXML = Time.timeSinceLevelLoad;
         triggering = false;
+
+        activeCubes = new ArrayList();
     }
+
+    public void addActiveCube( GameObject cube)
+    {
+        activeCubes.Add(cube);
+        Debug.Log("We added: " + cube.name);
+      
+    }
+
+    public void removeActiveCube(GameObject cube)
+    {
+
+        //TODO
+    //    activeCubes.
+
+    }
+
+    public void increaseSavedCubesCounter()
+    {
+        //TODO
+
+    }
+
 
     void OnTriggerEnter(Collider trigger)
     {
@@ -62,7 +90,16 @@ public class tableMenuTrigger: MonoBehaviour
                         lastContactSave = Time.timeSinceLevelLoad;
                     }
                 }
-                
+                else if (gameObject.transform.name == "TableMenuButtons_Apply")
+                {
+                    float actualMilis = Time.timeSinceLevelLoad;
+                    if (actualMilis - lastContactSave >= 0.2f)
+                    {
+                        deleteMarkerDuplicates(activeCubes); 
+
+                    }
+                }
+
                 else if (gameObject.transform.name.Contains("xml")){
                     float actualMilis = Time.timeSinceLevelLoad;
                     if (actualMilis - lastContactXML >= 2f){
@@ -74,6 +111,27 @@ public class tableMenuTrigger: MonoBehaviour
             }
         }
     }
+
+
+
+    public void deleteMarkerDuplicates(ArrayList arrayList)
+    {
+        for(int i=0; i< arrayList.Count; i++)
+        {
+            //TODO
+            //GameObject.Destroy
+            //arrayList[i]. Destroy
+               
+
+
+
+        }
+
+
+
+
+    }
+
 
     void OnTriggerExit(Collider trigger)
     {
