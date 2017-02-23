@@ -18,9 +18,18 @@ public class Timeline : MonoBehaviour {
 		files = new FileInformation[fia.Length];
 		int count=0;
 
+        GameObject savedScenes = GameObject.Find("savedScenes");
+        for(int i = 0; i< savedScenes.transform.childCount; i++)
+        {
+            if (savedScenes.transform.GetChild(i).name!= "TableMenuButtons_Entry")
+                 Destroy(savedScenes.transform.GetChild(i));
+
+        }
+
         //We crawl the file array and create buttons for all the ".xml" file
 		for(int f=0;f<fia.Length;f++){
 			files[f] = new FileInformation(fia[f]);
+            Debug.Log(files[f].fi.Name);
 			if(!files[f].fi.Name.Contains("meta") && files[f].fi.Name.Contains(".xml")){
 				count++;
 				GameObject button = Instantiate(prefabButton.gameObject);
@@ -40,6 +49,7 @@ public class Timeline : MonoBehaviour {
 
 
 	void Start () {
+        Debug.Log("init Timeline Start()");
 		initTimeline ();
 	}
 	

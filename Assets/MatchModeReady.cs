@@ -9,15 +9,19 @@ public class MatchModeReady : MonoBehaviour {
         IsReadyForCopy = false;
     }
 	
-    public void setReadyState(bool state)
+    public void setReadyState(bool state, GameObject trackedMarker)
     {
         IsReadyForCopy = state;
         if(IsReadyForCopy == true){
-            GameObject.Find("TableMenuButtons_Apply").GetComponent<tableMenuTrigger>().addActiveCube(gameObject);
+            GameObject.Find("TableMenuButtons_Save").GetComponent<tableMenuTrigger>().addInstancedMarker(gameObject);
+            GameObject.Find("TableMenuButtons_Save").GetComponent<tableMenuTrigger>().addTrackedMarker(trackedMarker);
+
         }
         if (IsReadyForCopy == false)
         {
-            GameObject.Find("TableMenuButtons_Apply").GetComponent<tableMenuTrigger>().removeActiveCube(gameObject);
+            //Debug.Log("isReadyFor Copy false");
+            GameObject.Find("TableMenuButtons_Save").GetComponent<tableMenuTrigger>().removeInstancedMarker(gameObject);
+            GameObject.Find("TableMenuButtons_Save").GetComponent<tableMenuTrigger>().removeTrackedMarker(trackedMarker);
         }
     }
 

@@ -50,9 +50,9 @@ public class open : MonoBehaviour {
                 if (debug)
                     Debug.Log("Instanciating marker: " + originalID);
                 GameObject newMarker = Instantiate(originalCube);
-
-                GameObject.Find("TableMenuButtons_Apply").GetComponent<tableMenuTrigger>().increaseSavedCubesCounter();
-
+             
+               GameObject.Find("TableMenuButtons_Save").GetComponent<tableMenuTrigger>().increaseSavedCubesCounter();
+               
                 newMarker.name = "Marker" + (originalID + 100);
                 newMarker.transform.parent = GameObject.Find("TableObject").transform;                                
 

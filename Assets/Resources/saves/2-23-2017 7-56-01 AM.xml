@@ -1,5 +1,5 @@
 <AR2COMPOSER_SCENE>
-  <time>2-22-2017 5-16-28 PM</time>
+  <time>2-23-2017 7-56-01 AM</time>
   <TableObject>
     <Marker1>
       <greenCube>
@@ -224,11 +224,11 @@
         <Active>False</Active>
       </Z_Handle>
       <Name>Marker1</Name>
-      <PositionX>0.3930933</PositionX>
+      <PositionX>0.122027</PositionX>
       <PositionY>0.5338702</PositionY>
-      <PositionZ>-0.251585</PositionZ>
+      <PositionZ>-0.1297642</PositionZ>
       <RotationX>0</RotationX>
-      <RotationY>185</RotationY>
+      <RotationY>183</RotationY>
       <RotationZ>0</RotationZ>
       <ScaleX>0.05</ScaleX>
       <ScaleY>0.05</ScaleY>
@@ -458,11 +458,11 @@
         <Active>False</Active>
       </Z_Handle>
       <Name>Marker2</Name>
-      <PositionX>0.3575571</PositionX>
+      <PositionX>0.1021929</PositionX>
       <PositionY>0.5338702</PositionY>
-      <PositionZ>0.0442654</PositionZ>
+      <PositionZ>0.1445884</PositionZ>
       <RotationX>0</RotationX>
-      <RotationY>290</RotationY>
+      <RotationY>94</RotationY>
       <RotationZ>0</RotationZ>
       <ScaleX>0.05</ScaleX>
       <ScaleY>0.05</ScaleY>
