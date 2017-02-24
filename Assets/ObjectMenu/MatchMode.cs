@@ -2,8 +2,8 @@
 using System.Collections;
 
 public class MatchMode : MonoBehaviour {
-	public Color colorStart = Color.red;
-	public Color colorEnd = Color.green;
+    public Color colorStart;
+    public Color colorEnd;
 	public float duration = 1.0F;
 	private Renderer rend;
     public GameObject Cube;
@@ -13,6 +13,8 @@ public class MatchMode : MonoBehaviour {
     void Start () {
 		rend = gameObject.GetComponent<Renderer>();
         tableObject = GameObject.Find("TableObject");
+        colorStart = new Color(0, 0.8f, 0);
+        colorEnd = new Color(0, 0.5f, 0);
     }
 
     public void setMatchMode(bool state){

@@ -4,35 +4,34 @@ using UnityEngine;
 
 public class MatchModeReady : MonoBehaviour {
     public  bool IsReadyForCopy;
-	// Use this for initialization
-	void Start () {
+    public DataHandler DH;
+    private GameObject greenCube;
+
+    void Start () {
         IsReadyForCopy = false;
+        greenCube = gameObject.transform.FindChild("greenCube").gameObject;
     }
 	
-    public void setReadyState(bool state, GameObject trackedMarker)
-    {
+    public void setReadyState(bool state, GameObject trackedMarker){
         IsReadyForCopy = state;
-        if(IsReadyForCopy == true){
-            GameObject.Find("TableMenuButtons_Save").GetComponent<tableMenuTrigger>().addInstancedMarker(gameObject);
-            GameObject.Find("TableMenuButtons_Save").GetComponent<tableMenuTrigger>().addTrackedMarker(trackedMarker);
-
+        if (IsReadyForCopy == true){
+            DH.addInstancedMarker(gameObject);
+            DH.addTrackedMarker(trackedMarker);
+            greenCube.GetComponent<MatchMode>().colorStart = new Color(0.8f, 0, 0);
+            greenCube.GetComponent<MatchMode>().colorEnd = new Color(0.5f, 0, 0);
         }
-        if (IsReadyForCopy == false)
-        {
-            //Debug.Log("isReadyFor Copy false");
-            GameObject.Find("TableMenuButtons_Save").GetComponent<tableMenuTrigger>().removeInstancedMarker(gameObject);
-            GameObject.Find("TableMenuButtons_Save").GetComponent<tableMenuTrigger>().removeTrackedMarker(trackedMarker);
+        if (IsReadyForCopy == false){
+            DH.removeInstancedMarker(gameObject);
+            DH.removeTrackedMarker(trackedMarker);
+            greenCube.GetComponent<MatchMode>().colorStart = new Color(0, 0.8f, 0);
+            greenCube.GetComponent<MatchMode>().colorEnd = new Color(0, 0.5f, 0);
         }
     }
 
-    public bool getReadyState()
-    {
+    public bool getReadyState(){
         return IsReadyForCopy;
-
     }
 
-	// Update is called once per frame
-	void Update () {
-		
+	void Update () {	
 	}
 }

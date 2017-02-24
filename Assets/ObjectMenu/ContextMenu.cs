@@ -50,19 +50,18 @@ public class ContextMenu : MonoBehaviour
         dims.y = cube.transform.localScale.y * displayValueOffset * globalBuildingScale;
         dims.z = cube.transform.localScale.z * displayValueOffset * globalBuildingScale;
         floors = (int)(dims.y / floorHeight/displayValueOffset/globalBuildingScale);
-        //  contextMenu.transform.position = new Vector3(contextMenu.transform.position.x, cube.transform.position.y + 3, contextMenu.transform.position.z);
-        canvasTransform.transform.LookAt(2 * canvasTransform.transform.position - cam.transform.position); //new Quaternion(canvasTransform.transform.rotation.x, , canvasTransform.transform.rotation.z, 1.0f);
+
+        canvasTransform.transform.LookAt(2 * canvasTransform.transform.position - cam.transform.position);
         canvasTransform.transform.localPosition = new Vector3(oriPos.x, oriPos.y + dims.y/displayValueOffset, oriPos.z);
         livingArea = dims.x * dims.z * floors;
 
-        // Normalized according to Miss Laura's Scale
         textArea.text = "Building ID: \t" + buildingID + "\n" +
-            "Scale: \t\t\t1:" +  (1 / 0.005) / globalBuildingScale + "\n"+
-            "Width: \t\t\t" + dims.x + " m\n" +
-            "Depth: \t\t\t" + dims.z + " m\n" +
-            "Height: \t\t" + dims.y + " m\n" +
+            "Scale: \t\t\t1:" + (1 / 0.005) / globalBuildingScale + "\n" +
+            "Width: \t\t\t" + dims.x.ToString("0.##") + " m\n" +
+            "Depth: \t\t\t" + dims.z.ToString("0.##") + " m\n" +
+            "Height: \t\t" + dims.y.ToString("0.##") + " m\n" +
             "Floors: \t\t\t" + floors + "\n" +
-            "Base area: \t" + dims.x * dims.z + " m²\n" +
-            "Living area: \t" + livingArea + " m²";
+            "Base area: \t" + (dims.x * dims.z).ToString("0.##") + " m²\n" +
+            "Living area: \t" + livingArea.ToString("0.##") + " m²";
     }
 }

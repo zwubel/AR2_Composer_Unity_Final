@@ -21,7 +21,7 @@ public class showTimeline : MonoBehaviour {
         {
             ScrollView.SetActive(false);
             savedScenes.SetActive(false);
-            loadSprite.SetActive(true);
+            loadSprite.SetActive(false);
             cancelSprite.SetActive(false);
             saveSprite.SetActive(true);
         }

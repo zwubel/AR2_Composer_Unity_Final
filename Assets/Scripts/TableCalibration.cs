@@ -77,9 +77,10 @@ public class TableCalibration : MonoBehaviour{
                     lowerLeft = position + positionOffsetAruco;
                     LLset = true;
                     StartCoroutine(LongVibration(0.2f, 3999));
-                    Debug.Log("[PLANE CALIBRATION] Lower left corner calibrated to (raw)" + position);
-                    Debug.Log("[PLANE CALIBRATION] Lower left corner calibrated to " + lowerLeft);
-                }else{
+                    Debug.Log("[PLANE CALIBRATION] Lower left corner calibrated to ("
+                        + lowerLeft.x + ", " + lowerLeft.y + ", " + lowerLeft.z + ")");
+                }
+                else{
                     Debug.LogError("[PLANE CALIBRATION] Lower left corner: error!");
                 }
                 break;
@@ -88,8 +89,8 @@ public class TableCalibration : MonoBehaviour{
                     upperRight = position + positionOffsetAruco;
                     URset = true;
                     StartCoroutine(LongVibration(0.2f, 3999));
-                    Debug.Log("[PLANE CALIBRATION] Upper right corner calibrated to (raw)" + position);
-                    Debug.Log("[PLANE CALIBRATION] Upper right corner calibrated to " + upperRight);
+                    Debug.Log("[PLANE CALIBRATION] Upper right corner calibrated to (" 
+                        + upperRight.x + ", " + upperRight.y +", " + upperRight.z + ")");
                 }else{
                     Debug.LogError("[PLANE CALIBRATION] Upper right corner: error!");
                 }
@@ -100,9 +101,10 @@ public class TableCalibration : MonoBehaviour{
                     additionalLRset = true;
                     StartCoroutine(LongVibration(0.5f, 3999));
                     System.Threading.Thread.Sleep(2000);
-                    Debug.Log("[PLANE CALIBRATION] Additional lower right corner calibrated to (raw)" + position);
-                    Debug.Log("[PLANE CALIBRATION] Additional lower right corner calibrated to " + additionalLowerRight);
-                }else{
+                    Debug.Log("[PLANE CALIBRATION] Additional lower right corner calibrated to ("
+                        + additionalLowerRight.x + ", " + additionalLowerRight.y + ", " + additionalLowerRight.z + ")");
+                }
+                else{
                     Debug.LogError("[PLANE CALIBRATION] Additional lower right corner: error!");
                 }
                 break;

@@ -2,217 +2,136 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class tableMenuTrigger: MonoBehaviour
+public class tableMenuTrigger : MonoBehaviour
 {
     private bool triggering;
     private Collider triggerCollider;
     public showTimeline showTimeline;
+
+    public DataHandler DH;
+
     float lastContactLoad;
     float lastContactSave;
     float lastContactCancel;
     float lastContactXML;
-    private int SavedCubesCounter;
+    float lastContactsavedScenes;
+    float lastContactsavedScenes1;
+    float lastContactsavedScenes2;
+    float lastContactsavedScenes3;
+
     public GameObject applybutton;
+    public GameObject savebutton;
+    public GameObject savedScenes;
+    public GameObject savedScenes1;
+    public GameObject savedScenes2;
+    public GameObject savedScenes3;
 
-    //TODO
-
-    ArrayList instancedMarkers;
-    ArrayList trackedMarkers;
-
+    public bool debug = false;
+       
     // Use this for initialization
-    void Start()
-    {
-        SavedCubesCounter = 0;
+    void Start(){
         lastContactLoad = Time.timeSinceLevelLoad;
         lastContactSave = Time.timeSinceLevelLoad;
         lastContactCancel = Time.timeSinceLevelLoad;
         lastContactXML = Time.timeSinceLevelLoad;
         triggering = false;
-        trackedMarkers = new ArrayList();
-        instancedMarkers = new ArrayList();
-         }
-
-    public void addInstancedMarker(GameObject cube)
-    {
-       
-        if (!instancedMarkers.Contains(cube))
-        {
-
-            instancedMarkers.Add(cube);
-             Debug.Log("We added the instanced marker: " + cube.name);
-            
-        }
-      
-    }
-
-    public void addTrackedMarker(GameObject cube)
-    {
-       
-        if (!trackedMarkers.Contains(cube))
-        {
-
-            trackedMarkers.Add(cube);
-            Debug.Log("We added tracked: " + cube.name);
-        }
-
-    }
-
-    public void removeInstancedMarker(GameObject cube)
-    {
-
-        Object O = (Object)cube;
-        object o = (object)O;
-        if (instancedMarkers.Contains(o))
-        {
-           
-            instancedMarkers.Remove(cube);
-             Debug.Log("We removed instance: " + cube.name);
-        }
-
-    }
-
-    public void removeTrackedMarker(GameObject cube)
-    {
-
-        Object O = (Object)cube;
-        object o = (object)O;
-        if (trackedMarkers.Contains(o))
-       {
-            Debug.Log("We remove the tracked marker: " + cube.name);
-            instancedMarkers.Remove(cube);
-          
-        }
-
-    }
-
-    public void increaseSavedCubesCounter()
-    {
-        SavedCubesCounter++;
-
-    }
-    public int getSavedCubesCounter()
-    {
-        return SavedCubesCounter;
-
-    }
-
-    public int getNumberOfActiveMarker()
-    {
-        return instancedMarkers.Count;
-
-    }
-
-    public bool isInsideActiveMarker(GameObject gameobject)
-    {
-        return instancedMarkers.Contains(gameobject);
-
     }
 
 
-    void OnTriggerEnter(Collider trigger)
-    {
-        if (!triggering)
-        {
-            
-            if (trigger.gameObject.name == "bone3" || trigger.gameObject.name == "bone2" || trigger.gameObject.name == "bone1")
-            {
+    void OnTriggerEnter(Collider trigger){
+        if (!triggering){
+            if (trigger.gameObject.name == "bone3" || trigger.gameObject.name == "bone2" || trigger.gameObject.name == "bone1"){
                 triggering = true;
                 triggerCollider = trigger;
-                if (gameObject.transform.name == "TableMenuButtons_Load")
-                {
+                if (gameObject.transform.name == "TableMenuButtons_Cancel"){
                     float actualMilis = Time.timeSinceLevelLoad;
-                    if (actualMilis - lastContactLoad >= 2 && actualMilis - lastContactCancel >= 2 )
-                    {
-                        Debug.Log("init load");
-                        gameObject.GetComponent<Timeline>().initTimeline();
-                        showTimeline.showHideTimeLine();
-                        lastContactLoad = Time.timeSinceLevelLoad;
-                    }
-                }
-                if (gameObject.transform.name == "TableMenuButtons_Cancel")
-                {
-                    float actualMilis = Time.timeSinceLevelLoad;
-                    if (actualMilis - lastContactCancel >= 2 && actualMilis - lastContactLoad >= 2)
-                    {
+                    if (actualMilis - lastContactCancel >= 2 && actualMilis - lastContactLoad >= 2){
                         showTimeline.showHideTimeLine();
                         lastContactCancel = Time.timeSinceLevelLoad;
+                        DH.deleteMarkerDuplicates();
+                        DH.SavedCubesCounter = 0;
                     }
-                }
-                
-                else if (gameObject.transform.name == "TableMenuButtons_Save")
-                {
+                }else if (gameObject.transform.name == "TableMenuButtons_Save"){
                     float actualMilis = Time.timeSinceLevelLoad;
-                    if (actualMilis - lastContactSave >= 0.2f)
-                    {
-                        // TODO: Button Duplikate prüfen
+                    if (actualMilis - lastContactSave >= 2f){
                         gameObject.GetComponent<save>().saveScene();
-                        Debug.Log("init Timeline save");
+                        if (debug)
+                            Debug.Log("init Timeline save");
                         gameObject.GetComponent<Timeline>().initTimeline();
                         lastContactSave = Time.timeSinceLevelLoad;
                     }
-                }
-                else if (gameObject.transform.name == "TableMenuButtons_Apply")
-                {
+                }else if (gameObject.transform.name == "TableMenuButtons_Apply"){
                     float actualMilis = Time.timeSinceLevelLoad;
-                    if (actualMilis - lastContactSave >= 0.2f)
-                    {
-                        if (SavedCubesCounter == instancedMarkers.Count)
-                        {
-                        deleteMarkerDuplicates(instancedMarkers); 
+                    if (actualMilis - lastContactSave >= 2f){
+                        if (DH.SavedCubesCounter == DH.instancedMarkers.Count){
+                            DH.copyProperties2GameMarker();
+                            DH.deleteMarkerDuplicates();
+                            DH.SavedCubesCounter = 0;
+                            applybutton.SetActive(false);
                         }
-
                     }
-                }
-
-                else if (gameObject.transform.name.Contains("xml")){
+                }else if (gameObject.transform.name.Contains("xml")) {
                     float actualMilis = Time.timeSinceLevelLoad;
-                    if (actualMilis - lastContactXML >= 2f){
-                     
-                            gameObject.GetComponent<open>().setPath();
-                            lastContactXML = Time.timeSinceLevelLoad;
-                        
+                    if (actualMilis - lastContactXML >= 2f) {
+                        gameObject.GetComponent<open>().setPath();
+                        lastContactXML = Time.timeSinceLevelLoad;
+                    }
+                }else if (gameObject.transform.name.Contains("TableMenuButtons_one2nine")){
+                    float actualMilis = Time.timeSinceLevelLoad;
+                    if (actualMilis - lastContactsavedScenes >= 2f){
+                        savedScenes.SetActive(true);
+                        savedScenes1.SetActive(false);
+                        savedScenes2.SetActive(false);
+                        savedScenes3.SetActive(false);
+                        lastContactsavedScenes = Time.timeSinceLevelLoad;
+                    }
+                }else if (gameObject.transform.name.Contains("TableMenuButtons_ten2nineteen")){
+                    float actualMilis = Time.timeSinceLevelLoad;
+                    if (actualMilis - lastContactsavedScenes1 >= 2f){
+                        savedScenes.SetActive(false);
+                        savedScenes1.SetActive(true);
+                        savedScenes2.SetActive(false);
+                        savedScenes3.SetActive(false);
+                        lastContactsavedScenes1 = Time.timeSinceLevelLoad;
+                    }
+                }else if (gameObject.transform.name.Contains("TableMenuButtons_twenty2twentynine")){
+                    float actualMilis = Time.timeSinceLevelLoad;
+                    if (actualMilis - lastContactsavedScenes2 >= 2f){
+                        savedScenes.SetActive(false);
+                        savedScenes1.SetActive(false);
+                        savedScenes2.SetActive(true);
+                        savedScenes3.SetActive(false);
+                        lastContactsavedScenes2 = Time.timeSinceLevelLoad;
+                    }
+                }else if (gameObject.transform.name.Contains("TableMenuButtons_thirty2thirtynine")){
+                    float actualMilis = Time.timeSinceLevelLoad;
+                    if (actualMilis - lastContactsavedScenes3 >= 2f){
+                        savedScenes.SetActive(false);
+                        savedScenes1.SetActive(false);
+                        savedScenes2.SetActive(false);
+                        savedScenes3.SetActive(true);
+                        lastContactsavedScenes3 = Time.timeSinceLevelLoad;
                     }
                 }
-
             }
         }
     }
 
-
-
-    public void deleteMarkerDuplicates(ArrayList arrayList)
-    {
-        for(int i=0; i< arrayList.Count; i++)
-        {
-            //TODO
-           GameObject temp = (GameObject)instancedMarkers[i];
-           instancedMarkers.RemoveAt(i);
-            Debug.Log("NarkerDuplicate removed: " + temp.name);
-           Destroy(temp);
-        }
-
-
-
-
-    }
-
-
-    void OnTriggerExit(Collider trigger)
-    {
+    void OnTriggerExit(Collider trigger){
         triggering = false;
         triggerCollider = null;
     }
 
-    // Update is called once per frame
-    void Update()
-    {
-        if (GameObject.Find("TableMenuButtons_Save").gameObject.GetComponent<tableMenuTrigger>().getSavedCubesCounter()== GameObject.Find("TableMenuButtons_Save").gameObject.GetComponent<tableMenuTrigger>().instancedMarkers.Count && applybutton.activeSelf == false)
-        {
-            Debug.Log("SavedCubesCounter " + GameObject.Find("TableMenuButtons_Save").gameObject.GetComponent<tableMenuTrigger>().getSavedCubesCounter() + "instancedMarkers " + GameObject.Find("TableMenuButtons_Save").gameObject.GetComponent<tableMenuTrigger>().instancedMarkers.Count);
-            //start copy properties
-            applybutton.SetActive(true);
-      
-        }
-
+    void Update(){
+        //if (savebutton.GetComponent<tableMenuTrigger>().getSavedCubesCounter()== savebutton.GetComponent<tableMenuTrigger>().instancedMarkers.Count && applybutton.activeSelf == false)
+        //{
+        //   // Debug.Log("SavedCubesCounter " + savebutton.GetComponent<tableMenuTrigger>().getSavedCubesCounter() + "instancedMarkers " + GameObject.Find("TableMenuButtons_Save").gameObject.GetComponent<tableMenuTrigger>().instancedMarkers.Count);
+        //    //start copy properties
+        //    Sprite greyedSave = Resources.Load("TableMenuButtons_Save_Greyed_Out", typeof(Sprite)) as Sprite;
+        //    savebutton.GetComponent<SpriteRenderer>().sprite = greyedSave;
+        //    Sprite apply = Resources.Load("TableMenuButtons_Apply", typeof(Sprite)) as Sprite;
+        //    applybutton.GetComponent<SpriteRenderer>().sprite = greyedSave;
+            
+        //}
     }
 }

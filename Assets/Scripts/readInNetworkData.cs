@@ -118,8 +118,8 @@ public class readInNetworkData : MonoBehaviour {
             float heightUR = System.BitConverter.ToSingle(receivedBytes, 4);
             float heightLR = System.BitConverter.ToSingle(receivedBytes, 8);
             Debug.Log("[TCP] Height deviations received: " + new Vector3(heightLL, heightUR, heightLR));
-            heightLL /= heightLR;
-            heightUR /= heightLR;
+            heightLL /= heightLR-1;
+            heightUR /= heightLR-1;
             heightLR /= heightLR;
             Vector3 heightDeviations = new Vector3(heightLL, heightUR, heightLR);
             Debug.Log("[TCP] Height deviations normalized: (" + heightDeviations.x + ", " + heightDeviations.y + ", " + heightDeviations.z + ")");

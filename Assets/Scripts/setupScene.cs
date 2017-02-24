@@ -37,6 +37,7 @@ public class setupScene : MonoBehaviour{
     private Vector3 calibratedLL;
     private Vector3 calibratedUR;
     private bool calibDone;
+    private Plane workspacePlane;
 
     // State for the main loop
     public enum state { planeCalib, poseAndPlaneCalib, startScene }
@@ -96,8 +97,7 @@ public class setupScene : MonoBehaviour{
 
     public void noCalibration(){
         Debug.Log("[SETUP SCENE] No Calibration has been selected. Loading saved information.");
-        string[] planeCalibDatText = System.IO.File.ReadAllLines(Application.dataPath + "/Resources/planeCalibData.txt");
-        Debug.Log("planeCalibDatText.Length: " + planeCalibDatText.Length);
+        string[] planeCalibDatText = System.IO.File.ReadAllLines(Application.dataPath + "/Resources/planeCalibData.txt");        
         if (planeCalibDatText.Length != 12){
             Debug.LogError("[SETUP SCENE] 'No calibration' has been selected, but no valid text file has been read.");
             SceneManager.UnloadSceneAsync(SceneManager.GetSceneByName("CalibrateOrNot"));
@@ -164,35 +164,50 @@ public class setupScene : MonoBehaviour{
     //}
 
     private float calculatePlaneRotation(Vector3 lowerLeft, Vector3 upperRight, Vector3 additionalLowerRight, Vector3 heightDeviations){
-        Plane plane = new Plane();
+        heightDeviations = new Vector3(1, 1, 1);
+        workspacePlane = new Plane();
         Vector3 planeUR = new Vector3(upperRight.x, upperRight.y * heightDeviations.y, upperRight.z);
-        calibratedUR = planeUR;
+       
+        calibratedUR = planeUR;        
         Vector3 planeAdditionalLR = new Vector3(additionalLowerRight.x, additionalLowerRight.y * heightDeviations.z, additionalLowerRight.z);
         Vector3 planeLL = new Vector3(lowerLeft.x, lowerLeft.y * heightDeviations.x, lowerLeft.z);
+        
         calibratedLL = planeLL;
-        plane.Set3Points(planeUR, planeAdditionalLR, planeLL);
-        Vector3 planeNormalVector = plane.normal;
+        workspacePlane.Set3Points(planeUR, planeAdditionalLR, planeLL);
+        Vector3 planeNormalVector = workspacePlane.normal;
+
+        Debug.DrawLine(planeLL, planeAdditionalLR, Color.green, 3600f, false);
+        Debug.DrawLine(planeAdditionalLR, planeUR, Color.green, 3600f, false);
+        Debug.DrawLine(planeUR, planeLL, Color.green, 3600f, false);
+
+        //Plane planeZ0 = new Plane();
+        //Vector3 planeZ0UR = new Vector3(upperRight.x, additionalLowerRight.y, upperRight.z);
+        //Vector3 planeZ0AdditionalLR = new Vector3(additionalLowerRight.x, additionalLowerRight.y, additionalLowerRight.z);
+        //Vector3 planeZ0LL = new Vector3(lowerLeft.x, additionalLowerRight.y, lowerLeft.z);
+        //planeZ0.Set3Points(planeZ0UR, planeZ0AdditionalLR, planeZ0LL);
+        //Vector3 planeZ0NormalVector = planeZ0.normal;
 
         Plane planeZ0 = new Plane();
-        Vector3 planeZ0UR = new Vector3(upperRight.x, additionalLowerRight.y, upperRight.z);
-        Vector3 planeZ0AdditionalLR = new Vector3(additionalLowerRight.x, additionalLowerRight.y, additionalLowerRight.z);
-        Vector3 planeZ0LL = new Vector3(lowerLeft.x, additionalLowerRight.y, lowerLeft.z);
-        planeZ0.Set3Points(planeZ0UR, planeZ0AdditionalLR, planeZ0LL);
+        //Vector3 planeZ0UR = new Vector3(upperRight.x, additionalLowerRight.y, upperRight.z);
+        Vector3 planeZ0AdditionalLR = new Vector3(upperRight.x, (upperRight.y + lowerLeft.y) / 2, lowerLeft.z);
+        //Vector3 planeZ0LL = new Vector3(lowerLeft.x, additionalLowerRight.y, lowerLeft.z);
+        planeZ0.Set3Points(planeUR, planeZ0AdditionalLR, planeLL);
         Vector3 planeZ0NormalVector = planeZ0.normal;
+
+        Debug.DrawLine(planeLL, planeZ0AdditionalLR, Color.red, 3600f, false);
+        Debug.DrawLine(planeZ0AdditionalLR, planeUR, Color.red, 3600f, false);
+        Debug.DrawLine(planeUR, planeLL, Color.red, 3600f, false);
 
         float dotProduct = Vector3.Dot(planeNormalVector, planeZ0NormalVector);
         float lengthProduct = planeNormalVector.magnitude * planeZ0NormalVector.magnitude;
-        return (float)Math.Acos(dotProduct / lengthProduct);
+        float angleInRad = (float)Math.Acos(dotProduct / lengthProduct);
+        return (float)(angleInRad * (180.0 / Math.PI));
     }
 
     // Is called when table calibration finishes (in TableCalibration.cs)
     public void calibrationDone(Vector3 lowerLeft, Vector3 upperRight, Vector3 additionalLowerRight, Vector3 heightDeviations){
         float rotation = calculatePlaneRotation(lowerLeft, upperRight, additionalLowerRight, heightDeviations);
         Debug.Log("Plane rotation: " + rotation);
-
-        // Make marker positions available globally
-        //calibratedLL = lowerLeft;
-        //calibratedUR = upperRight;
 
         GameObject alreadyCalibrated = GameObject.Find("TablePlane");
         if (alreadyCalibrated != null)
@@ -204,20 +219,22 @@ public class setupScene : MonoBehaviour{
         table.transform.parent = parent.transform;
         float width = Math.Abs(calibratedUR.x - calibratedLL.x);
         float height = Math.Abs(calibratedUR.z - calibratedLL.z);
-        Vector3 position = new Vector3(
-                                        (calibratedLL.x + calibratedUR.x) / 2,
-                                        ((calibratedLL.y + calibratedUR.y) / 2),
+        Vector3 position = new Vector3( (calibratedLL.x + calibratedUR.x) / 2,
+                                        (calibratedLL.y + calibratedUR.y) / 2,
                                         (calibratedLL.z + calibratedUR.z) / 2
                                       );
         table.transform.position = position;
         table.transform.localScale = new Vector3(width / 10, 1, height / 10);
-        table.transform.localRotation = Quaternion.Euler(new Vector3(-rotation, 0, -rotation));
-
-        table.GetComponent<MeshCollider>().enabled = false;
+        table.transform.rotation = Quaternion.Euler(new Vector3(rotation, 0, rotation));
+        table.GetComponent<MeshCollider>().enabled = false;        
 
         GameObject tableMenuParent = GameObject.Find("TableMenuParent");
         tableMenuParent.transform.parent = table.transform;
-        tableMenuParent.transform.position = new Vector3(position.x + width / 2, position.y, position.z - height / 2);
+        //tableMenuParent.transform.position
+        
+        tableMenuParent.transform.position = new Vector3((position.x + width / 2), 0, position.z - height / 2);
+        tableMenuParent.transform.localPosition = new Vector3(tableMenuParent.transform.localPosition.x, 0, tableMenuParent.transform.localPosition.z);
+        tableMenuParent.transform.localRotation = Quaternion.Euler(new Vector3(90, 0, 0));
 
         calibDone = true;
     }
@@ -260,17 +277,19 @@ public class setupScene : MonoBehaviour{
         // Linear interpolation of X
         float xMin = calibratedLL.x;
         float xMax = calibratedUR.x;
-        float newX = xMin + position.x * (xMax - xMin);
-
-        // Linear interpolation of Y
-        float yMin = calibratedLL.y;
-        float yMax = calibratedUR.y;
-        float newY = yMin + position.y * (yMax - yMin);
+        float newX = xMin + position.x * (xMax - xMin);        
 
         // Linear interpolation of Z
         float zMin = calibratedUR.z;
         float zMax = calibratedLL.z;
         float newZ = zMin + position.z * (zMax - zMin);
+
+        // New Y-value
+        Ray ray = new Ray(new Vector3(newX, 0.0f, newZ), Vector3.up);
+        float rayDistance;
+        workspacePlane.Raycast(ray, out rayDistance);
+        float newY = rayDistance;
+        
 
         return new Vector3(newX, newY, newZ);
     }
@@ -300,8 +319,8 @@ public class setupScene : MonoBehaviour{
                 else
                     markerCubes[i].transform.position = position;
                 markerCubes[i].transform.rotation = Quaternion.Euler(0.0f, cur.getAngle(), 0.0f);
-
-                if (cur.getStatus() == 1) // Is marker visible?
+                //Debug.Log("Collider Marker: "+ markerCubes[i].transform.FindChild("CoverCollider").GetComponent<CoverController>().isTriggeredMarker());
+                if (cur.getStatus() == 1 || markerCubes[i].transform.FindChild("CoverCollider").GetComponent<CoverController>().isTriggeredMarker()) // Is marker visible?
                     markerCubes[i].SetActive(true);
                 else
                     markerCubes[i].SetActive(false);

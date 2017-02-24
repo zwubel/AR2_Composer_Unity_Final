@@ -4,28 +4,28 @@ using System.Collections;
 using System.Xml;
 
 public class open : MonoBehaviour {
-
+    public DataHandler DH;
     public bool debug = false;
-	private String projectPath;    
+	private String projectPath;
 
     void Start () {
         projectPath = Application.dataPath + "/Resources/";
     }
 
-    //This methode crawles through all the nodes
+    // Crawl through all nodes
 	void crawlXML( XmlNodeList nodes ){
 
         XmlNodeList markers = null;
         ArrayList activeMarkerIDs = new ArrayList();
-        //int activeMarkerCounter = 0;
-        for (int i=0; i< nodes.Count; i++){
+        
+        for (int i = 0; i < nodes.Count; i++){
 
             if (nodes[i].Name == "TableObject"){
-                markers = nodes[i].ChildNodes; //We now have every marker node in the XmlNodeList called Marker                
+                markers = nodes[i].ChildNodes; // Save every marker node in XmlNodeList called Marker
 
-                for (int j = 0; j < markers.Count -11; j++) // We don't need the last 11 items ( this are the position/scale/rot. from the TableObject node.)
+                for (int j = 0; j < markers.Count -11; j++) // Skip last 11 items (position/scale/rot) of TableObject node
                 {
-                    if(markers.Item(j).ChildNodes.Item(16).InnerText == "True")
+                    if(markers.Item(j).ChildNodes.Item(17).InnerText == "True")
                     {
                         activeMarkerIDs.Add(j);
                         if(debug)
@@ -51,30 +51,32 @@ public class open : MonoBehaviour {
                     Debug.Log("Instanciating marker: " + originalID);
                 GameObject newMarker = Instantiate(originalCube);
              
-               GameObject.Find("TableMenuButtons_Save").GetComponent<tableMenuTrigger>().increaseSavedCubesCounter();
+                DH.increaseSavedCubesCounter();
                
                 newMarker.name = "Marker" + (originalID + 100);
                 newMarker.transform.parent = GameObject.Find("TableObject").transform;                                
 
                 // Position
-                float PosX = float.Parse(node.ChildNodes.Item(7).InnerText, System.Globalization.CultureInfo.CurrentCulture);
-                float PosY = float.Parse(node.ChildNodes.Item(8).InnerText, System.Globalization.CultureInfo.CurrentCulture);
-                float PosZ = float.Parse(node.ChildNodes.Item(9).InnerText, System.Globalization.CultureInfo.CurrentCulture);
+                float PosX = float.Parse(node.ChildNodes.Item(8).InnerText, System.Globalization.CultureInfo.CurrentCulture);
+                float PosY = float.Parse(node.ChildNodes.Item(9).InnerText, System.Globalization.CultureInfo.CurrentCulture);
+                float PosZ = float.Parse(node.ChildNodes.Item(10).InnerText, System.Globalization.CultureInfo.CurrentCulture);
                 newMarker.transform.localPosition = new Vector3(PosX, PosY, PosZ);
 
                 // Rotation
-                float RotX = float.Parse(node.ChildNodes.Item(10).InnerText, System.Globalization.CultureInfo.CurrentCulture);
-                float RotY = float.Parse(node.ChildNodes.Item(11).InnerText, System.Globalization.CultureInfo.CurrentCulture);
-                float RotZ = float.Parse(node.ChildNodes.Item(12).InnerText, System.Globalization.CultureInfo.CurrentCulture);
+                float RotX = float.Parse(node.ChildNodes.Item(11).InnerText, System.Globalization.CultureInfo.CurrentCulture);
+                float RotY = float.Parse(node.ChildNodes.Item(12).InnerText, System.Globalization.CultureInfo.CurrentCulture);
+                float RotZ = float.Parse(node.ChildNodes.Item(13).InnerText, System.Globalization.CultureInfo.CurrentCulture);
                 newMarker.transform.localRotation = Quaternion.Euler(new Vector3(RotX, RotY, RotZ));
                 
+                // Pivot
                 Transform pivot = newMarker.transform.FindChild("Pivot");
                 XmlNode pivotNode = node.ChildNodes.Item(2);                
                 float ScaleX = float.Parse(pivotNode.ChildNodes.Item(8).InnerText, System.Globalization.CultureInfo.CurrentCulture);
                 float ScaleY = float.Parse(pivotNode.ChildNodes.Item(9).InnerText, System.Globalization.CultureInfo.CurrentCulture);
                 float ScaleZ = float.Parse(pivotNode.ChildNodes.Item(10).InnerText, System.Globalization.CultureInfo.CurrentCulture);
                 pivot.localScale = new Vector3(ScaleX, ScaleY, ScaleZ);
-                Debug.Log("pivot scale: " + new Vector3(ScaleX, ScaleY, ScaleZ));
+                if(debug)
+                    Debug.Log("Pivot scale: " + new Vector3(ScaleX, ScaleY, ScaleZ));
                 pivot.gameObject.SetActive(false);
                 pivot.FindChild("ScaledCube").gameObject.SetActive(true);
 
@@ -102,15 +104,17 @@ public class open : MonoBehaviour {
 
                 // Enable match mode
                 GameObject greenCube = newMarker.transform.FindChild("greenCube").gameObject;
+                greenCube.transform.localScale = new Vector3(0.98f, 0.98f, 0.98f);
                 greenCube.SetActive(true);
                 MatchMode matchMode = greenCube.GetComponent<MatchMode>();
                 greenCube.GetComponent<BoxCollider>().enabled = false;
                 matchMode.setMatchMode(true);
                 matchMode.enabled = true;
 
-                // TODO: The scale has to be saved in XML, then the following function can be used...
+                // Load global building scale
                 float buildingScale = float.Parse(nodes[2].InnerText, System.Globalization.CultureInfo.CurrentCulture);
-                Debug.Log("loaded scale: " + buildingScale);
+                if(debug)
+                    Debug.Log("Loaded global building scale: " + buildingScale);
                 GameObject.FindObjectOfType<setupScene>().setGlobalBuildingScale(buildingScale);
             }
         }
@@ -120,9 +124,7 @@ public class open : MonoBehaviour {
         if (debug)
             Debug.Log ("Opening: "+ gameObject.name);
 		openXml(gameObject.name);
-	}
-
-   
+	}   
 
 	public void openXml(String filePath){		
 		String fullFilePath = projectPath + "/saves/" + filePath;
@@ -135,7 +137,7 @@ public class open : MonoBehaviour {
 		XmlNode root = xml.FirstChild;
 		XmlNodeList children = root.ChildNodes;
 
-        // Begin crawling XML nodes
+        // Crawl XML nodes
 		crawlXML (children); 
 	}
 
