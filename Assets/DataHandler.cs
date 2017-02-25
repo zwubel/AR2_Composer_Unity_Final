@@ -7,6 +7,17 @@ public class DataHandler : MonoBehaviour {
     public ArrayList trackedMarkers;
     public int SavedCubesCounter;
     public bool debug = false;
+    private ArrayList additionalMarkers;
+
+    public void deleteAllMarkers(){
+        foreach (Object GO in additionalMarkers)
+            Destroy((GameObject)GO);
+    }
+
+    public void addAdditionalMarker(GameObject marker)
+    {
+        additionalMarkers.Add(marker);
+    }
 
     public void addInstancedMarker(GameObject cube){
         if (!instancedMarkers.Contains(cube)){
@@ -97,7 +108,7 @@ public class DataHandler : MonoBehaviour {
         instancedMarkers = new ArrayList();
         trackedMarkers = new ArrayList();
         SavedCubesCounter = 0;
-
+        additionalMarkers = new ArrayList();
     }
 
     // Update is called once per frame

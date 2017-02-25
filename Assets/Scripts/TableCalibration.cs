@@ -52,26 +52,14 @@ public class TableCalibration : MonoBehaviour{
                 if (LLset && !URset && !additionalLRset){
                     upperRight = position + positionOffsetAruco;
                     URset = true;
-                    StartCoroutine(LongVibration(0.2f, 3999));
+                    StartCoroutine(LongVibration(0.5f, 3999));
+                    System.Threading.Thread.Sleep(2000);
                     Debug.Log("[PLANE CALIBRATION] Upper right corner calibrated to (" 
                         + upperRight.x + ", " + upperRight.y +", " + upperRight.z + ")");
                 }else{
                     Debug.LogError("[PLANE CALIBRATION] Upper right corner: error!");
                 }
-                break;
-            case (int)readInNetworkData.TCPstatus.arucoFound3:
-                if (LLset && URset && !additionalLRset){
-                    additionalLowerRight = position + positionOffsetAruco;
-                    additionalLRset = true;
-                    StartCoroutine(LongVibration(0.5f, 3999));
-                    System.Threading.Thread.Sleep(2000);
-                    Debug.Log("[PLANE CALIBRATION] Additional lower right corner calibrated to ("
-                        + additionalLowerRight.x + ", " + additionalLowerRight.y + ", " + additionalLowerRight.z + ")");
-                }
-                else{
-                    Debug.LogError("[PLANE CALIBRATION] Additional lower right corner: error!");
-                }
-                break;
+                break;            
             case (int)readInNetworkData.TCPstatus.arucoNotFound:
                 Debug.LogError("[PLANE CALIBRATION] AruCo marker not found, please try again."); break;
             case -1: Debug.LogError("[PLANE CALIBRATION] Failed, because of a socket error."); break;
@@ -101,7 +89,6 @@ public class TableCalibration : MonoBehaviour{
         calibrateBoth = false;
         LLset = false;
         URset = false;
-        additionalLRset = false;
     }
 
     private void loadPreviousScene(){
@@ -117,7 +104,6 @@ public class TableCalibration : MonoBehaviour{
         calibrateBoth = false;
         LLset = false;
         URset = false;
-        additionalLRset = false;
     }
 
     void Update() {
@@ -155,19 +141,16 @@ public class TableCalibration : MonoBehaviour{
             //    }
             //    loadNextScene();
             //}
-            if (LLset && URset && additionalLRset){ // Workspace calibration successful
+            if (LLset && URset){ // Workspace calibration successful
                 Debug.Log("Plane calibration: completed successfully.");
 
                 // Tell setupScene that the calibration has been
                 // completed and load / unload corresponding scenes
-                Vector3 heightDeviations = networkData.receiveHeightDeviations();
-                setupScene.calibrationDone(lowerLeft, upperRight, additionalLowerRight, heightDeviations);
+                setupScene.calibrationDone(lowerLeft, upperRight);
 
                 // Write text file
                 string[] CalibPos = {   "" + lowerLeft.x, "" + lowerLeft.y, "" + lowerLeft.z,
-                                        "" + upperRight.x, "" + upperRight.y, "" + upperRight.z,
-                                        "" + additionalLowerRight.x, "" + additionalLowerRight.y, "" + additionalLowerRight.z,
-                                        "" + heightDeviations.x, "" + heightDeviations.y, "" + heightDeviations.z};
+                                        "" + upperRight.x, "" + upperRight.y, "" + upperRight.z};
                 using (System.IO.StreamWriter file = new System.IO.StreamWriter(Application.dataPath + "/Resources/planeCalibData.txt")){
                     foreach (string line in CalibPos){
                         file.WriteLine(line);

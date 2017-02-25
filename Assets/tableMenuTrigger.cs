@@ -21,6 +21,7 @@ public class tableMenuTrigger : MonoBehaviour
 
     public GameObject applybutton;
     public GameObject savebutton;
+    public GameObject cancelbutton;
     public GameObject savedScenes;
     public GameObject savedScenes1;
     public GameObject savedScenes2;
@@ -46,10 +47,10 @@ public class tableMenuTrigger : MonoBehaviour
                 if (gameObject.transform.name == "TableMenuButtons_Cancel"){
                     float actualMilis = Time.timeSinceLevelLoad;
                     if (actualMilis - lastContactCancel >= 2 && actualMilis - lastContactLoad >= 2){
-                        showTimeline.showHideTimeLine();
-                        lastContactCancel = Time.timeSinceLevelLoad;
-                        DH.deleteMarkerDuplicates();
+                        DH.deleteAllMarkers();
                         DH.SavedCubesCounter = 0;
+                        cancelbutton.SetActive(false);
+                        lastContactCancel = Time.timeSinceLevelLoad;
                     }
                 }else if (gameObject.transform.name == "TableMenuButtons_Save"){
                     float actualMilis = Time.timeSinceLevelLoad;
@@ -69,27 +70,20 @@ public class tableMenuTrigger : MonoBehaviour
                             DH.SavedCubesCounter = 0;
                             applybutton.SetActive(false);
                             savebutton.SetActive(true);
+                            cancelbutton.SetActive(false);
                         }
                     }
                 }else if (gameObject.transform.name.Contains("xml")) {
                     float actualMilis = Time.timeSinceLevelLoad;
                     if (actualMilis - lastContactXML >= 2f) {
-                        DH.deleteMarkerDuplicates();
+                        DH.deleteAllMarkers();
+                        DH.SavedCubesCounter = 0;
                         gameObject.GetComponent<open>().setPath();
                         savebutton.SetActive(false);
+                        cancelbutton.SetActive(true);
                         lastContactXML = Time.timeSinceLevelLoad;
                     }
-                }//else if (gameObject.transform.name.Contains("TableMenuButtons_Cancel"))
-                //{
-                //    float actualMilis = Time.timeSinceLevelLoad;
-                //    if (actualMilis - lastContactXML >= 2f)
-                //    {
-                //        DH.deleteMarkerDuplicates();
-                //        gameObject.GetComponent<open>().setPath();
-                //        lastContactXML = Time.timeSinceLevelLoad;
-                //    }
-                //}
-                else if (gameObject.transform.name.Contains("TableMenuButtons_one2nine")){
+                }else if (gameObject.transform.name.Contains("TableMenuButtons_one2nine")){
                     float actualMilis = Time.timeSinceLevelLoad;
                     if (actualMilis - lastContactsavedScenes >= 2f){
                         savedScenes.SetActive(true);

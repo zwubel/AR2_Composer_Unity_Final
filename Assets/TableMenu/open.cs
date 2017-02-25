@@ -105,6 +105,8 @@ public class open : MonoBehaviour {
                 newMarker.transform.FindChild("X_Handle").gameObject.SetActive(false);
                 newMarker.transform.FindChild("CanvasTransform").gameObject.SetActive(false);
 
+                DH.addAdditionalMarker(newMarker);
+
                 // Enable match mode
                 GameObject greenCube = newMarker.transform.FindChild("greenCube").gameObject;
                 greenCube.transform.localScale = new Vector3(0.98f, 0.98f, 0.98f);

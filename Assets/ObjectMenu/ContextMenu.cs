@@ -52,11 +52,11 @@ public class ContextMenu : MonoBehaviour
         floors = (int)(dims.y / floorHeight/displayValueOffset/globalBuildingScale);
 
         canvasTransform.transform.LookAt(2 * canvasTransform.transform.position - cam.transform.position);
-        canvasTransform.transform.localPosition = new Vector3(oriPos.x, oriPos.y + dims.y/displayValueOffset, oriPos.z);
+        canvasTransform.transform.localPosition = new Vector3(oriPos.x, oriPos.y + dims.y/displayValueOffset/globalBuildingScale, oriPos.z);
         livingArea = dims.x * dims.z * floors;
 
         textArea.text = "Building ID: \t" + buildingID + "\n" +
-            "Scale: \t\t\t1:" + (1 / 0.005) / globalBuildingScale + "\n" +
+            "Scale: \t\t\t1:" + Math.Round((1 / 0.005) / globalBuildingScale) + "\n" +
             "Width: \t\t\t" + dims.x.ToString("0.##") + " m\n" +
             "Depth: \t\t\t" + dims.z.ToString("0.##") + " m\n" +
             "Height: \t\t" + dims.y.ToString("0.##") + " m\n" +

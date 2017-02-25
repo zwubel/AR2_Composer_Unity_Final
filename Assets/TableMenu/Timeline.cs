@@ -58,9 +58,6 @@ public class Timeline : MonoBehaviour {
         }
 
         // Crawl file array and create buttons for all ".xml" file
-        //PageCounter = 0;
-        //fileCounter = 0;
-        //int count = 0;
         ArrayList xmlFiles = new ArrayList();
         int counter = 0;
         for (int i = fia.Length - 1; i >= 0; i--){

@@ -15,10 +15,7 @@ public class LeapHandCalib : MonoBehaviour {
 	
 	void Update () {
         if (!heightSet) { 
-            if (!trackedObj.gameObject.activeSelf && !controllerFailed){
-                Debug.LogError("[TABLE HEIGHT CALIBRATION] Controller (right) not found, please connect device and try again!");
-                controllerFailed = true;
-            }else if(trackedObj.gameObject.activeSelf){
+            if(trackedObj.gameObject.activeSelf){
                 controllerdevice = SteamVR_Controller.Input((int)trackedObj.index);
                 if (controllerdevice.GetPressDown(SteamVR_Controller.ButtonMask.Trigger)){
                     float posHand = rightHand.transform.position.y;
