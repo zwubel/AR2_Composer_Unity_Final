@@ -3,6 +3,7 @@ using System;
 using System.Collections;
 using UnityEngine.SceneManagement;
 using System.Text.RegularExpressions;
+using System.IO;
 
 public class setupScene : MonoBehaviour{
     private GameObject[] markerCubes;
@@ -173,51 +174,54 @@ public class setupScene : MonoBehaviour{
     //    calibDone = true;        
     //}
 
-    private float calculatePlaneRotation(Vector3 lowerLeft, Vector3 upperRight, Vector3 additionalLowerRight, Vector3 heightDeviations){
-        heightDeviations = new Vector3(1, 1, 1);
-        workspacePlane = new Plane();
-        Vector3 planeUR = new Vector3(upperRight.x, upperRight.y * heightDeviations.y, upperRight.z);
+    //private float calculatePlaneRotation(Vector3 lowerLeft, Vector3 upperRight, Vector3 additionalLowerRight, Vector3 heightDeviations){
+    //    heightDeviations = new Vector3(1, 1, 1);
+    //    workspacePlane = new Plane();
+    //    Vector3 planeUR = new Vector3(upperRight.x, upperRight.y * heightDeviations.y, upperRight.z);
        
-        calibratedUR = planeUR;        
-        Vector3 planeAdditionalLR = new Vector3(additionalLowerRight.x, additionalLowerRight.y * heightDeviations.z, additionalLowerRight.z);
-        Vector3 planeLL = new Vector3(lowerLeft.x, lowerLeft.y * heightDeviations.x, lowerLeft.z);
+    //    calibratedUR = planeUR;        
+    //    Vector3 planeAdditionalLR = new Vector3(additionalLowerRight.x, additionalLowerRight.y * heightDeviations.z, additionalLowerRight.z);
+    //    Vector3 planeLL = new Vector3(lowerLeft.x, lowerLeft.y * heightDeviations.x, lowerLeft.z);
         
-        calibratedLL = planeLL;
-        workspacePlane.Set3Points(planeUR, planeAdditionalLR, planeLL);
-        Vector3 planeNormalVector = workspacePlane.normal;
+    //    calibratedLL = planeLL;
+    //    workspacePlane.Set3Points(planeUR, planeAdditionalLR, planeLL);
+    //    Vector3 planeNormalVector = workspacePlane.normal;
 
-        Debug.DrawLine(planeLL, planeAdditionalLR, Color.green, 3600f, false);
-        Debug.DrawLine(planeAdditionalLR, planeUR, Color.green, 3600f, false);
-        Debug.DrawLine(planeUR, planeLL, Color.green, 3600f, false);
+    //    Debug.DrawLine(planeLL, planeAdditionalLR, Color.green, 3600f, false);
+    //    Debug.DrawLine(planeAdditionalLR, planeUR, Color.green, 3600f, false);
+    //    Debug.DrawLine(planeUR, planeLL, Color.green, 3600f, false);
 
-        //Plane planeZ0 = new Plane();
-        //Vector3 planeZ0UR = new Vector3(upperRight.x, additionalLowerRight.y, upperRight.z);
-        //Vector3 planeZ0AdditionalLR = new Vector3(additionalLowerRight.x, additionalLowerRight.y, additionalLowerRight.z);
-        //Vector3 planeZ0LL = new Vector3(lowerLeft.x, additionalLowerRight.y, lowerLeft.z);
-        //planeZ0.Set3Points(planeZ0UR, planeZ0AdditionalLR, planeZ0LL);
-        //Vector3 planeZ0NormalVector = planeZ0.normal;
+    //    //Plane planeZ0 = new Plane();
+    //    //Vector3 planeZ0UR = new Vector3(upperRight.x, additionalLowerRight.y, upperRight.z);
+    //    //Vector3 planeZ0AdditionalLR = new Vector3(additionalLowerRight.x, additionalLowerRight.y, additionalLowerRight.z);
+    //    //Vector3 planeZ0LL = new Vector3(lowerLeft.x, additionalLowerRight.y, lowerLeft.z);
+    //    //planeZ0.Set3Points(planeZ0UR, planeZ0AdditionalLR, planeZ0LL);
+    //    //Vector3 planeZ0NormalVector = planeZ0.normal;
 
-        Plane planeZ0 = new Plane();
-        //Vector3 planeZ0UR = new Vector3(upperRight.x, additionalLowerRight.y, upperRight.z);
-        Vector3 planeZ0AdditionalLR = new Vector3(upperRight.x, (upperRight.y + lowerLeft.y) / 2, lowerLeft.z);
-        //Vector3 planeZ0LL = new Vector3(lowerLeft.x, additionalLowerRight.y, lowerLeft.z);
-        planeZ0.Set3Points(planeUR, planeZ0AdditionalLR, planeLL);
-        Vector3 planeZ0NormalVector = planeZ0.normal;
+    //    Plane planeZ0 = new Plane();
+    //    //Vector3 planeZ0UR = new Vector3(upperRight.x, additionalLowerRight.y, upperRight.z);
+    //    Vector3 planeZ0AdditionalLR = new Vector3(upperRight.x, (upperRight.y + lowerLeft.y) / 2, lowerLeft.z);
+    //    //Vector3 planeZ0LL = new Vector3(lowerLeft.x, additionalLowerRight.y, lowerLeft.z);
+    //    planeZ0.Set3Points(planeUR, planeZ0AdditionalLR, planeLL);
+    //    Vector3 planeZ0NormalVector = planeZ0.normal;
 
-        Debug.DrawLine(planeLL, planeZ0AdditionalLR, Color.red, 3600f, false);
-        Debug.DrawLine(planeZ0AdditionalLR, planeUR, Color.red, 3600f, false);
-        Debug.DrawLine(planeUR, planeLL, Color.red, 3600f, false);
+    //    Debug.DrawLine(planeLL, planeZ0AdditionalLR, Color.red, 3600f, false);
+    //    Debug.DrawLine(planeZ0AdditionalLR, planeUR, Color.red, 3600f, false);
+    //    Debug.DrawLine(planeUR, planeLL, Color.red, 3600f, false);
 
-        float dotProduct = Vector3.Dot(planeNormalVector, planeZ0NormalVector);
-        float lengthProduct = planeNormalVector.magnitude * planeZ0NormalVector.magnitude;
-        float angleInRad = (float)Math.Acos(dotProduct / lengthProduct);
-        return (float)(angleInRad * (180.0 / Math.PI));
-    }
+    //    float dotProduct = Vector3.Dot(planeNormalVector, planeZ0NormalVector);
+    //    float lengthProduct = planeNormalVector.magnitude * planeZ0NormalVector.magnitude;
+    //    float angleInRad = (float)Math.Acos(dotProduct / lengthProduct);
+    //    return (float)(angleInRad * (180.0 / Math.PI));
+    //}
 
     // Is called when table calibration finishes (in TableCalibration.cs)
     public void calibrationDone(Vector3 lowerLeft, Vector3 upperRight, Vector3 additionalLowerRight, Vector3 heightDeviations){
-        float rotation = calculatePlaneRotation(lowerLeft, upperRight, additionalLowerRight, heightDeviations);
-        Debug.Log("Plane rotation: " + rotation);
+        calibratedLL = lowerLeft;
+        calibratedUR = upperRight;
+
+        //float rotation = calculatePlaneRotation(lowerLeft, upperRight, additionalLowerRight, heightDeviations);
+        // Debug.Log("Plane rotation: " + rotation);
 
         GameObject alreadyCalibrated = GameObject.Find("TablePlane");
         if (alreadyCalibrated != null)
@@ -235,7 +239,7 @@ public class setupScene : MonoBehaviour{
                                       );
         table.transform.position = position;
         table.transform.localScale = new Vector3(width / 10, 1, height / 10);
-        table.transform.rotation = Quaternion.Euler(new Vector3(rotation, 0, rotation));
+        //table.transform.rotation = Quaternion.Euler(new Vector3(rotation, 0, rotation));
         table.GetComponent<MeshCollider>().enabled = false;        
 
         GameObject tableMenuParent = GameObject.Find("TableMenuParent");
@@ -248,6 +252,12 @@ public class setupScene : MonoBehaviour{
 
         calibrationInProgress = false;
         calibDone = true;        
+    }
+
+    private void deleteSavesDir(){
+        string path = Application.dataPath + "/Resources/saves/";
+        Directory.Delete(path, true);        
+        Directory.CreateDirectory(path);
     }
 
     void Start() {
@@ -297,11 +307,13 @@ public class setupScene : MonoBehaviour{
         float newZ = zMin + position.z * (zMax - zMin);
 
         // New Y-value
-        Ray ray = new Ray(new Vector3(newX, 0.0f, newZ), Vector3.up);
-        float rayDistance;
-        workspacePlane.Raycast(ray, out rayDistance);
-        float newY = rayDistance;
-        
+        //Ray ray = new Ray(new Vector3(newX, 0.0f, newZ), Vector3.up);
+        //float rayDistance;
+        //workspacePlane.Raycast(ray, out rayDistance);
+        //float newY = rayDistance;
+
+        float newY = (calibratedUR.y + calibratedLL.y) / 2;
+        newY += markerHeightOffset;
 
         return new Vector3(newX, newY, newZ);
     }
@@ -350,6 +362,7 @@ public class setupScene : MonoBehaviour{
 
                 // MENU SELECTION: 'Workspace' in 'SelectCalibrationTarget' scene
                 case (int)state.planeCalib:
+                    deleteSavesDir();
                     calibrationInProgress = true;
                     Debug.Log("[STATE LOOP] Entered state: planeCalib");
                     tableCalib.enabled = true;
@@ -360,6 +373,7 @@ public class setupScene : MonoBehaviour{
                 
                 // MENU SELECTION: 'Workspace and camera' in 'SelectCalibrationTarget' scene
                 case (int)state.poseAndPlaneCalib:
+                    deleteSavesDir();
                     calibrationInProgress = true;
                     SceneManager.LoadScene("doPoseCalibInVS", LoadSceneMode.Additive);
                     Debug.Log("[STATE LOOP] Entered state: poseAndPlaneCalib");
@@ -372,6 +386,7 @@ public class setupScene : MonoBehaviour{
 
                 // MENU SELECTION: 'Start' in 'SetScale' scene
                 case (int)state.startScene:
+                    GameObject.Find("TableMenuButtons_Save").GetComponent<Timeline>().initTimeline();
                     Debug.Log("[STATE LOOP] Entered state: startScene");
                     networkData.sendTCPstatus((int)readInNetworkData.TCPstatus.sceneStart);
                     networkData.setSceneStarted(true);

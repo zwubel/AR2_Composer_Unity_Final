@@ -16,7 +16,7 @@ public class StopMatchmode : MonoBehaviour {
     // Use this for initialization
     void Start () {
         colliding = false;
-        myID = 0;       
+        myID = 0;
 	}
 	
     private void findMyID(GameObject marker){
@@ -27,15 +27,19 @@ public class StopMatchmode : MonoBehaviour {
     void OnTriggerEnter(Collider collider){
         if (debug)
             Debug.Log(gameObject.name + ": onTriggerEnter has been called.");
-        colliding = true;
-        collidingTrackedMarker = collider.gameObject.transform.parent.transform.parent.gameObject;
+        if (collider.name.Equals("CubeA") || collider.name.Equals("CubeB") || collider.name.Equals("CubeC") || collider.name.Equals("CubeD")) { 
+            colliding = true;
+            collidingTrackedMarker = collider.gameObject.transform.parent.transform.parent.gameObject;
+        }
     }
 
     void OnTriggerExit(Collider collider){
         if (debug)
             Debug.Log(gameObject.name + ": onTriggerExit has been called.");
-        colliding = false;
-        collidingTrackedMarker = null;
+        if (collider.name.Equals("CubeA") || collider.name.Equals("CubeB") || collider.name.Equals("CubeC") || collider.name.Equals("CubeD")){         
+            colliding = false;
+            collidingTrackedMarker = null;
+        }
     }
 
 

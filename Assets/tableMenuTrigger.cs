@@ -68,15 +68,28 @@ public class tableMenuTrigger : MonoBehaviour
                             DH.deleteMarkerDuplicates();
                             DH.SavedCubesCounter = 0;
                             applybutton.SetActive(false);
+                            savebutton.SetActive(true);
                         }
                     }
                 }else if (gameObject.transform.name.Contains("xml")) {
                     float actualMilis = Time.timeSinceLevelLoad;
                     if (actualMilis - lastContactXML >= 2f) {
+                        DH.deleteMarkerDuplicates();
                         gameObject.GetComponent<open>().setPath();
+                        savebutton.SetActive(false);
                         lastContactXML = Time.timeSinceLevelLoad;
                     }
-                }else if (gameObject.transform.name.Contains("TableMenuButtons_one2nine")){
+                }//else if (gameObject.transform.name.Contains("TableMenuButtons_Cancel"))
+                //{
+                //    float actualMilis = Time.timeSinceLevelLoad;
+                //    if (actualMilis - lastContactXML >= 2f)
+                //    {
+                //        DH.deleteMarkerDuplicates();
+                //        gameObject.GetComponent<open>().setPath();
+                //        lastContactXML = Time.timeSinceLevelLoad;
+                //    }
+                //}
+                else if (gameObject.transform.name.Contains("TableMenuButtons_one2nine")){
                     float actualMilis = Time.timeSinceLevelLoad;
                     if (actualMilis - lastContactsavedScenes >= 2f){
                         savedScenes.SetActive(true);

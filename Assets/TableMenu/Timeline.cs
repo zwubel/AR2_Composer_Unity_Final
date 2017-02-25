@@ -106,7 +106,6 @@ public class Timeline : MonoBehaviour {
 
             button.name = ((FileInformation)xmlFiles[j]).fi.Name;
             button.GetComponentInChildren<Text>().text = button.name.Remove(button.name.Length - 4);
-            //Debug.Log("Positioning counter: " + positioningCounter);
             button.transform.localPosition = new Vector3(0, prefabButton.transform.localPosition.y - 4 + (4 - positioningCounter * 4), 0);
             button.transform.localScale = new Vector3(1, 1, 1);
             button.transform.localRotation = Quaternion.Euler(new Vector3());
@@ -115,45 +114,6 @@ public class Timeline : MonoBehaviour {
             if (j == 5 || j == 11 || j == 17)
                 positioningCounter = 0;            
         }
-
-  //      for (int f = fia.Length-1; f >= lowest; f--){
-  //          if(fia.Length > 48 - 1){
-  //              lowest = fia.Length - 48 - 1;
-  //          }
-  //          if (fileCounter == 11) {
-  //              PageCounter++;
-  //              if(debug)
-  //                  Debug.Log("PageCounter: " + PageCounter);
-  //              fileCounter = 0;
-  //              count = 0;
-  //          }
-  //          fileCounter++;
-  //          if (debug)
-  //              Debug.Log("fileCounter: " + fileCounter);
-  //          files[f] = new FileInformation(fia[f]);
-  //          if (debug)
-  //              Debug.Log(files[f].fi.Name);
-		//	if(!files[f].fi.Name.Contains("meta") && files[f].fi.Name.Contains(".xml")){
-  //              count++;
-		//		GameObject button = Instantiate(prefabButton.gameObject);
-  //              switch (PageCounter) {
-  //                  case 1: button.transform.parent = SavedScenes1.transform; break;
-  //                  case 2: button.transform.parent = SavedScenes2.transform; break;
-  //                  case 3: button.transform.parent = SavedScenes3.transform; break;
-  //                  default: button.transform.parent = SavedScenes.transform; break;
-  //              }
-
-  //              button.name = files [f].fi.Name;
-		//		button.GetComponentInChildren<Text>().text = button.name.Remove(button.name.Length - 4);
-		//		button.transform.localPosition = new Vector3 (0, prefabButton.transform.localPosition.y + (4 - count * 4), 0 );
-  //              button.transform.localScale = new Vector3(1, 1, 1);
-  //              button.transform.localRotation = Quaternion.Euler(new Vector3());
-
-  //              //Debug.Log("Local Scale XML" + prefabButton.transform.localScale + "Parent name" + prefabButton.transform.parent.name);
-  //              if(debug)
-  //                  Debug.Log ("reading file: " + button.name);
-		//	}
-		//}
 		prefabButton.SetActive (false);
 	}
 

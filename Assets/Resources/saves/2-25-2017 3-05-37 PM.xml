@@ -1,5 +1,5 @@
 <AR2COMPOSER_SCENE>
-  <time>2-25-2017 9-50-12 AM</time>
+  <time>2-25-2017 3-05-37 PM</time>
   <TableObject>
     <Marker1>
       <greenCube>
@@ -96,11 +96,11 @@
         </ContextMenu>
         <Name>CanvasTransform</Name>
         <PositionX>0</PositionX>
-        <PositionY>1.171</PositionY>
+        <PositionY>201.171</PositionY>
         <PositionZ>0</PositionZ>
-        <RotationX>0</RotationX>
-        <RotationY>90</RotationY>
-        <RotationZ>0</RotationZ>
+        <RotationX>271.4873</RotationX>
+        <RotationY>176.0949</RotationY>
+        <RotationZ>-1.64489E-05</RotationZ>
         <ScaleX>5.958396</ScaleX>
         <ScaleY>5.958385</ScaleY>
         <ScaleZ>5.958394</ScaleZ>
@@ -127,17 +127,17 @@
         <RotationX>0</RotationX>
         <RotationY>0</RotationY>
         <RotationZ>0</RotationZ>
-        <ScaleX>2</ScaleX>
-        <ScaleY>1</ScaleY>
+        <ScaleX>1.50441</ScaleX>
+        <ScaleY>0.25</ScaleY>
         <ScaleZ>2</ScaleZ>
         <Active>True</Active>
       </Pivot>
       <X_Handle>
         <CylinderX>
           <Name>CylinderX</Name>
-          <PositionX>0</PositionX>
-          <PositionY>-1.62</PositionY>
-          <PositionZ>0.251</PositionZ>
+          <PositionX>-7.033348E-06</PositionX>
+          <PositionY>-1.620019</PositionY>
+          <PositionZ>0.2510004</PositionZ>
           <RotationX>0</RotationX>
           <RotationY>270</RotationY>
           <RotationZ>90</RotationZ>
@@ -147,7 +147,7 @@
           <Active>True</Active>
         </CylinderX>
         <Name>X_Handle</Name>
-        <PositionX>-1.505</PositionX>
+        <PositionX>-1.00941</PositionX>
         <PositionY>0.25</PositionY>
         <PositionZ>0.48</PositionZ>
         <RotationX>90</RotationX>
@@ -161,9 +161,9 @@
       <Y_Handle>
         <CylinderY>
           <Name>CylinderY</Name>
-          <PositionX>0</PositionX>
-          <PositionY>-1.65</PositionY>
-          <PositionZ>0.251</PositionZ>
+          <PositionX>3.695488E-06</PositionX>
+          <PositionY>-1.650022</PositionY>
+          <PositionZ>0.2510004</PositionZ>
           <RotationX>270</RotationX>
           <RotationY>0</RotationY>
           <RotationZ>0</RotationZ>
@@ -187,12 +187,12 @@
       <Z_Handle>
         <Minus>
           <Name>Minus</Name>
-          <PositionX>-1.52</PositionX>
-          <PositionY>-1.64</PositionY>
-          <PositionZ>0.251</PositionZ>
+          <PositionX>-1.519999</PositionX>
+          <PositionY>-1.640046</PositionY>
+          <PositionZ>0.2509999</PositionZ>
           <RotationX>0</RotationX>
           <RotationY>0</RotationY>
-          <RotationZ>0</RotationZ>
+          <RotationZ>6.830188E-06</RotationZ>
           <ScaleX>1.449926</ScaleX>
           <ScaleY>1.45</ScaleY>
           <ScaleZ>0.5</ScaleZ>
@@ -200,19 +200,19 @@
         </Minus>
         <Plus>
           <Name>Plus</Name>
-          <PositionX>1.57</PositionX>
-          <PositionY>-1.64</PositionY>
-          <PositionZ>0.251</PositionZ>
+          <PositionX>1.570035</PositionX>
+          <PositionY>-1.640056</PositionY>
+          <PositionZ>0.2510001</PositionZ>
           <RotationX>0</RotationX>
           <RotationY>0</RotationY>
-          <RotationZ>0</RotationZ>
+          <RotationZ>6.830188E-06</RotationZ>
           <ScaleX>1.467143</ScaleX>
           <ScaleY>1.450047</ScaleY>
           <ScaleZ>0.5000398</ScaleZ>
           <Active>True</Active>
         </Plus>
         <Name>Z_Handle</Name>
-        <PositionX>-1.5</PositionX>
+        <PositionX>-1.00441</PositionX>
         <PositionY>0.25</PositionY>
         <PositionZ>-1.5</PositionZ>
         <RotationX>90</RotationX>
@@ -237,16 +237,16 @@
         <Active>True</Active>
       </CoverCollider>
       <Name>Marker1</Name>
-      <PositionX>0.6071899</PositionX>
-      <PositionY>0.8166867</PositionY>
-      <PositionZ>-0.1637534</PositionZ>
+      <PositionX>0.2577761</PositionX>
+      <PositionY>0.6425427</PositionY>
+      <PositionZ>0.01576641</PositionZ>
       <RotationX>0</RotationX>
-      <RotationY>42</RotationY>
+      <RotationY>196</RotationY>
       <RotationZ>0</RotationZ>
       <ScaleX>0.05</ScaleX>
       <ScaleY>0.05</ScaleY>
       <ScaleZ>0.05</ScaleZ>
-      <Active>False</Active>
+      <Active>True</Active>
     </Marker1>
     <Marker2>
       <greenCube>
@@ -343,15 +343,15 @@
         </ContextMenu>
         <Name>CanvasTransform</Name>
         <PositionX>0</PositionX>
-        <PositionY>1.171</PositionY>
+        <PositionY>2601.171</PositionY>
         <PositionZ>0</PositionZ>
-        <RotationX>0</RotationX>
-        <RotationY>90</RotationY>
+        <RotationX>270.1083</RotationX>
+        <RotationY>128.5164</RotationY>
         <RotationZ>0</RotationZ>
         <ScaleX>5.958396</ScaleX>
         <ScaleY>5.958385</ScaleY>
         <ScaleZ>5.958394</ScaleZ>
-        <Active>False</Active>
+        <Active>True</Active>
       </CanvasTransform>
       <Pivot>
         <ScaledCube>
@@ -374,17 +374,17 @@
         <RotationX>0</RotationX>
         <RotationY>0</RotationY>
         <RotationZ>0</RotationZ>
-        <ScaleX>2</ScaleX>
-        <ScaleY>1</ScaleY>
+        <ScaleX>2.808958</ScaleX>
+        <ScaleY>3.25</ScaleY>
         <ScaleZ>2</ScaleZ>
         <Active>True</Active>
       </Pivot>
       <X_Handle>
         <CylinderX>
           <Name>CylinderX</Name>
-          <PositionX>0</PositionX>
-          <PositionY>-1.62</PositionY>
-          <PositionZ>0.251</PositionZ>
+          <PositionX>-2.563E-06</PositionX>
+          <PositionY>-1.620247</PositionY>
+          <PositionZ>0.2510004</PositionZ>
           <RotationX>0</RotationX>
           <RotationY>270</RotationY>
           <RotationZ>90</RotationZ>
@@ -394,7 +394,7 @@
           <Active>True</Active>
         </CylinderX>
         <Name>X_Handle</Name>
-        <PositionX>-1.505</PositionX>
+        <PositionX>-2.313958</PositionX>
         <PositionY>0.25</PositionY>
         <PositionZ>0.48</PositionZ>
         <RotationX>90</RotationX>
@@ -403,14 +403,14 @@
         <ScaleX>0.5</ScaleX>
         <ScaleY>0.5</ScaleY>
         <ScaleZ>0.5</ScaleZ>
-        <Active>False</Active>
+        <Active>True</Active>
       </X_Handle>
       <Y_Handle>
         <CylinderY>
           <Name>CylinderY</Name>
-          <PositionX>0</PositionX>
-          <PositionY>-1.65</PositionY>
-          <PositionZ>0.251</PositionZ>
+          <PositionX>5.722046E-06</PositionX>
+          <PositionY>-1.650022</PositionY>
+          <PositionZ>0.2510004</PositionZ>
           <RotationX>270</RotationX>
           <RotationY>0</RotationY>
           <RotationZ>0</RotationZ>
@@ -429,17 +429,17 @@
         <ScaleX>0.5</ScaleX>
         <ScaleY>0.5000005</ScaleY>
         <ScaleZ>0.5000005</ScaleZ>
-        <Active>False</Active>
+        <Active>True</Active>
       </Y_Handle>
       <Z_Handle>
         <Minus>
           <Name>Minus</Name>
-          <PositionX>-1.52</PositionX>
-          <PositionY>-1.64</PositionY>
-          <PositionZ>0.251</PositionZ>
+          <PositionX>-1.51994</PositionX>
+          <PositionY>-1.640671</PositionY>
+          <PositionZ>0.2509999</PositionZ>
           <RotationX>0</RotationX>
           <RotationY>0</RotationY>
-          <RotationZ>0</RotationZ>
+          <RotationZ>4.781131E-05</RotationZ>
           <ScaleX>1.449926</ScaleX>
           <ScaleY>1.45</ScaleY>
           <ScaleZ>0.5</ScaleZ>
@@ -447,19 +447,19 @@
         </Minus>
         <Plus>
           <Name>Plus</Name>
-          <PositionX>1.57</PositionX>
-          <PositionY>-1.64</PositionY>
-          <PositionZ>0.251</PositionZ>
+          <PositionX>1.570547</PositionX>
+          <PositionY>-1.640859</PositionY>
+          <PositionZ>0.2510001</PositionZ>
           <RotationX>0</RotationX>
           <RotationY>0</RotationY>
-          <RotationZ>0</RotationZ>
+          <RotationZ>4.781131E-05</RotationZ>
           <ScaleX>1.467143</ScaleX>
           <ScaleY>1.450047</ScaleY>
           <ScaleZ>0.5000398</ScaleZ>
           <Active>True</Active>
         </Plus>
         <Name>Z_Handle</Name>
-        <PositionX>-1.5</PositionX>
+        <PositionX>-2.308958</PositionX>
         <PositionY>0.25</PositionY>
         <PositionZ>-1.5</PositionZ>
         <RotationX>90</RotationX>
@@ -468,7 +468,7 @@
         <ScaleX>0.5000008</ScaleX>
         <ScaleY>0.5000008</ScaleY>
         <ScaleZ>0.5000011</ScaleZ>
-        <Active>False</Active>
+        <Active>True</Active>
       </Z_Handle>
       <CoverCollider>
         <Name>CoverCollider</Name>
@@ -484,16 +484,16 @@
         <Active>True</Active>
       </CoverCollider>
       <Name>Marker2</Name>
-      <PositionX>0.2941651</PositionX>
-      <PositionY>0.799674</PositionY>
-      <PositionZ>-0.1606043</PositionZ>
+      <PositionX>0.4575041</PositionX>
+      <PositionY>0.6425427</PositionY>
+      <PositionZ>-0.1168399</PositionZ>
       <RotationX>0</RotationX>
-      <RotationY>35</RotationY>
+      <RotationY>229</RotationY>
       <RotationZ>0</RotationZ>
       <ScaleX>0.05</ScaleX>
       <ScaleY>0.05</ScaleY>
       <ScaleZ>0.05</ScaleZ>
-      <Active>False</Active>
+      <Active>True</Active>
     </Marker2>
     <Marker3>
       <greenCube>
@@ -590,15 +590,15 @@
         </ContextMenu>
         <Name>CanvasTransform</Name>
         <PositionX>0</PositionX>
-        <PositionY>1.171</PositionY>
+        <PositionY>1201.171</PositionY>
         <PositionZ>0</PositionZ>
-        <RotationX>0</RotationX>
-        <RotationY>90</RotationY>
-        <RotationZ>0</RotationZ>
+        <RotationX>270.575</RotationX>
+        <RotationY>341.9361</RotationY>
+        <RotationZ>-0.0001701454</RotationZ>
         <ScaleX>5.958396</ScaleX>
         <ScaleY>5.958385</ScaleY>
         <ScaleZ>5.958394</ScaleZ>
-        <Active>False</Active>
+        <Active>True</Active>
       </CanvasTransform>
       <Pivot>
         <ScaledCube>
@@ -621,17 +621,17 @@
         <RotationX>0</RotationX>
         <RotationY>0</RotationY>
         <RotationZ>0</RotationZ>
-        <ScaleX>2</ScaleX>
-        <ScaleY>1</ScaleY>
-        <ScaleZ>2</ScaleZ>
+        <ScaleX>1</ScaleX>
+        <ScaleY>1.5</ScaleY>
+        <ScaleZ>1</ScaleZ>
         <Active>True</Active>
       </Pivot>
       <X_Handle>
         <CylinderX>
           <Name>CylinderX</Name>
-          <PositionX>0</PositionX>
-          <PositionY>-1.62</PositionY>
-          <PositionZ>0.251</PositionZ>
+          <PositionX>3.516674E-06</PositionX>
+          <PositionY>-1.620004</PositionY>
+          <PositionZ>0.2510004</PositionZ>
           <RotationX>0</RotationX>
           <RotationY>270</RotationY>
           <RotationZ>90</RotationZ>
@@ -641,7 +641,7 @@
           <Active>True</Active>
         </CylinderX>
         <Name>X_Handle</Name>
-        <PositionX>-1.505</PositionX>
+        <PositionX>-0.505</PositionX>
         <PositionY>0.25</PositionY>
         <PositionZ>0.48</PositionZ>
         <RotationX>90</RotationX>
@@ -650,14 +650,14 @@
         <ScaleX>0.5</ScaleX>
         <ScaleY>0.5</ScaleY>
         <ScaleZ>0.5</ScaleZ>
-        <Active>False</Active>
+        <Active>True</Active>
       </X_Handle>
       <Y_Handle>
         <CylinderY>
           <Name>CylinderY</Name>
-          <PositionX>0</PositionX>
-          <PositionY>-1.65</PositionY>
-          <PositionZ>0.251</PositionZ>
+          <PositionX>2.563E-06</PositionX>
+          <PositionY>-1.650193</PositionY>
+          <PositionZ>0.2510004</PositionZ>
           <RotationX>270</RotationX>
           <RotationY>0</RotationY>
           <RotationZ>0</RotationZ>
@@ -669,24 +669,24 @@
         <Name>Y_Handle</Name>
         <PositionX>0.46</PositionX>
         <PositionY>0.25</PositionY>
-        <PositionZ>-1.5</PositionZ>
+        <PositionZ>-0.5</PositionZ>
         <RotationX>90</RotationX>
         <RotationY>0</RotationY>
         <RotationZ>0</RotationZ>
         <ScaleX>0.5</ScaleX>
         <ScaleY>0.5000005</ScaleY>
         <ScaleZ>0.5000005</ScaleZ>
-        <Active>False</Active>
+        <Active>True</Active>
       </Y_Handle>
       <Z_Handle>
         <Minus>
           <Name>Minus</Name>
-          <PositionX>-1.52</PositionX>
-          <PositionY>-1.64</PositionY>
-          <PositionZ>0.251</PositionZ>
+          <PositionX>-1.519996</PositionX>
+          <PositionY>-1.640071</PositionY>
+          <PositionZ>0.2509999</PositionZ>
           <RotationX>0</RotationX>
           <RotationY>0</RotationY>
-          <RotationZ>0</RotationZ>
+          <RotationZ>4.781133E-05</RotationZ>
           <ScaleX>1.449926</ScaleX>
           <ScaleY>1.45</ScaleY>
           <ScaleZ>0.5</ScaleZ>
@@ -694,28 +694,28 @@
         </Minus>
         <Plus>
           <Name>Plus</Name>
-          <PositionX>1.57</PositionX>
-          <PositionY>-1.64</PositionY>
-          <PositionZ>0.251</PositionZ>
+          <PositionX>1.570062</PositionX>
+          <PositionY>-1.640096</PositionY>
+          <PositionZ>0.2510001</PositionZ>
           <RotationX>0</RotationX>
           <RotationY>0</RotationY>
-          <RotationZ>0</RotationZ>
+          <RotationZ>4.781133E-05</RotationZ>
           <ScaleX>1.467143</ScaleX>
           <ScaleY>1.450047</ScaleY>
           <ScaleZ>0.5000398</ScaleZ>
           <Active>True</Active>
         </Plus>
         <Name>Z_Handle</Name>
-        <PositionX>-1.5</PositionX>
+        <PositionX>-0.5</PositionX>
         <PositionY>0.25</PositionY>
-        <PositionZ>-1.5</PositionZ>
+        <PositionZ>-0.5</PositionZ>
         <RotationX>90</RotationX>
         <RotationY>45</RotationY>
         <RotationZ>0</RotationZ>
         <ScaleX>0.5000008</ScaleX>
         <ScaleY>0.5000008</ScaleY>
         <ScaleZ>0.5000011</ScaleZ>
-        <Active>False</Active>
+        <Active>True</Active>
       </Z_Handle>
       <CoverCollider>
         <Name>CoverCollider</Name>
@@ -731,16 +731,16 @@
         <Active>True</Active>
       </CoverCollider>
       <Name>Marker3</Name>
-      <PositionX>0.435636</PositionX>
-      <PositionY>0.8057886</PositionY>
-      <PositionZ>-0.1081198</PositionZ>
+      <PositionX>-0.008817496</PositionX>
+      <PositionY>0.6425427</PositionY>
+      <PositionZ>-0.01310028</PositionZ>
       <RotationX>0</RotationX>
-      <RotationY>78</RotationY>
+      <RotationY>325</RotationY>
       <RotationZ>0</RotationZ>
       <ScaleX>0.05</ScaleX>
       <ScaleY>0.05</ScaleY>
       <ScaleZ>0.05</ScaleZ>
-      <Active>False</Active>
+      <Active>True</Active>
     </Marker3>
     <Marker4>
       <greenCube>
@@ -978,16 +978,16 @@
         <Active>True</Active>
       </CoverCollider>
       <Name>Marker4</Name>
-      <PositionX>0.7055691</PositionX>
-      <PositionY>0.8197669</PositionY>
-      <PositionZ>-0.08712592</PositionZ>
+      <PositionX>-0.242</PositionX>
+      <PositionY>0</PositionY>
+      <PositionZ>0</PositionZ>
       <RotationX>0</RotationX>
-      <RotationY>46</RotationY>
+      <RotationY>0</RotationY>
       <RotationZ>0</RotationZ>
       <ScaleX>0.05</ScaleX>
       <ScaleY>0.05</ScaleY>
       <ScaleZ>0.05</ScaleZ>
-      <Active>True</Active>
+      <Active>False</Active>
     </Marker4>
     <Marker5>
       <greenCube>
@@ -1225,16 +1225,16 @@
         <Active>True</Active>
       </CoverCollider>
       <Name>Marker5</Name>
-      <PositionX>0.4340099</PositionX>
-      <PositionY>0.8018385</PositionY>
-      <PositionZ>0.0241414</PositionZ>
+      <PositionX>-0.242</PositionX>
+      <PositionY>0</PositionY>
+      <PositionZ>0</PositionZ>
       <RotationX>0</RotationX>
-      <RotationY>70</RotationY>
+      <RotationY>0</RotationY>
       <RotationZ>0</RotationZ>
       <ScaleX>0.05</ScaleX>
       <ScaleY>0.05</ScaleY>
       <ScaleZ>0.05</ScaleZ>
-      <Active>True</Active>
+      <Active>False</Active>
     </Marker5>
     <Marker6>
       <greenCube>
@@ -1472,16 +1472,16 @@
         <Active>True</Active>
       </CoverCollider>
       <Name>Marker6</Name>
-      <PositionX>0.3575831</PositionX>
-      <PositionY>0.8014775</PositionY>
-      <PositionZ>-0.1049707</PositionZ>
+      <PositionX>-0.242</PositionX>
+      <PositionY>0</PositionY>
+      <PositionZ>0</PositionZ>
       <RotationX>0</RotationX>
-      <RotationY>81</RotationY>
+      <RotationY>0</RotationY>
       <RotationZ>0</RotationZ>
       <ScaleX>0.05</ScaleX>
       <ScaleY>0.05</ScaleY>
       <ScaleZ>0.05</ScaleZ>
-      <Active>True</Active>
+      <Active>False</Active>
     </Marker6>
     <Marker7>
       <greenCube>
@@ -24713,5 +24713,5 @@
     <ScaleZ>1</ScaleZ>
     <Active>True</Active>
   </TableObject>
-  <globalBuildingScale>4</globalBuildingScale>
+  <globalBuildingScale>800</globalBuildingScale>
 </AR2COMPOSER_SCENE>

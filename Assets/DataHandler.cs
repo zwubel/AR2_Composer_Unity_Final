@@ -69,15 +69,17 @@ public class DataHandler : MonoBehaviour {
 
     public void copyProperties2GameMarker(){
         for (int i = 0; i < instancedMarkers.Count; i++){
-            GameObject instance = (GameObject)instancedMarkers[i];
-            GameObject tracked = (GameObject)trackedMarkers[i];
-            instance.transform.localRotation = Quaternion.FromToRotation(instance.transform.localRotation.eulerAngles, tracked.transform.localRotation.eulerAngles);
-            tracked.transform.localRotation = instance.transform.localRotation;
-            tracked.transform.FindChild("X_Handle").transform.localPosition = instance.transform.FindChild("X_Handle").transform.localPosition;
-            tracked.transform.FindChild("Y_Handle").transform.localPosition = instance.transform.FindChild("Y_Handle").transform.localPosition;
-            tracked.transform.FindChild("Pivot").transform.localScale = instance.transform.FindChild("Pivot").transform.localScale;
+            if(trackedMarkers[i] != null) { 
+                GameObject instance = (GameObject)instancedMarkers[i];
+                GameObject tracked = (GameObject)trackedMarkers[i];
+                instance.transform.localRotation = Quaternion.FromToRotation(instance.transform.localRotation.eulerAngles, tracked.transform.localRotation.eulerAngles);
+                tracked.transform.localRotation = instance.transform.localRotation;
+                tracked.transform.FindChild("X_Handle").transform.localPosition = instance.transform.FindChild("X_Handle").transform.localPosition;
+                tracked.transform.FindChild("Y_Handle").transform.localPosition = instance.transform.FindChild("Y_Handle").transform.localPosition;
+                tracked.transform.FindChild("Pivot").transform.localScale = instance.transform.FindChild("Pivot").transform.localScale;
+            }
         }
-    }
+    }    
 
     public void deleteMarkerDuplicates(){
         for (int i = 0; i < instancedMarkers.Count; i++)
@@ -87,9 +89,8 @@ public class DataHandler : MonoBehaviour {
                 Debug.Log("MarkerDuplicate removed: " + temp.name);
             Destroy(temp);
         }
-        trackedMarkers.Clear();
+        instancedMarkers.Clear();
     }
-
 
     // Use this for initialization
     void Start () {
