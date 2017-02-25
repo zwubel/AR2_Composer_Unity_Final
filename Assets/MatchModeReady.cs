@@ -17,14 +17,14 @@ public class MatchModeReady : MonoBehaviour {
         if (IsReadyForCopy == true){
             DH.addInstancedMarker(gameObject);
             DH.addTrackedMarker(trackedMarker);
-            greenCube.GetComponent<MatchMode>().colorStart = new Color(0.8f, 0, 0);
-            greenCube.GetComponent<MatchMode>().colorEnd = new Color(0.5f, 0, 0);
+            greenCube.GetComponent<MatchMode>().colorStart = new Color(0, 0.8f, 0);
+            greenCube.GetComponent<MatchMode>().colorEnd = new Color(0, 0.5f, 0);            
         }
         if (IsReadyForCopy == false){
             DH.removeInstancedMarker(gameObject);
             DH.removeTrackedMarker(trackedMarker);
-            greenCube.GetComponent<MatchMode>().colorStart = new Color(0, 0.8f, 0);
-            greenCube.GetComponent<MatchMode>().colorEnd = new Color(0, 0.5f, 0);
+            greenCube.GetComponent<MatchMode>().colorStart = new Color(0.8f, 0, 0);
+            greenCube.GetComponent<MatchMode>().colorEnd = new Color(0.5f, 0, 0);
         }
     }
 

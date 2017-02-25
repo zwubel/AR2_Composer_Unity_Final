@@ -28,44 +28,8 @@ public class TableCalibration : MonoBehaviour{
         calibrateBoth = status;
     }
 
-    void Start(){
-        //controllerExceptionThrown = false;
-    }
-
-    //// This is called by ControllerPos.cs when the trigger on
-    //// the right vive controller is pressed during calibration
-    //public void setPosition(Vector3 position){
-    //    int statusReceived = networkData.receiveTCPstatus();
-    //    switch (statusReceived){
-    //        case (int)readInNetworkData.TCPstatus.arucoFound1:
-    //            if(!LLset && !URset) {
-    //                lowerLeft = position;
-    //                LLset = true;
-    //                StartCoroutine(LongVibration(0.2f, 3999));
-    //                Debug.Log("[PLANE CALIBRATION] Lower left corner calibrated to " + position);
-    //            }else{
-    //                Debug.LogError("[PLANE CALIBRATION] Lower left corner: received status arucoFound1," +
-    //                    " but one position has already been set.");
-    //            }
-    //            break;
-    //        case (int)readInNetworkData.TCPstatus.arucoFound2:
-    //            if (LLset && !URset){
-    //                upperRight = position;
-    //                URset = true;
-    //                StartCoroutine(LongVibration(0.5f, 3999));
-    //                System.Threading.Thread.Sleep(2000);
-    //                Debug.Log("[PLANE CALIBRATION] Upper right corner calibrated to " + position);
-    //            }else{
-    //                Debug.LogError("[PLANE CALIBRATION] Upper right corner: received status arucoFound2," +
-    //                    " but either lower left has not been set yet or upper right already has been.");
-    //            }
-    //            break;
-    //        case (int)readInNetworkData.TCPstatus.arucoNotFound: Debug.LogError("[PLANE CALIBRATION] " +
-    //            "AruCo marker not found, please try again."); break;
-    //        case -1: Debug.LogError("[PLANE CALIBRATION] Failed, because of a socket error."); break;
-    //        default: Debug.LogError("[PLANE CALIBRATION] Unknown status received: " + statusReceived); break;
-    //    }
-    //}
+    void Start(){     
+    }    
 
     // This is called by ControllerPos.cs when the trigger on
     // the right vive controller is pressed during calibration

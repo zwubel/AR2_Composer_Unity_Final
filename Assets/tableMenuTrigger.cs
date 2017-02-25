@@ -123,15 +123,9 @@ public class tableMenuTrigger : MonoBehaviour
     }
 
     void Update(){
-        //if (savebutton.GetComponent<tableMenuTrigger>().getSavedCubesCounter()== savebutton.GetComponent<tableMenuTrigger>().instancedMarkers.Count && applybutton.activeSelf == false)
-        //{
-        //   // Debug.Log("SavedCubesCounter " + savebutton.GetComponent<tableMenuTrigger>().getSavedCubesCounter() + "instancedMarkers " + GameObject.Find("TableMenuButtons_Save").gameObject.GetComponent<tableMenuTrigger>().instancedMarkers.Count);
-        //    //start copy properties
-        //    Sprite greyedSave = Resources.Load("TableMenuButtons_Save_Greyed_Out", typeof(Sprite)) as Sprite;
-        //    savebutton.GetComponent<SpriteRenderer>().sprite = greyedSave;
-        //    Sprite apply = Resources.Load("TableMenuButtons_Apply", typeof(Sprite)) as Sprite;
-        //    applybutton.GetComponent<SpriteRenderer>().sprite = greyedSave;
-            
-        //}
+        if (DH.getSavedCubesCounter() != 0 && DH.getSavedCubesCounter() == DH.instancedMarkers.Count){
+            applybutton.SetActive(true);
+        }else
+            applybutton.SetActive(false);
     }
 }

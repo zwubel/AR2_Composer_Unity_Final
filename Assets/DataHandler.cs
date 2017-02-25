@@ -8,20 +8,16 @@ public class DataHandler : MonoBehaviour {
     public int SavedCubesCounter;
     public bool debug = false;
 
-    public void addInstancedMarker(GameObject cube)
-    {
-        if (!instancedMarkers.Contains(cube))
-        {
+    public void addInstancedMarker(GameObject cube){
+        if (!instancedMarkers.Contains(cube)){
             instancedMarkers.Add(cube);
             if(debug)
                 Debug.Log("We added the instanced marker: " + cube.name);
         }
     }
 
-    public void addTrackedMarker(GameObject cube)
-    {
-        if (!trackedMarkers.Contains(cube))
-        {
+    public void addTrackedMarker(GameObject cube){
+        if (!trackedMarkers.Contains(cube)){
             trackedMarkers.Add(cube);
             if (debug)
                 Debug.Log("We added tracked: " + cube.name);
@@ -32,8 +28,7 @@ public class DataHandler : MonoBehaviour {
     {
         Object O = (Object)cube;
         object o = (object)O;
-        if (instancedMarkers.Contains(o))
-        {
+        if (instancedMarkers.Contains(o)){
             instancedMarkers.Remove(cube);
             if (debug)
                 Debug.Log("We removed instance: " + cube.name);
@@ -88,12 +83,10 @@ public class DataHandler : MonoBehaviour {
         for (int i = 0; i < instancedMarkers.Count; i++)
         {
             GameObject temp = (GameObject)instancedMarkers[i];
-            instancedMarkers.RemoveAt(i);
             if (debug)
                 Debug.Log("MarkerDuplicate removed: " + temp.name);
             Destroy(temp);
         }
-
         trackedMarkers.Clear();
     }
 

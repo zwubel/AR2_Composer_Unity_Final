@@ -1,5 +1,5 @@
 <AR2COMPOSER_SCENE>
-  <time>2-24-2017 8-05-53 PM</time>
+  <time>2-25-2017 9-50-12 AM</time>
   <TableObject>
     <Marker1>
       <greenCube>
@@ -237,16 +237,16 @@
         <Active>True</Active>
       </CoverCollider>
       <Name>Marker1</Name>
-      <PositionX>0.4838094</PositionX>
-      <PositionY>0.6544209</PositionY>
-      <PositionZ>-0.1893222</PositionZ>
+      <PositionX>0.6071899</PositionX>
+      <PositionY>0.8166867</PositionY>
+      <PositionZ>-0.1637534</PositionZ>
       <RotationX>0</RotationX>
-      <RotationY>145</RotationY>
+      <RotationY>42</RotationY>
       <RotationZ>0</RotationZ>
       <ScaleX>0.05</ScaleX>
       <ScaleY>0.05</ScaleY>
       <ScaleZ>0.05</ScaleZ>
-      <Active>True</Active>
+      <Active>False</Active>
     </Marker1>
     <Marker2>
       <greenCube>
@@ -484,16 +484,16 @@
         <Active>True</Active>
       </CoverCollider>
       <Name>Marker2</Name>
-      <PositionX>0.5900549</PositionX>
-      <PositionY>0.6575961</PositionY>
-      <PositionZ>-0.08003506</PositionZ>
+      <PositionX>0.2941651</PositionX>
+      <PositionY>0.799674</PositionY>
+      <PositionZ>-0.1606043</PositionZ>
       <RotationX>0</RotationX>
-      <RotationY>305</RotationY>
+      <RotationY>35</RotationY>
       <RotationZ>0</RotationZ>
       <ScaleX>0.05</ScaleX>
       <ScaleY>0.05</ScaleY>
       <ScaleZ>0.05</ScaleZ>
-      <Active>True</Active>
+      <Active>False</Active>
     </Marker2>
     <Marker3>
       <greenCube>
@@ -731,11 +731,11 @@
         <Active>True</Active>
       </CoverCollider>
       <Name>Marker3</Name>
-      <PositionX>-0.242</PositionX>
-      <PositionY>0</PositionY>
-      <PositionZ>0</PositionZ>
+      <PositionX>0.435636</PositionX>
+      <PositionY>0.8057886</PositionY>
+      <PositionZ>-0.1081198</PositionZ>
       <RotationX>0</RotationX>
-      <RotationY>0</RotationY>
+      <RotationY>78</RotationY>
       <RotationZ>0</RotationZ>
       <ScaleX>0.05</ScaleX>
       <ScaleY>0.05</ScaleY>
@@ -978,16 +978,16 @@
         <Active>True</Active>
       </CoverCollider>
       <Name>Marker4</Name>
-      <PositionX>-0.242</PositionX>
-      <PositionY>0</PositionY>
-      <PositionZ>0</PositionZ>
+      <PositionX>0.7055691</PositionX>
+      <PositionY>0.8197669</PositionY>
+      <PositionZ>-0.08712592</PositionZ>
       <RotationX>0</RotationX>
-      <RotationY>0</RotationY>
+      <RotationY>46</RotationY>
       <RotationZ>0</RotationZ>
       <ScaleX>0.05</ScaleX>
       <ScaleY>0.05</ScaleY>
       <ScaleZ>0.05</ScaleZ>
-      <Active>False</Active>
+      <Active>True</Active>
     </Marker4>
     <Marker5>
       <greenCube>
@@ -1225,16 +1225,16 @@
         <Active>True</Active>
       </CoverCollider>
       <Name>Marker5</Name>
-      <PositionX>-0.242</PositionX>
-      <PositionY>0</PositionY>
-      <PositionZ>0</PositionZ>
+      <PositionX>0.4340099</PositionX>
+      <PositionY>0.8018385</PositionY>
+      <PositionZ>0.0241414</PositionZ>
       <RotationX>0</RotationX>
-      <RotationY>0</RotationY>
+      <RotationY>70</RotationY>
       <RotationZ>0</RotationZ>
       <ScaleX>0.05</ScaleX>
       <ScaleY>0.05</ScaleY>
       <ScaleZ>0.05</ScaleZ>
-      <Active>False</Active>
+      <Active>True</Active>
     </Marker5>
     <Marker6>
       <greenCube>
@@ -1472,16 +1472,16 @@
         <Active>True</Active>
       </CoverCollider>
       <Name>Marker6</Name>
-      <PositionX>-0.242</PositionX>
-      <PositionY>0</PositionY>
-      <PositionZ>0</PositionZ>
+      <PositionX>0.3575831</PositionX>
+      <PositionY>0.8014775</PositionY>
+      <PositionZ>-0.1049707</PositionZ>
       <RotationX>0</RotationX>
-      <RotationY>0</RotationY>
+      <RotationY>81</RotationY>
       <RotationZ>0</RotationZ>
       <ScaleX>0.05</ScaleX>
       <ScaleY>0.05</ScaleY>
       <ScaleZ>0.05</ScaleZ>
-      <Active>False</Active>
+      <Active>True</Active>
     </Marker6>
     <Marker7>
       <greenCube>

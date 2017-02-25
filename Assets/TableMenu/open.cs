@@ -7,9 +7,11 @@ public class open : MonoBehaviour {
     public DataHandler DH;
     public bool debug = false;
 	private String projectPath;
+    private GameObject tableObject;
 
     void Start () {
         projectPath = Application.dataPath + "/Resources/";
+        tableObject = GameObject.Find("TableObject");        
     }
 
     // Crawl through all nodes
@@ -44,17 +46,18 @@ public class open : MonoBehaviour {
                 Debug.Log("Original Marker ID:" + originalID);
                 Debug.Log("Original marker name: " + node.Name);
             }
-            GameObject originalCube = GameObject.Find(node.Name);
+            GameObject originalCube = tableObject.transform.FindChild(node.Name).gameObject;
             
             if (originalCube != null){
                 if (debug)
                     Debug.Log("Instanciating marker: " + originalID);
                 GameObject newMarker = Instantiate(originalCube);
-             
+                newMarker.SetActive(true);
+
                 DH.increaseSavedCubesCounter();
                
                 newMarker.name = "Marker" + (originalID + 100);
-                newMarker.transform.parent = GameObject.Find("TableObject").transform;                                
+                newMarker.transform.parent = tableObject.transform;
 
                 // Position
                 float PosX = float.Parse(node.ChildNodes.Item(8).InnerText, System.Globalization.CultureInfo.CurrentCulture);
@@ -126,7 +129,7 @@ public class open : MonoBehaviour {
 		openXml(gameObject.name);
 	}   
 
-	public void openXml(String filePath){		
+	public void openXml(String filePath){
 		String fullFilePath = projectPath + "/saves/" + filePath;
 
         // Read XML file

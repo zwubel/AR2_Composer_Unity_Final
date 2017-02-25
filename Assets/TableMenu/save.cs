@@ -24,9 +24,7 @@ public class save : MonoBehaviour {
 
 		String timeStamp = System.DateTime.Now.ToString();
 		timeStamp = timeStamp.Replace("/", "-");
-		timeStamp = timeStamp.Replace(":", "-");
-
-        Directory.CreateDirectory(Application.dataPath + "/Resources/saves/");
+		timeStamp = timeStamp.Replace(":", "-");        
 
         filepath  = Application.dataPath + "/Resources/saves/" + timeStamp +".xml";
         if (debug){

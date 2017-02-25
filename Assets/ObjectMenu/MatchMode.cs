@@ -13,8 +13,8 @@ public class MatchMode : MonoBehaviour {
     void Start () {
 		rend = gameObject.GetComponent<Renderer>();
         tableObject = GameObject.Find("TableObject");
-        colorStart = new Color(0, 0.8f, 0);
-        colorEnd = new Color(0, 0.5f, 0);
+        colorStart = new Color(0.5f, 0, 0);
+        colorEnd = new Color(0.8f, 0, 0); 
     }
 
     public void setMatchMode(bool state){

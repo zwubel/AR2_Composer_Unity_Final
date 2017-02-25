@@ -38,6 +38,7 @@ public class setupScene : MonoBehaviour{
     private Vector3 calibratedUR;
     private bool calibDone;
     private Plane workspacePlane;
+    private bool calibrationInProgress;
 
     // State for the main loop
     public enum state { planeCalib, poseAndPlaneCalib, startScene }
@@ -64,6 +65,15 @@ public class setupScene : MonoBehaviour{
 
     public float getFloorHeight(){
         return floorHeight;
+    }
+
+    public bool getCalibrationInProgress(){
+        return calibrationInProgress;
+    }
+
+    public void setCalibrationInProgress (bool state) {
+        calibrationInProgress = state;
+
     }
 
     //public void noCalibration(){
@@ -236,12 +246,14 @@ public class setupScene : MonoBehaviour{
         tableMenuParent.transform.localPosition = new Vector3(tableMenuParent.transform.localPosition.x, 0, tableMenuParent.transform.localPosition.z);
         tableMenuParent.transform.localRotation = Quaternion.Euler(new Vector3(90, 0, 0));
 
-        calibDone = true;
+        calibrationInProgress = false;
+        calibDone = true;        
     }
 
     void Start() {
         // Initialization
         calibDone = false;
+        calibrationInProgress = false;
         tableCalib.enabled = false;        
         networkMarkersPrevFrame = new Marker[0];
         networkData = gameObject.GetComponent<readInNetworkData>();
@@ -338,6 +350,7 @@ public class setupScene : MonoBehaviour{
 
                 // MENU SELECTION: 'Workspace' in 'SelectCalibrationTarget' scene
                 case (int)state.planeCalib:
+                    calibrationInProgress = true;
                     Debug.Log("[STATE LOOP] Entered state: planeCalib");
                     tableCalib.enabled = true;
                     controllerPos.enabled = true;
@@ -347,6 +360,7 @@ public class setupScene : MonoBehaviour{
                 
                 // MENU SELECTION: 'Workspace and camera' in 'SelectCalibrationTarget' scene
                 case (int)state.poseAndPlaneCalib:
+                    calibrationInProgress = true;
                     SceneManager.LoadScene("doPoseCalibInVS", LoadSceneMode.Additive);
                     Debug.Log("[STATE LOOP] Entered state: poseAndPlaneCalib");
                     networkData.sendTCPstatus((int)readInNetworkData.TCPstatus.planeAndPoseCalib);
