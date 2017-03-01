@@ -1,0 +1,10 @@
+Controller position 1:
+0.5377047
+0.6395711
+-0.1903224
+
+
+ Controller position2:
+0.741363
+0.6437523
+-0.1583912

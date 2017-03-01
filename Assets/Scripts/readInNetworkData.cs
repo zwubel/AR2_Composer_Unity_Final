@@ -31,7 +31,7 @@ public class readInNetworkData : MonoBehaviour {
 
     // TCP status enum for sending AND receiving statuses
     public enum TCPstatus { planeAndPoseCalib, planeOnlyCalib, sceneStart, planeCalibDone,
-        poseCalibDone, controllerButtonPressed, arucoFound1, arucoFound2, arucoNotFound, reCalib };
+        poseCalibDone, controllerButtonPressed, arucoFound, arucoNotFound, reCalib };
     private bool sceneStarted;
 
     public void setHostIP(string ipAddress){
@@ -88,6 +88,20 @@ public class readInNetworkData : MonoBehaviour {
             Debug.LogError("[TCP] Failed to send status, because the socket is not ready: " + status);
     }
 
+    // Send calibrated position over TCP
+    public void sendCalibPosition(Vector3 position){
+        if (socketReady){
+            byte[] writeBuffer = new byte[12];
+            System.Buffer.BlockCopy(System.BitConverter.GetBytes(position.x), 0, writeBuffer, 0, 4);
+            System.Buffer.BlockCopy(System.BitConverter.GetBytes(position.y), 0, writeBuffer, 4, 4);
+            System.Buffer.BlockCopy(System.BitConverter.GetBytes(position.z), 0, writeBuffer, 8, 4);
+            theStream.Write(writeBuffer, 0, 12);
+            Debug.Log("[TCP] Calibrated position sent: (" + position.x + ", " + position.y  + ", " + position.z + ")");
+        }
+        else
+            Debug.LogError("[TCP] Failed to send calibrated position, because the socket is not ready.");
+    }
+
     // Receive status over TCP according to TCPstatus enum
     public int receiveTCPstatus(){
         if (socketReady){
@@ -123,23 +137,24 @@ public class readInNetworkData : MonoBehaviour {
                 continue;
             }
             if (curID == -1) { // Marker is empty
-                markers[i / bytesPerMarker] = new Marker(-1, 0.0f, 0.0f, 0.0f, 0);
+                markers[i / bytesPerMarker] = new Marker(-1, 0.0f, 0.0f, 0.0f, 0.0f, 0);
                 continue;
             }
             if (curID == -2){ // End of frame reached
                 if(printMarkerDebugInfo)
                     Debug.Log("[READ IN NETWORK DATA] Last marker reached, suspending loop for current frame.");
                 frameCounter++; // This is counted even if showMarkerDebugInfo is false, so that it can be enabled at any time
-                markers[i / bytesPerMarker] = new Marker(-2, 0.0f, 0.0f, 0.0f, 0); // Set last marker as EOF (end of frame)
+                markers[i / bytesPerMarker] = new Marker(-2, 0.0f, 0.0f, 0.0f, 0.0f, 0); // Set last marker as EOF (end of frame)
                 break;                                                                 // and suspend loop
             }else if (curID < -2 || curID > markersToReceive){ // For debugging, this should not happen during normal operation
                 Debug.LogError("[READ IN NETWORK DATA] Marker ID not valid: " + curID);
             }else{ // ID is valid and does not mark the end of the frame
                 float curPosX = System.BitConverter.ToSingle(readBuffer, i + 4); // Convert the x-position
                 float curPosY = System.BitConverter.ToSingle(readBuffer, i + 8); // Convert the y-position
-                float curAngle = System.BitConverter.ToSingle(readBuffer, i + 12); // Conver the angle
-                int status = System.BitConverter.ToInt32(readBuffer, i + 16); // Convert the status of the marker
-                markers[i / bytesPerMarker] = new Marker(curID, curPosX, curPosY, curAngle, status); // Add new marker to array
+                float curPosZ = System.BitConverter.ToSingle(readBuffer, i + 12); // Convert the y-position
+                float curAngle = System.BitConverter.ToSingle(readBuffer, i + 16); // Conver the angle
+                int status = System.BitConverter.ToInt32(readBuffer, i + 20); // Convert the status of the marker
+                markers[i / bytesPerMarker] = new Marker(curID, curPosX, curPosY, curPosZ, curAngle, status); // Add new marker to array
                 oneMarkerSet = true;    // Give permission to use marker array since at least
                                         // one marker has been set for the current frame
                 TCPText.text = markers[i / bytesPerMarker].toStr(); // Set text on object menu canvas

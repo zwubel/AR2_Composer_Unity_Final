@@ -1,15 +1,19 @@
-﻿public class Marker {
+﻿using UnityEngine;
+
+public class Marker {
 
     private int ID;
     private float posX;
     private float posY;
+    private float posZ;
     private float angle;
-    private int status;    
+    private int status;
 
-    public Marker(int ID, float posX, float posY, float angle, int status){
+    public Marker(int ID, float posX, float posY, float posZ, float angle, int status){
         this.ID = ID;
         this.posX = posX;
         this.posY = posY;
+        this.posZ = posZ;
         this.angle = angle;
         this.status = status;
     }
@@ -24,6 +28,10 @@
 
     public float getPosY(){
         return this.posY;
+    }
+
+    public float getPosZ(){
+        return this.posZ;
     }
 
     public float getAngle(){
