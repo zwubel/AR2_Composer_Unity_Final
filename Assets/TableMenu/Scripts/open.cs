@@ -8,6 +8,7 @@ public class open : MonoBehaviour {
     public bool debug = false;
 	private String projectPath;
     private GameObject tableObject;
+    public setupScene setupScene;
 
     void Start () {
         projectPath = Application.dataPath + "/Resources/";
@@ -114,14 +115,13 @@ public class open : MonoBehaviour {
                 MatchMode matchMode = greenCube.GetComponent<MatchMode>();
                 greenCube.GetComponent<BoxCollider>().enabled = false;
                 matchMode.setMatchMode(true);
-                matchMode.enabled = true;
-
-                // Load global building scale
-                float buildingScale = float.Parse(nodes[2].InnerText, System.Globalization.CultureInfo.CurrentCulture);
-                if(debug)
-                    Debug.Log("Loaded global building scale: " + buildingScale);
-                GameObject.FindObjectOfType<setupScene>().setGlobalBuildingScale(buildingScale);
+                matchMode.enabled = true;                
             }
+            // Load global building scale
+            float buildingScale = (float.Parse(nodes[2].InnerText, System.Globalization.CultureInfo.CurrentCulture)) / 200;
+            setupScene.setGlobalBuildingScale(buildingScale);
+            if (debug)
+                Debug.Log("Loaded global building scale: " + buildingScale);
         }
     }
 

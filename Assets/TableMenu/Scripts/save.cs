@@ -44,7 +44,7 @@ public class save : MonoBehaviour {
         traverseHirarchy(tableObject, root); //.. and recursive traverse all the childs
 
         XmlNode globalBuildingScale = doc.CreateNode("element", "globalBuildingScale", "");
-        globalBuildingScale.InnerText = GameObject.Find("SetupScene").GetComponent<setupScene>().globalBuildingScale.ToString();
+        globalBuildingScale.InnerText = GameObject.Find("SetupScene").GetComponent<setupScene>().getGlobalBuildingScale().ToString();
         root.AppendChild(globalBuildingScale);
         if (debug) { 
             Debug.Log ("Objects crawled!");

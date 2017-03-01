@@ -26,7 +26,7 @@ public class setupScene : MonoBehaviour{
     [Header("Scene Settings")]
     // Maximum number of markers that can be displayed (virtual markers)
     private int markersToRender;
-    public float globalBuildingScale;
+    private float globalBuildingScale;
     public float floorHeight;
 
     // Global scale of each marker to fit size of virtual to real markers
@@ -61,7 +61,7 @@ public class setupScene : MonoBehaviour{
 
     public void setGlobalBuildingScale(float value){
         globalBuildingScale = value * 200; // Value mapped to 1:200 being the
-                                           // "original" size of the markers        
+                                           // "original" size of the markers
     }
 
     public float getFloorHeight(){

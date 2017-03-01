@@ -80,15 +80,13 @@ public class DataHandler : MonoBehaviour {
 
     public void copyProperties2GameMarker(){
         for (int i = 0; i < instancedMarkers.Count; i++){
-            if(trackedMarkers[i] != null) { 
-                GameObject instance = (GameObject)instancedMarkers[i];
-                GameObject tracked = (GameObject)trackedMarkers[i];
-                instance.transform.localRotation = Quaternion.FromToRotation(instance.transform.localRotation.eulerAngles, tracked.transform.localRotation.eulerAngles);
-                tracked.transform.localRotation = instance.transform.localRotation;
-                tracked.transform.FindChild("X_Handle").transform.localPosition = instance.transform.FindChild("X_Handle").transform.localPosition;
-                tracked.transform.FindChild("Y_Handle").transform.localPosition = instance.transform.FindChild("Y_Handle").transform.localPosition;
-                tracked.transform.FindChild("Pivot").transform.localScale = instance.transform.FindChild("Pivot").transform.localScale;
-            }
+            GameObject instance = (GameObject)instancedMarkers[i];
+            GameObject tracked = (GameObject)trackedMarkers[i];
+            instance.transform.localRotation = Quaternion.FromToRotation(instance.transform.localRotation.eulerAngles, tracked.transform.localRotation.eulerAngles);
+            tracked.transform.localRotation = instance.transform.localRotation;
+            tracked.transform.FindChild("X_Handle").transform.localPosition = instance.transform.FindChild("X_Handle").transform.localPosition;
+            tracked.transform.FindChild("Y_Handle").transform.localPosition = instance.transform.FindChild("Y_Handle").transform.localPosition;
+            tracked.transform.FindChild("Pivot").transform.localScale = instance.transform.FindChild("Pivot").transform.localScale;
         }
     }    
 
