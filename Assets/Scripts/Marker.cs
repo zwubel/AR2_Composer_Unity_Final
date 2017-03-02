@@ -64,7 +64,7 @@ public class Marker {
 
     public string toStr(){
         return "Marker " + this.ID + " data:\n" +
-            "\tPosition: (" + this.posX + "/" + this.posY + ")\n" +
+            "\tPosition: (" + this.posX + ", " + this.posY + ", " + this.posZ +  ")\n" +
             "\tAngle: " + this.angle + "\n\tStatus: " + status;
     }
 

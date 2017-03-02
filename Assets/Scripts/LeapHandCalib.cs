@@ -4,36 +4,29 @@ public class LeapHandCalib : MonoBehaviour {
     public GameObject rightHand;
     public SteamVR_TrackedObject trackedObj;
     private SteamVR_Controller.Device controllerdevice;
-    private bool controllerFailed;
     private bool heightSet;
+    private Transform tablePlane;
 
     void Start () {
-        Debug.Log("Put your right hand on the table and press key \"c\" to cablibrate Leap Height.");
-        controllerFailed = false;
-        heightSet = false;        
+        heightSet = false;
+        tablePlane = null;// GameObject.Find("TableObject").transform.FindChild("TablePlane");
     }
 	
 	void Update () {
-        if (!heightSet) { 
-            if(trackedObj.gameObject.activeSelf){
-                controllerdevice = SteamVR_Controller.Input((int)trackedObj.index);
-                if (controllerdevice.GetPressDown(SteamVR_Controller.ButtonMask.Trigger)){
-                    float posHand = rightHand.transform.position.y;
-                    float plane = GameObject.Find("TableObject").transform.FindChild("TablePlane").position.y;
-                    gameObject.transform.position += new Vector3(gameObject.transform.position.x, plane - posHand, gameObject.transform.position.z);
-                    heightSet = true;
+        if (!heightSet) {
+            if (trackedObj.gameObject.activeSelf){
+                if (tablePlane == null) { 
+                    tablePlane = GameObject.Find("TableObject").transform.FindChild("TablePlane");
+                }else{
+                    controllerdevice = SteamVR_Controller.Input((int)trackedObj.index);
+                    if (controllerdevice.GetPressDown(SteamVR_Controller.ButtonMask.Trigger)){
+                        float newY = tablePlane.position.y - rightHand.transform.position.y;
+                        gameObject.transform.position += new Vector3(gameObject.transform.position.x, newY, gameObject.transform.position.z);
+                        heightSet = true;
+                        Debug.Log("Leap height set.");
+                    }
                 }
-            }
+            }                
         }
-        
-
-        //if (Input.GetKeyDown(KeyCode.C)) {
-        //    Debug.Log("Pressed C Key");
-        //   float posHand= rightHand.transform.position.y;
-        //   float plane = GameObject.Find("TablePlane").transform.position.y;
-        //    gameObject.transform.position += new Vector3( gameObject.transform.position.x, plane - posHand, gameObject.transform.position.z);
-        //   Debug.Log("Leap height calibrated with " + (plane-posHand).ToString());
-        //}
-
     }
 }

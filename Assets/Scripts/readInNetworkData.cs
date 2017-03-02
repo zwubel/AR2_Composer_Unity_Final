@@ -26,18 +26,13 @@ public class readInNetworkData : MonoBehaviour {
     // This is overwritten by inspector input
     [Header("Data Stream Settings")]
     public int markersToReceive = 100; // This multiplied by bytesPerMarker has to match
-    public int bytesPerMarker = 20;  // the length of the byte array that is sent over TCP
+    public int bytesPerMarker = 24;  // the length of the byte array that is sent over TCP
     public bool printMarkerDebugInfo = false;
 
     // TCP status enum for sending AND receiving statuses
     public enum TCPstatus { planeAndPoseCalib, planeOnlyCalib, sceneStart, planeCalibDone,
         poseCalibDone, controllerButtonPressed, arucoFound, arucoNotFound, reCalib };
     private bool sceneStarted;
-
-    public void setHostIP(string ipAddress){
-        Host = ipAddress;
-        Debug.Log("NEW ip: " + ipAddress);
-    }
 
     // Return markers array (is called by setupScene.cs)
     public Marker[] getMarkers() {
@@ -49,6 +44,7 @@ public class readInNetworkData : MonoBehaviour {
         return markersToReceive;
     }
 
+    // Return whether a network connection has been set up successfully
     public bool getSocketReady(){
         return socketReady;
     }
@@ -61,7 +57,7 @@ public class readInNetworkData : MonoBehaviour {
         sceneStarted = false;
     }
 
-    // This is called by the menu that starts the normal tracking and rendering operation
+    // This is called by the 'SetScale' menu
     public void setSceneStarted(bool status){
         sceneStarted = status;
     }
@@ -88,13 +84,13 @@ public class readInNetworkData : MonoBehaviour {
             Debug.LogError("[TCP] Failed to send status, because the socket is not ready: " + status);
     }
 
-    // Send calibrated position over TCP
+    // Send calibrated position over TCP during workspace calibration
     public void sendCalibPosition(Vector3 position){
         if (socketReady){
             byte[] writeBuffer = new byte[12];
-            System.Buffer.BlockCopy(System.BitConverter.GetBytes(position.x), 0, writeBuffer, 0, 4);
-            System.Buffer.BlockCopy(System.BitConverter.GetBytes(position.y), 0, writeBuffer, 4, 4);
-            System.Buffer.BlockCopy(System.BitConverter.GetBytes(position.z), 0, writeBuffer, 8, 4);
+            System.Buffer.BlockCopy(System.BitConverter.GetBytes(position.x), 0, writeBuffer, 0, 4); // X float value
+            System.Buffer.BlockCopy(System.BitConverter.GetBytes(position.y), 0, writeBuffer, 4, 4); // Y float value
+            System.Buffer.BlockCopy(System.BitConverter.GetBytes(position.z), 0, writeBuffer, 8, 4); // Z float value
             theStream.Write(writeBuffer, 0, 12);
             Debug.Log("[TCP] Calibrated position sent: (" + position.x + ", " + position.y  + ", " + position.z + ")");
         }
@@ -102,7 +98,10 @@ public class readInNetworkData : MonoBehaviour {
             Debug.LogError("[TCP] Failed to send calibrated position, because the socket is not ready.");
     }
 
-    // Receive status over TCP according to TCPstatus enum
+    // Receive status over TCP according to TCPstatus enum.
+    // The function waits for a status to be received when it's called. This means that the thread halts
+    // and the Unity GUI freezes up. Since there's nothing else to do until the status is received, though, 
+    // this is as intended.
     public int receiveTCPstatus(){
         if (socketReady){
             while (!theStream.DataAvailable){
@@ -119,7 +118,7 @@ public class readInNetworkData : MonoBehaviour {
         return -1;
     }
 
-    // Returns the number of bytes that have been read from the stream in int
+    // Returns the number of bytes that have been read from the stream
     private int receiveTCPdata(){
         if (socketReady && theStream.DataAvailable){
             readBuffer = new byte[readBufferLength];
@@ -142,7 +141,7 @@ public class readInNetworkData : MonoBehaviour {
             }
             if (curID == -2){ // End of frame reached
                 if(printMarkerDebugInfo)
-                    Debug.Log("[READ IN NETWORK DATA] Last marker reached, suspending loop for current frame.");
+                    Debug.Log("[READ IN NETWORK DATA] End of frame.");
                 frameCounter++; // This is counted even if showMarkerDebugInfo is false, so that it can be enabled at any time
                 markers[i / bytesPerMarker] = new Marker(-2, 0.0f, 0.0f, 0.0f, 0.0f, 0); // Set last marker as EOF (end of frame)
                 break;                                                                 // and suspend loop
@@ -151,7 +150,7 @@ public class readInNetworkData : MonoBehaviour {
             }else{ // ID is valid and does not mark the end of the frame
                 float curPosX = System.BitConverter.ToSingle(readBuffer, i + 4); // Convert the x-position
                 float curPosY = System.BitConverter.ToSingle(readBuffer, i + 8); // Convert the y-position
-                float curPosZ = System.BitConverter.ToSingle(readBuffer, i + 12); // Convert the y-position
+                float curPosZ = System.BitConverter.ToSingle(readBuffer, i + 12); // Convert the z-position
                 float curAngle = System.BitConverter.ToSingle(readBuffer, i + 16); // Conver the angle
                 int status = System.BitConverter.ToInt32(readBuffer, i + 20); // Convert the status of the marker
                 markers[i / bytesPerMarker] = new Marker(curID, curPosX, curPosY, curPosZ, curAngle, status); // Add new marker to array
@@ -165,7 +164,7 @@ public class readInNetworkData : MonoBehaviour {
     }
 
     void Update(){
-        if (sceneStarted) { // Controlled by unity menu "thirdmenu"
+        if (sceneStarted) { // Controlled by unity menu "SetScale"
             setupScene.setMarkerArraySet(false); // Reset for next frame
             oneMarkerSet = false;                // Reset for next frame
             if (receiveTCPdata() == readBufferLength){ // Receive marker data via TCP

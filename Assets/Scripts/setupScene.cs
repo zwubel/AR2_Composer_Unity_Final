@@ -32,7 +32,7 @@ public class setupScene : MonoBehaviour{
     // Global scale of each marker to fit size of virtual to real markers
     //public float markerScale = 0.05f;
     public float planeHeightOffset = -0.023f;
-    public float markerHeightOffset = -0.023f;
+    //public float markerHeightOffset = -0.023f;
 
     // Calibrated positions for plane
     private Vector3 calibratedLL;
@@ -60,8 +60,7 @@ public class setupScene : MonoBehaviour{
     }
 
     public void setGlobalBuildingScale(float value){
-        globalBuildingScale = value * 200; // Value mapped to 1:200 being the
-                                           // "original" size of the markers
+        globalBuildingScale = value * 200; // Value mapped to 1:200
     }
 
     public float getFloorHeight(){
@@ -74,20 +73,16 @@ public class setupScene : MonoBehaviour{
 
     public void setCalibrationInProgress (bool state) {
         calibrationInProgress = state;
-
     }
 
     public void noCalibration(){
         Debug.Log("[SETUP SCENE] No Calibration has been selected. Loading saved information.");
         string[] planeCalibDatText = System.IO.File.ReadAllLines(Application.dataPath + "/Resources/planeCalibData.txt");
-        if (planeCalibDatText.Length != 6)
-        {
+        if (planeCalibDatText.Length != 6){
             Debug.LogError("[SETUP SCENE] 'No calibration' has been selected, but no valid text file has been read.");
             SceneManager.UnloadSceneAsync(SceneManager.GetSceneByName("CalibrateOrNot"));
             SceneManager.LoadScene("SelectCalibrationTarget", LoadSceneMode.Additive);
-        }
-        else
-        {
+        }else{
             Vector3 lowerLeft = new Vector3();
             Vector3 upperRight = new Vector3();
             lowerLeft.x = float.Parse(planeCalibDatText[0]);
@@ -125,24 +120,30 @@ public class setupScene : MonoBehaviour{
         float width = Math.Abs(calibratedUR.x - calibratedLL.x);
         float height = Math.Abs(calibratedUR.z - calibratedLL.z);
         Vector3 position = new Vector3( (calibratedLL.x + calibratedUR.x) / 2,
-                                        (calibratedLL.y + calibratedUR.y) / 2,
+                                        ((calibratedLL.y + calibratedUR.y) / 2) + planeHeightOffset,
                                         (calibratedLL.z + calibratedUR.z) / 2
                                       );
         table.transform.position = position;
+
+        // A PrimitiveType.Plane is instantiated as 10x10 in the XZ plane,
+        // therefore we need to bring it down to one in either direction
         table.transform.localScale = new Vector3(width / 10, 1, height / 10);
         table.GetComponent<MeshCollider>().enabled = false;        
 
+        // Put table menu next to table plane
         GameObject tableMenuParent = GameObject.Find("TableMenuParent");
-        tableMenuParent.transform.parent = table.transform;
-        
+        tableMenuParent.transform.parent = table.transform;        
         tableMenuParent.transform.position = new Vector3((position.x + width / 2), 0, position.z - height / 2);
         tableMenuParent.transform.localPosition = new Vector3(tableMenuParent.transform.localPosition.x, 0, tableMenuParent.transform.localPosition.z);
         tableMenuParent.transform.localRotation = Quaternion.Euler(new Vector3(90, 0, 0));
 
         calibrationInProgress = false;
-        calibDone = true;        
+        calibDone = true;
     }
 
+    // This is called when a new calibration is done, because
+    // the old saves are not compatible with a newly calibrated
+    // camera and/or workspace.
     private void deleteSavesDir(){
         string path = Application.dataPath + "/Resources/saves/";
         if (Directory.Exists(path)) { 
@@ -167,7 +168,7 @@ public class setupScene : MonoBehaviour{
         createMarkers();
     }
 
-    // Create markers (cubes)
+    // Create marker GameObjects
     private void createMarkers(){        
         GameObject MarkerMaster = GameObject.Find("MarkerMaster");
         for (int i = 1; i < markersToRender; i++)
@@ -181,33 +182,10 @@ public class setupScene : MonoBehaviour{
     }
 
     // Set whether the marker array has been filled
+    // (is called from readInNetworkData.cs)
     public void setMarkerArraySet(bool state){
         markerArraySet = state;
     }
-
-    //// Returns the position on the plane for the tracked (normalized) marker position
-    //private Vector3 getCalibratedMarkerPos(Vector3 position){
-    //    // Linear interpolation of X
-    //    float xMin = calibratedLL.x;
-    //    float xMax = calibratedUR.x;
-    //    float newX = xMin + position.x * (xMax - xMin);        
-
-    //    // Linear interpolation of Z
-    //    float zMin = calibratedUR.z;
-    //    float zMax = calibratedLL.z;
-    //    float newZ = zMin + position.z * (zMax - zMin);
-
-    //    // New Y-value
-    //    //Ray ray = new Ray(new Vector3(newX, 0.0f, newZ), Vector3.up);
-    //    //float rayDistance;
-    //    //workspacePlane.Raycast(ray, out rayDistance);
-    //    //float newY = rayDistance;
-
-    //    float newY = (calibratedUR.y + calibratedLL.y) / 2;
-    //    newY += markerHeightOffset;
-
-    //    return new Vector3(newX, newY, newZ);
-    //}
 
     private void renderMarkersFromTCP(){
         if (markerArraySet){
@@ -225,10 +203,10 @@ public class setupScene : MonoBehaviour{
                 if (cur.getID() == -2) // End of frame reached
                     break;
 
-                markerCubes[i].transform.position = new Vector3(cur.getPosX(), cur.getPosY(), cur.getPosZ());
+                markerCubes[i].transform.position = new Vector3(cur.getPosX(), table.transform.position.y, cur.getPosZ());
                 markerCubes[i].transform.rotation = Quaternion.Euler(0.0f, cur.getAngle(), 0.0f);
-
-                if (cur.getStatus() == 1 || markerCubes[i].transform.FindChild("CoverCollider").GetComponent<CoverController>().isTriggeredMarker()) // Is marker visible?
+                
+                if (cur.getStatus() == 1 || markerCubes[i].transform.FindChild("CoverCollider").GetComponent<CoverController>().isTriggeredMarker())
                     markerCubes[i].SetActive(true);
                 else
                     markerCubes[i].SetActive(false);
@@ -279,10 +257,5 @@ public class setupScene : MonoBehaviour{
                 default: Debug.Log("[STATE LOOP] State loop: no state specified."); break;
             }
         }
-    }
-
-    private void SceneManager_sceneLoaded(Scene arg0, LoadSceneMode arg1)
-    {
-        throw new NotImplementedException();
     }
 }

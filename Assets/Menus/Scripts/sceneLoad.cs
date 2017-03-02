@@ -21,7 +21,7 @@ public class sceneLoad : MonoBehaviour {
         Directory.CreateDirectory(Application.dataPath + "/Resources/saves/");
         SceneManager.LoadScene("AR2_Composer_Unity_Final", LoadSceneMode.Single);
         SceneManager.LoadScene("CalibrateOrNot", LoadSceneMode.Additive);
-        SceneManager.UnloadSceneAsync("Welcome");
+        //SceneManager.UnloadSceneAsync("Welcome");
     }
 
     public void loadWithSocketCheck(string target){

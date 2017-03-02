@@ -5,6 +5,7 @@ using UnityEngine.SceneManagement;
 public class TableCalibration : MonoBehaviour{
     
     private int foundCalibMarkers;
+    public int calibrationSamples;
 
     [Header("Dependencies")]
     public setupScene setupScene;
@@ -21,7 +22,6 @@ public class TableCalibration : MonoBehaviour{
     public Vector3 additionalLowerRight;
     private bool calibrateBoth;
     private Vector3[] calibPositions;
-    //public Vector3 positionOffsetAruco;
 
     private Vector3 controllerPos1;
     private Vector3 controllerPos2;
@@ -32,22 +32,22 @@ public class TableCalibration : MonoBehaviour{
 
     void Start(){
         foundCalibMarkers = 0;
-        calibPositions = new Vector3[20];
+        calibPositions = new Vector3[calibrationSamples];
     }    
 
     // This is called by ControllerPos.cs when the trigger on
     // the right vive controller is pressed during calibration
     public void setPosition(Vector3 position){
-        if (foundCalibMarkers < 20){
+        if (foundCalibMarkers < calibrationSamples){
             int statusReceived = networkData.receiveTCPstatus();
             switch (statusReceived){
                 case (int)readInNetworkData.TCPstatus.arucoFound:
                     networkData.sendCalibPosition(position);
                     calibPositions[foundCalibMarkers] = position;
-                    if(foundCalibMarkers != 19)
+                    if(foundCalibMarkers != calibrationSamples - 1)
                         StartCoroutine(LongVibration(0.2f, 3999));
                     else
-                        StartCoroutine(LongVibration(0.5f, 3999));
+                        StartCoroutine(LongVibration(1f, 3999));
                     Debug.Log("[PLANE CALIBRATION] Position " + (foundCalibMarkers + 1) + " calibrated to ("
                         + position.x + ", " + position.y + ", " + position.z + ")");
                     foundCalibMarkers++;
@@ -66,6 +66,7 @@ public class TableCalibration : MonoBehaviour{
         }
     }
 
+    // Continue to 'CalibDone' menu
     private void loadNextScene(){
         if (networkData.receiveTCPstatus() == (int)readInNetworkData.TCPstatus.planeCalibDone){
             SceneManager.UnloadSceneAsync(SceneManager.GetSceneByName("doPlaneCalibInVS"));
@@ -81,9 +82,10 @@ public class TableCalibration : MonoBehaviour{
         calibrateBoth = false;
     }
 
+    // Go to 'ControllerNotFound'
     private void loadPreviousScene(){
         SceneManager.UnloadSceneAsync(SceneManager.GetSceneByName("doPlaneCalibInVS"));
-        SceneManager.LoadScene("SelectCalibrationTarget", LoadSceneMode.Additive);
+        SceneManager.LoadScene("ControllerNotFound", LoadSceneMode.Additive);
 
         // Disable controller position script
         controllerPos.enabled = false;
@@ -95,14 +97,14 @@ public class TableCalibration : MonoBehaviour{
     }
 
     void Update() {
-        // If both calibrations have been selected, do pose calibration first
+        // If both camera and workspace calibration have been selected, do camera calibration first...
         if (calibrateBoth) {
-            calibrateBoth = false;            
+            calibrateBoth = false;
             if (networkData.receiveTCPstatus() == (int)readInNetworkData.TCPstatus.poseCalibDone) {
                 SceneManager.UnloadSceneAsync(SceneManager.GetSceneByName("doPoseCalibInVS"));
                 SceneManager.LoadScene("doPlaneCalibInVS", LoadSceneMode.Additive);                
             }
-            // and then the workspace calibration
+            // ...and then the workspace calibration
         } else {
             // Needed for haptic feedback
             if (!trackedObj.gameObject.activeSelf){ // Check whether controller is switched on
@@ -112,12 +114,8 @@ public class TableCalibration : MonoBehaviour{
                 controllerdevice = SteamVR_Controller.Input((int)trackedObj.index);
             }         
 
-            if (foundCalibMarkers > 19){ // Workspace calibration successful
+            if (foundCalibMarkers > calibrationSamples - 1){ // Workspace calibration successful
                 Debug.Log("Plane calibration: completed successfully.");
-
-                // Tell setupScene that the calibration has been
-                // completed and load / unload corresponding scenes
-                setupScene.calibrationDone(calibPositions[0], calibPositions[1]);
 
                 // Write text file                
                 string[] CalibPos = {   "" + calibPositions[0].x, "" + calibPositions[0].y, "" + calibPositions[0].z,
@@ -127,6 +125,27 @@ public class TableCalibration : MonoBehaviour{
                         file.WriteLine(line);
                     }
                 }
+                // Tell setupScene that the calibration has been
+                // completed and load / unload corresponding scenes
+                setupScene.calibrationDone(calibPositions[0], calibPositions[1]);
+
+                GameObject corner0 = GameObject.CreatePrimitive(PrimitiveType.Cylinder);
+                corner0.name = "Corner0";
+                corner0.transform.localScale = new Vector3(0.1f, 0.1f, 0.1f);
+                corner0.transform.position = calibPositions[0];
+                GameObject corner1 = GameObject.CreatePrimitive(PrimitiveType.Cylinder);
+                corner1.name = "Corner1";
+                corner1.transform.localScale = new Vector3(0.1f, 0.1f, 0.1f);
+                corner1.transform.position = calibPositions[1];
+                GameObject corner2 = GameObject.CreatePrimitive(PrimitiveType.Cylinder);
+                corner2.name = "Corner2";
+                corner2.transform.localScale = new Vector3(0.1f, 0.1f, 0.1f);
+                corner2.transform.position = calibPositions[2];
+                GameObject corner3 = GameObject.CreatePrimitive(PrimitiveType.Cylinder);
+                corner3.name = "Corner3";
+                corner3.transform.localScale = new Vector3(0.1f, 0.1f, 0.1f);
+                corner3.transform.position = calibPositions[3];
+
                 foundCalibMarkers = 0;
                 loadNextScene();
             }
