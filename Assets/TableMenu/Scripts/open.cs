@@ -28,7 +28,7 @@ public class open : MonoBehaviour {
 
                 for (int j = 0; j < markers.Count -11; j++) // Skip last 11 items (position/scale/rot) of TableObject node
                 {
-                    if(markers.Item(j).ChildNodes.Item(17).InnerText == "True")
+                    if(markers.Item(j).ChildNodes.Item(16).InnerText == "True")
                     {
                         activeMarkerIDs.Add(j);
                         if(debug)
@@ -61,15 +61,15 @@ public class open : MonoBehaviour {
                 newMarker.transform.parent = tableObject.transform;
 
                 // Position
-                float PosX = float.Parse(node.ChildNodes.Item(8).InnerText, System.Globalization.CultureInfo.CurrentCulture);
-                float PosY = float.Parse(node.ChildNodes.Item(9).InnerText, System.Globalization.CultureInfo.CurrentCulture);
-                float PosZ = float.Parse(node.ChildNodes.Item(10).InnerText, System.Globalization.CultureInfo.CurrentCulture);
+                float PosX = float.Parse(node.ChildNodes.Item(7).InnerText, System.Globalization.CultureInfo.CurrentCulture);
+                float PosY = float.Parse(node.ChildNodes.Item(8).InnerText, System.Globalization.CultureInfo.CurrentCulture);
+                float PosZ = float.Parse(node.ChildNodes.Item(9).InnerText, System.Globalization.CultureInfo.CurrentCulture);
                 newMarker.transform.localPosition = new Vector3(PosX, PosY, PosZ);
 
                 // Rotation
-                float RotX = float.Parse(node.ChildNodes.Item(11).InnerText, System.Globalization.CultureInfo.CurrentCulture);
-                float RotY = float.Parse(node.ChildNodes.Item(12).InnerText, System.Globalization.CultureInfo.CurrentCulture);
-                float RotZ = float.Parse(node.ChildNodes.Item(13).InnerText, System.Globalization.CultureInfo.CurrentCulture);
+                float RotX = float.Parse(node.ChildNodes.Item(10).InnerText, System.Globalization.CultureInfo.CurrentCulture);
+                float RotY = float.Parse(node.ChildNodes.Item(11).InnerText, System.Globalization.CultureInfo.CurrentCulture);
+                float RotZ = float.Parse(node.ChildNodes.Item(12).InnerText, System.Globalization.CultureInfo.CurrentCulture);
                 newMarker.transform.localRotation = Quaternion.Euler(new Vector3(RotX, RotY, RotZ));
                 
                 // Pivot

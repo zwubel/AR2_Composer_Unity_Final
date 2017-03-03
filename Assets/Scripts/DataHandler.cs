@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
+//This script handles the data for saving and opening scenes with the table menu
 public class DataHandler : MonoBehaviour {
     public ArrayList instancedMarkers;
     public ArrayList trackedMarkers;
@@ -9,16 +10,19 @@ public class DataHandler : MonoBehaviour {
     public bool debug = false;
     private ArrayList additionalMarkers;
 
+    //Destroys all gameobjects of the markers
     public void deleteAllMarkers(){
         foreach (Object GO in additionalMarkers)
             Destroy((GameObject)GO);
     }
 
+    //Adds an marker object
     public void addAdditionalMarker(GameObject marker)
     {
         additionalMarkers.Add(marker);
     }
 
+    //Adds Instanciated markers 
     public void addInstancedMarker(GameObject cube){
         if (!instancedMarkers.Contains(cube)){
             instancedMarkers.Add(cube);
@@ -27,6 +31,7 @@ public class DataHandler : MonoBehaviour {
         }
     }
 
+    //Adds TCP controlled markers 
     public void addTrackedMarker(GameObject cube){
         if (!trackedMarkers.Contains(cube)){
             trackedMarkers.Add(cube);
@@ -35,6 +40,7 @@ public class DataHandler : MonoBehaviour {
         }
     }
 
+    //Removes an instanciated marker
     public void removeInstancedMarker(GameObject cube)
     {
         Object O = (Object)cube;
@@ -46,6 +52,7 @@ public class DataHandler : MonoBehaviour {
         }
     }
 
+    //Removes an TCP controlled marker
     public void removeTrackedMarker(GameObject cube)
     {
         Object O = (Object)cube;
@@ -58,26 +65,32 @@ public class DataHandler : MonoBehaviour {
         }
     }
 
+    //Counter handler
     public void increaseSavedCubesCounter()
     {
         SavedCubesCounter++;
     }
 
+    //Counter getter
     public int getSavedCubesCounter()
     {
         return SavedCubesCounter;
     }
-
+    
+    //Returns number of active instanciated markers
     public int getNumberOfActiveMarker()
     {
         return instancedMarkers.Count;
     }
 
+    //Returns true if gameobject is attached to an instanciated marker
     public bool isInsideActiveMarker(GameObject gameobject)
     {
         return instancedMarkers.Contains(gameobject);
     }
 
+    //Copies marker properties from instanciated markers (the marker which are loaded by opening a scene and wich contains all the saved 
+    //marker informations) to the tcp controlled markers
     public void copyProperties2GameMarker(){
         for (int i = 0; i < instancedMarkers.Count; i++){
             GameObject instance = (GameObject)instancedMarkers[i];
@@ -90,6 +103,7 @@ public class DataHandler : MonoBehaviour {
         }
     }    
 
+    //Checkout dublicated markers
     public void deleteMarkerDuplicates(){
         for (int i = 0; i < instancedMarkers.Count; i++)
         {

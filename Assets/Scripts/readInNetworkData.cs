@@ -151,7 +151,7 @@ public class readInNetworkData : MonoBehaviour {
                 float curPosX = System.BitConverter.ToSingle(readBuffer, i + 4); // Convert the x-position
                 float curPosY = System.BitConverter.ToSingle(readBuffer, i + 8); // Convert the y-position
                 float curPosZ = System.BitConverter.ToSingle(readBuffer, i + 12); // Convert the z-position
-                float curAngle = System.BitConverter.ToSingle(readBuffer, i + 16); // Conver the angle
+                float curAngle = System.BitConverter.ToSingle(readBuffer, i + 16); // Convert the angle
                 int status = System.BitConverter.ToInt32(readBuffer, i + 20); // Convert the status of the marker
                 markers[i / bytesPerMarker] = new Marker(curID, curPosX, curPosY, curPosZ, curAngle, status); // Add new marker to array
                 oneMarkerSet = true;    // Give permission to use marker array since at least

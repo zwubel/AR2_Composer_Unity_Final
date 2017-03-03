@@ -10,10 +10,10 @@ public class setupScene : MonoBehaviour{
 
     // Marker data received over TCP
     private Marker[] networkMarkers;
-    private Marker[] networkMarkersPrevFrame;
+    //private Marker[] networkMarkersPrevFrame;
 
     private bool markerArraySet = false;
-    private GameObject table;
+    //private GameObject table;
     private GameObject parent;
 
     [Header("Dependencies")]
@@ -30,13 +30,13 @@ public class setupScene : MonoBehaviour{
     public float floorHeight;
 
     // Global scale of each marker to fit size of virtual to real markers
-    //public float markerScale = 0.05f;
-    public float planeHeightOffset = -0.023f;
-    //public float markerHeightOffset = -0.023f;
+    private float globalHeight;
 
-    // Calibrated positions for plane
-    private Vector3 calibratedLL;
-    private Vector3 calibratedUR;
+    // Calibrated positions for plane    
+    private Vector3 calibratedPos0;
+    private Vector3 calibratedPos1;
+    private Vector3 calibratedPos2;
+    private Vector3 calibratedPos3;
     private bool calibDone;
     private Plane workspacePlane;
     private bool calibrationInProgress;
@@ -53,6 +53,14 @@ public class setupScene : MonoBehaviour{
         statusChanged = true;
         doRender = false;
         Debug.Log("[STATE LOOP] State changed to: " + Enum.GetName(typeof(state), state));
+    }
+
+    public bool getCalibDone(){
+        return calibDone;
+    }
+
+    public float getGlobalHeight(){
+        return globalHeight;
     }
 
     public float getGlobalBuildingScale(){
@@ -75,27 +83,38 @@ public class setupScene : MonoBehaviour{
         calibrationInProgress = state;
     }
 
+    // Is called when 'no' is selected in 'CalibrateOrNot' menu
     public void noCalibration(){
         Debug.Log("[SETUP SCENE] No Calibration has been selected. Loading saved information.");
         string[] planeCalibDatText = System.IO.File.ReadAllLines(Application.dataPath + "/Resources/planeCalibData.txt");
-        if (planeCalibDatText.Length != 6){
+        if (planeCalibDatText.Length != 12){
             Debug.LogError("[SETUP SCENE] 'No calibration' has been selected, but no valid text file has been read.");
             SceneManager.UnloadSceneAsync(SceneManager.GetSceneByName("CalibrateOrNot"));
             SceneManager.LoadScene("SelectCalibrationTarget", LoadSceneMode.Additive);
         }else{
-            Vector3 lowerLeft = new Vector3();
-            Vector3 upperRight = new Vector3();
-            lowerLeft.x = float.Parse(planeCalibDatText[0]);
-            lowerLeft.y = float.Parse(planeCalibDatText[1]);
-            lowerLeft.z = float.Parse(planeCalibDatText[2]);
-            upperRight.x = float.Parse(planeCalibDatText[3]);
-            upperRight.y = float.Parse(planeCalibDatText[4]);
-            upperRight.z = float.Parse(planeCalibDatText[5]);
+            Vector3 pos0 = new Vector3();
+            Vector3 pos1 = new Vector3();
+            Vector3 pos2 = new Vector3();
+            Vector3 pos3 = new Vector3();
+            pos0.x = float.Parse(planeCalibDatText[0]);
+            pos0.y = float.Parse(planeCalibDatText[1]);
+            pos0.z = float.Parse(planeCalibDatText[2]);
+            pos1.x = float.Parse(planeCalibDatText[3]);
+            pos1.y = float.Parse(planeCalibDatText[4]);
+            pos1.z = float.Parse(planeCalibDatText[5]);
+            pos2.x = float.Parse(planeCalibDatText[6]);
+            pos2.y = float.Parse(planeCalibDatText[7]);
+            pos2.z = float.Parse(planeCalibDatText[8]);
+            pos3.x = float.Parse(planeCalibDatText[9]);
+            pos3.y = float.Parse(planeCalibDatText[10]);
+            pos3.z = float.Parse(planeCalibDatText[11]);
 
-            Debug.Log("[LOADING CALIBRATION DATA] lowerLeft: " + lowerLeft);
-            Debug.Log("[LOADING CALIBRATION DATA] upperRight: " + upperRight);
+            Debug.Log("[LOADING CALIBRATION DATA] Position 0: " + pos0);
+            Debug.Log("[LOADING CALIBRATION DATA] Position 1: " + pos1);
+            Debug.Log("[LOADING CALIBRATION DATA] Position 2: " + pos2);
+            Debug.Log("[LOADING CALIBRATION DATA] Position 3: " + pos3);
 
-            calibrationDone(lowerLeft, upperRight);
+            calibrationDone(pos0, pos1, pos2, pos3);
 
             SceneManager.UnloadSceneAsync(SceneManager.GetSceneByName("CalibrateOrNot"));
             SceneManager.LoadScene("SetScale", LoadSceneMode.Additive);
@@ -103,39 +122,44 @@ public class setupScene : MonoBehaviour{
     }
 
     // Is called when table calibration finishes (in TableCalibration.cs)
-    public void calibrationDone(Vector3 lowerLeft, Vector3 upperRight){
-        
+    public void calibrationDone(Vector3 pos0, Vector3 pos1, Vector3 pos2, Vector3 pos3){
+
         // Make plane corners available globally
-        calibratedLL = lowerLeft;
-        calibratedUR = upperRight;
+        calibratedPos0 = pos0;
+        calibratedPos1 = pos1;
+        calibratedPos2 = pos2;
+        calibratedPos3 = pos3;
 
-        GameObject alreadyCalibrated = GameObject.Find("TablePlane");
-        if (alreadyCalibrated != null)
-            Destroy(alreadyCalibrated);
+        // Create cylinders marking the corners of the workspace
+        GameObject cornerSprite = GameObject.Find("CornerSprite");
+        GameObject corner0 = Instantiate(cornerSprite);
+        corner0.name = "Corner0";
+        corner0.transform.position = pos0;
+        corner0.transform.localRotation = Quaternion.Euler(new Vector3(90.0f, 0.0f, 0.0f));
+        GameObject corner1 = Instantiate(cornerSprite);
+        corner0.name = "Corner1";
+        corner1.transform.position = pos1;
+        corner1.transform.localRotation = Quaternion.Euler(new Vector3(90.0f, 90.0f, 0.0f));
+        GameObject corner2 = Instantiate(cornerSprite);
+        corner0.name = "Corner2";
+        corner2.transform.position = pos2;
+        corner2.transform.localRotation = Quaternion.Euler(new Vector3(90.0f, 180.0f, 0.0f));
+        GameObject corner3 = Instantiate(cornerSprite);
+        corner0.name = "Corner3";
+        corner3.transform.position = pos3;
+        corner3.transform.localRotation = Quaternion.Euler(new Vector3(90.0f, 270.0f, 0.0f));
+        cornerSprite.SetActive(false);
 
-        // Create plane (table surface)
-        table = GameObject.CreatePrimitive(PrimitiveType.Plane);
-        table.name = "TablePlane";
-        table.transform.parent = parent.transform;
-        float width = Math.Abs(calibratedUR.x - calibratedLL.x);
-        float height = Math.Abs(calibratedUR.z - calibratedLL.z);
-        Vector3 position = new Vector3( (calibratedLL.x + calibratedUR.x) / 2,
-                                        ((calibratedLL.y + calibratedUR.y) / 2) + planeHeightOffset,
-                                        (calibratedLL.z + calibratedUR.z) / 2
-                                      );
-        table.transform.position = position;
-
-        // A PrimitiveType.Plane is instantiated as 10x10 in the XZ plane,
-        // therefore we need to bring it down to one in either direction
-        table.transform.localScale = new Vector3(width / 10, 1, height / 10);
-        table.GetComponent<MeshCollider>().enabled = false;        
-
-        // Put table menu next to table plane
+        // Put table menu next lower right corner cylinder
         GameObject tableMenuParent = GameObject.Find("TableMenuParent");
-        tableMenuParent.transform.parent = table.transform;        
-        tableMenuParent.transform.position = new Vector3((position.x + width / 2), 0, position.z - height / 2);
-        tableMenuParent.transform.localPosition = new Vector3(tableMenuParent.transform.localPosition.x, 0, tableMenuParent.transform.localPosition.z);
+        tableMenuParent.transform.position = new Vector3(   corner3.transform.position.x + 0.1f,
+                                                            corner3.transform.position.y,
+                                                            corner3.transform.position.z
+                                                        );
         tableMenuParent.transform.localRotation = Quaternion.Euler(new Vector3(90, 0, 0));
+
+        // Used for leap height calibration
+        globalHeight = (calibratedPos0.y + calibratedPos1.y + calibratedPos2.y + calibratedPos3.y) / 4;
 
         calibrationInProgress = false;
         calibDone = true;
@@ -157,7 +181,7 @@ public class setupScene : MonoBehaviour{
         calibDone = false;
         calibrationInProgress = false;
         tableCalib.enabled = false;        
-        networkMarkersPrevFrame = new Marker[0];
+        //networkMarkersPrevFrame = new Marker[0];
         networkData = gameObject.GetComponent<readInNetworkData>();
         markersToRender = networkData.getMarkersToReceive() + 1;
         markerCubes = new GameObject[markersToRender];
@@ -202,11 +226,11 @@ public class setupScene : MonoBehaviour{
                 }
                 if (cur.getID() == -2) // End of frame reached
                     break;
-
-                markerCubes[i].transform.position = new Vector3(cur.getPosX(), table.transform.position.y, cur.getPosZ());
+                
+                markerCubes[i].transform.position = new Vector3(cur.getPosX(), globalHeight, cur.getPosZ());
                 markerCubes[i].transform.rotation = Quaternion.Euler(0.0f, cur.getAngle(), 0.0f);
                 
-                if (cur.getStatus() == 1 || markerCubes[i].transform.FindChild("CoverCollider").GetComponent<CoverController>().isTriggeredMarker())
+                if (cur.getStatus() == 1)
                     markerCubes[i].SetActive(true);
                 else
                     markerCubes[i].SetActive(false);

@@ -2,6 +2,8 @@
 
 public class Marker {
 
+    //This class contains the marker informations and the getter and setter
+
     private int ID;
     private float posX;
     private float posY;

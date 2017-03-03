@@ -12,6 +12,7 @@ public class MatchModeReady : MonoBehaviour {
         greenCube = gameObject.transform.FindChild("greenCube").gameObject;
     }
 	
+    //Sets the status of the marker in the matchmode
     public void setReadyState(bool state, GameObject trackedMarker){
         IsReadyForCopy = state;
         if (IsReadyForCopy == true){

@@ -19,8 +19,8 @@ public class StopMatchmode : MonoBehaviour {
         myID = 0;
 	}
 	
+    //Calculates the id of the marker
     private void findMyID(GameObject marker){
-        string s = gameObject.transform.parent.transform.parent.name.Substring(6);
         myID = int.Parse(gameObject.transform.parent.transform.parent.name.Substring(6));
     }
 
@@ -43,7 +43,7 @@ public class StopMatchmode : MonoBehaviour {
     }
 
 
-    // Update is called once per frame
+    //Sets the marker as ready for copy, when all the 4 colliders are colliding with an TCP controlled marker
     void Update () {
         if (CubeA.GetComponent<StopMatchmode>().colliding == true && CubeB.GetComponent<StopMatchmode>().colliding == true && CubeC.GetComponent<StopMatchmode>().colliding == true && CubeD.GetComponent<StopMatchmode>().colliding == true){
             findMyID(gameObject);

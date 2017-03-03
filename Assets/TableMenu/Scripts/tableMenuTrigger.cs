@@ -5,7 +5,6 @@ using UnityEngine;
 public class tableMenuTrigger : MonoBehaviour
 {
     private bool triggering;
-    private Collider triggerCollider;
     public showTimeline showTimeline;
 
     public DataHandler DH;
@@ -38,13 +37,12 @@ public class tableMenuTrigger : MonoBehaviour
         triggering = false;
     }
 
-
+    //This function controlls the behaviour of the table menu when the different buttons are touched
     void OnTriggerEnter(Collider trigger){
         if (!triggering){
             if (trigger.gameObject.name == "bone3" || trigger.gameObject.name == "bone2" || trigger.gameObject.name == "bone1"){
                 triggering = true;
-                triggerCollider = trigger;
-                if (gameObject.transform.name == "TableMenuButtons_Cancel"){
+                if (gameObject.transform.name == "TableMenuButtons_Cancel"){ //cancel button
                     float actualMilis = Time.timeSinceLevelLoad;
                     if (actualMilis - lastContactCancel >= 2 && actualMilis - lastContactLoad >= 2){
                         DH.deleteAllMarkers();
@@ -52,7 +50,7 @@ public class tableMenuTrigger : MonoBehaviour
                         cancelbutton.SetActive(false);
                         lastContactCancel = Time.timeSinceLevelLoad;
                     }
-                }else if (gameObject.transform.name == "TableMenuButtons_Save"){
+                }else if (gameObject.transform.name == "TableMenuButtons_Save"){ //save button
                     float actualMilis = Time.timeSinceLevelLoad;
                     if (actualMilis - lastContactSave >= 2f){
                         gameObject.GetComponent<save>().saveScene();
@@ -61,7 +59,7 @@ public class tableMenuTrigger : MonoBehaviour
                         gameObject.GetComponent<Timeline>().initTimeline();
                         lastContactSave = Time.timeSinceLevelLoad;
                     }
-                }else if (gameObject.transform.name == "TableMenuButtons_Apply"){
+                }else if (gameObject.transform.name == "TableMenuButtons_Apply"){ //apply button
                     float actualMilis = Time.timeSinceLevelLoad;
                     if (actualMilis - lastContactSave >= 2f){
                         if (DH.SavedCubesCounter == DH.instancedMarkers.Count){
@@ -73,7 +71,7 @@ public class tableMenuTrigger : MonoBehaviour
                             cancelbutton.SetActive(false);
                         }
                     }
-                }else if (gameObject.transform.name.Contains("xml")) {
+                }else if (gameObject.transform.name.Contains("xml")) { //saved scenes buttons
                     float actualMilis = Time.timeSinceLevelLoad;
                     if (actualMilis - lastContactXML >= 2f) {
                         DH.deleteAllMarkers();
@@ -83,7 +81,7 @@ public class tableMenuTrigger : MonoBehaviour
                         cancelbutton.SetActive(true);
                         lastContactXML = Time.timeSinceLevelLoad;
                     }
-                }else if (gameObject.transform.name.Contains("TableMenuButtons_one2nine")){
+                }else if (gameObject.transform.name.Contains("TableMenuButtons_one2nine")){ //toggel button1
                     float actualMilis = Time.timeSinceLevelLoad;
                     if (actualMilis - lastContactsavedScenes >= 2f){
                         savedScenes.SetActive(true);
@@ -92,7 +90,7 @@ public class tableMenuTrigger : MonoBehaviour
                         savedScenes3.SetActive(false);
                         lastContactsavedScenes = Time.timeSinceLevelLoad;
                     }
-                }else if (gameObject.transform.name.Contains("TableMenuButtons_ten2nineteen")){
+                }else if (gameObject.transform.name.Contains("TableMenuButtons_ten2nineteen")){  //toggel button2
                     float actualMilis = Time.timeSinceLevelLoad;
                     if (actualMilis - lastContactsavedScenes1 >= 2f){
                         savedScenes.SetActive(false);
@@ -101,7 +99,7 @@ public class tableMenuTrigger : MonoBehaviour
                         savedScenes3.SetActive(false);
                         lastContactsavedScenes1 = Time.timeSinceLevelLoad;
                     }
-                }else if (gameObject.transform.name.Contains("TableMenuButtons_twenty2twentynine")){
+                }else if (gameObject.transform.name.Contains("TableMenuButtons_twenty2twentynine")){ //toggel button3
                     float actualMilis = Time.timeSinceLevelLoad;
                     if (actualMilis - lastContactsavedScenes2 >= 2f){
                         savedScenes.SetActive(false);
@@ -110,7 +108,7 @@ public class tableMenuTrigger : MonoBehaviour
                         savedScenes3.SetActive(false);
                         lastContactsavedScenes2 = Time.timeSinceLevelLoad;
                     }
-                }else if (gameObject.transform.name.Contains("TableMenuButtons_thirty2thirtynine")){
+                }else if (gameObject.transform.name.Contains("TableMenuButtons_thirty2thirtynine")){ //toggel button4
                     float actualMilis = Time.timeSinceLevelLoad;
                     if (actualMilis - lastContactsavedScenes3 >= 2f){
                         savedScenes.SetActive(false);
@@ -126,7 +124,6 @@ public class tableMenuTrigger : MonoBehaviour
 
     void OnTriggerExit(Collider trigger){
         triggering = false;
-        triggerCollider = null;
     }
 
     void Update(){

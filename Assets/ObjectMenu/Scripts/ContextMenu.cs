@@ -24,7 +24,7 @@ public class ContextMenu : MonoBehaviour
     Vector3 oriPos;
     private float floorHeight;
 
-    // Use this for initialization
+    // Setting the global building scale, wich was entered by the user in the beginning 
     void Start(){
         globalBuildingScale = setupSceneObj.getGlobalBuildingScale();
         cam = GameObject.Find("Camera (eye)").GetComponent<Camera>();
@@ -43,9 +43,8 @@ public class ContextMenu : MonoBehaviour
         floorHeight = setupSceneObj.getFloorHeight();
     }
 
-    // Update is called once per frame
+    // Setting the buildings parameters onto the context menu plane
     void Update(){
-        // cube = canvasTransform.transform.parent.transform.parent.FindChild("Pivot").gameObject;
         dims.x = cube.transform.localScale.x * displayValueOffset * globalBuildingScale;
         dims.y = cube.transform.localScale.y * displayValueOffset * globalBuildingScale;
         dims.z = cube.transform.localScale.z * displayValueOffset * globalBuildingScale;

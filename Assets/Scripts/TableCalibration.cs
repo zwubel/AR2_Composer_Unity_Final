@@ -119,7 +119,10 @@ public class TableCalibration : MonoBehaviour{
 
                 // Write text file                
                 string[] CalibPos = {   "" + calibPositions[0].x, "" + calibPositions[0].y, "" + calibPositions[0].z,
-                                        "" + calibPositions[1].x, "" + calibPositions[1].y, "" + calibPositions[1].z};
+                                        "" + calibPositions[1].x, "" + calibPositions[1].y, "" + calibPositions[1].z,
+                                        "" + calibPositions[2].x, "" + calibPositions[2].y, "" + calibPositions[2].z,
+                                        "" + calibPositions[3].x, "" + calibPositions[3].y, "" + calibPositions[3].z
+                                    };
                 using (System.IO.StreamWriter file = new System.IO.StreamWriter(Application.dataPath + "/Resources/planeCalibData.txt")){
                     foreach (string line in CalibPos){
                         file.WriteLine(line);
@@ -127,25 +130,7 @@ public class TableCalibration : MonoBehaviour{
                 }
                 // Tell setupScene that the calibration has been
                 // completed and load / unload corresponding scenes
-                setupScene.calibrationDone(calibPositions[0], calibPositions[1]);
-
-                GameObject corner0 = GameObject.CreatePrimitive(PrimitiveType.Cylinder);
-                corner0.name = "Corner0";
-                corner0.transform.localScale = new Vector3(0.1f, 0.1f, 0.1f);
-                corner0.transform.position = calibPositions[0];
-                GameObject corner1 = GameObject.CreatePrimitive(PrimitiveType.Cylinder);
-                corner1.name = "Corner1";
-                corner1.transform.localScale = new Vector3(0.1f, 0.1f, 0.1f);
-                corner1.transform.position = calibPositions[1];
-                GameObject corner2 = GameObject.CreatePrimitive(PrimitiveType.Cylinder);
-                corner2.name = "Corner2";
-                corner2.transform.localScale = new Vector3(0.1f, 0.1f, 0.1f);
-                corner2.transform.position = calibPositions[2];
-                GameObject corner3 = GameObject.CreatePrimitive(PrimitiveType.Cylinder);
-                corner3.name = "Corner3";
-                corner3.transform.localScale = new Vector3(0.1f, 0.1f, 0.1f);
-                corner3.transform.position = calibPositions[3];
-
+                setupScene.calibrationDone(calibPositions[0], calibPositions[1], calibPositions[2], calibPositions[3]);
                 foundCalibMarkers = 0;
                 loadNextScene();
             }

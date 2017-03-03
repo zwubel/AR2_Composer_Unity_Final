@@ -12,6 +12,7 @@ public class ControllerPos : MonoBehaviour
     void Start(){        
     }
 
+    //Sends the current Position of the ViveController 
     void Update(){
         if (setupSc.getCalibrationInProgress()){
             trackedObj = GetComponent<SteamVR_TrackedObject>();

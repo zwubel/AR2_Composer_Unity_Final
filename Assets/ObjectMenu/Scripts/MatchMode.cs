@@ -8,11 +8,9 @@ public class MatchMode : MonoBehaviour {
 	private Renderer rend;
     public GameObject Cube;
 	private bool matchMode;
-    private GameObject tableObject;
 
     void Start () {
 		rend = gameObject.GetComponent<Renderer>();
-        tableObject = GameObject.Find("TableObject");
         colorStart = new Color(0.5f, 0, 0);
         colorEnd = new Color(0.8f, 0, 0); 
     }
@@ -22,10 +20,9 @@ public class MatchMode : MonoBehaviour {
     }
 	
 
-	// Update is called once per frame
+	// If matchmode is active, controll the marker color and set all the unneccesary objects deactive
 	void Update () {
 		if (matchMode) {
-            //transform.parent.gameObject.SetActive (true);
             gameObject.GetComponent<BoxCollider>().enabled = false;
             transform.gameObject.SetActive(true);
             Cube.gameObject.SetActive(false);
@@ -37,7 +34,6 @@ public class MatchMode : MonoBehaviour {
             gameObject.transform.FindChild("CubeD").GetComponent<BoxCollider>().isTrigger = true;
 
         } else {
-            //transform.parent.gameObject.SetActive (false);
             gameObject.GetComponent<BoxCollider>().enabled = true;
             transform.gameObject.SetActive(false);
             Cube.gameObject.SetActive(true);

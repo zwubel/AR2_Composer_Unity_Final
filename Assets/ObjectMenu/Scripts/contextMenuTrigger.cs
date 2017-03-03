@@ -10,8 +10,8 @@ public class contextMenuTrigger : MonoBehaviour
     private bool showContextMenu;
     float lastContactGreenCube;
     float lastContactZ;
-    float lastContactX;
-    float lastContactY;
+    //float lastContactX;
+    //float lastContactY;
     Vector3 oldPosition;
     Vector3 startPosition;
     Vector3 handStartPosition;
@@ -21,8 +21,8 @@ public class contextMenuTrigger : MonoBehaviour
         startPosition = gameObject.transform.parent.transform.localPosition;
         lastContactGreenCube = Time.timeSinceLevelLoad;
         lastContactZ = Time.timeSinceLevelLoad;
-        lastContactX = Time.timeSinceLevelLoad;
-        lastContactY = Time.timeSinceLevelLoad;
+        //lastContactX = Time.timeSinceLevelLoad;
+        //lastContactY = Time.timeSinceLevelLoad;
 
         triggering = false;
         showContextMenu = false;
@@ -34,6 +34,7 @@ public class contextMenuTrigger : MonoBehaviour
         }
     }
 
+    //The userinteraction is controlled by collider
     void OnTriggerEnter(Collider trigger){
         if (!triggering){
             triggering = true;
@@ -61,6 +62,7 @@ public class contextMenuTrigger : MonoBehaviour
                     }
                 }
 
+               //Extdruding the building
                else if (gameObject.transform.name == "Plus")
                 {
                     float actualMilis = Time.timeSinceLevelLoad;
@@ -70,6 +72,7 @@ public class contextMenuTrigger : MonoBehaviour
                         lastContactZ = Time.timeSinceLevelLoad;
                     }
                 }
+                //De-extruding the building
                 else if (gameObject.transform.name == "Minus")
                 {
                     float actualMilis = Time.timeSinceLevelLoad;
@@ -102,6 +105,7 @@ public class contextMenuTrigger : MonoBehaviour
         {
             if (triggerCollider.gameObject.name == "bone3" || triggerCollider.gameObject.name == "bone2" || triggerCollider.gameObject.name == "bone1" && triggering == true)
             {
+                //Scaling the x size of the building
                 if (gameObject.transform.name == "CylinderX")
                 {
                     Vector3 goPosition = gameObject.transform.parent.transform.InverseTransformVector(triggerCollider.gameObject.transform.position);
@@ -109,6 +113,7 @@ public class contextMenuTrigger : MonoBehaviour
                     Vector3 localDifference = (hoPosition - goPosition);
                     gameObject.transform.parent.transform.localPosition = new Vector3((startPosition.x - localDifference.y) / 2, startPosition.y, startPosition.z);
 
+                //Scaling the y size of the building
                 }
                 else if (gameObject.transform.name == "CylinderY")
                 {

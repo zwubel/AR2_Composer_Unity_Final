@@ -14,6 +14,7 @@ public class printFPS : MonoBehaviour {
         deltaTime += (Time.deltaTime - deltaTime) * 0.1f;
     }
 
+    //Helper script, addes FPS support to GUI
     void OnGUI()
     {
         int w = Screen.width, h = Screen.height;

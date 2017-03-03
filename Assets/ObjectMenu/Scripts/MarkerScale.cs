@@ -30,12 +30,14 @@ public class MarkerScale : MonoBehaviour {
         floorHeight = setupSceneObj.getFloorHeight();
     }
 	
+    //Extruding the building
     public void extrudeBuilding(){
         float newHeight = gameObject.transform.localScale.y + floorHeight;
         if (newHeight > 25)
             newHeight = 25;
         gameObject.transform.localScale = new Vector3(gameObject.transform.localScale.x, newHeight, gameObject.transform.localScale.z);
     }
+    //De-Extruding the building
     public void deExtrudeBuilding(){
         float newHeight = gameObject.transform.localScale.y - floorHeight;
         if (newHeight < floorHeight)
@@ -45,11 +47,14 @@ public class MarkerScale : MonoBehaviour {
 
     // Update is called once per frame
     void Update () {
+
+        //Setting up the x scale
         newScale.x = originalPosXY.x - xHandle.localPosition.x + 2f; // Scale has to be one, not ZERO
         if (newScale.x < 1.0f){
             newScale.x = 1.0f;
             xHandle.localPosition = new Vector3(originalPosXY.x + 1, xHandle.localPosition.y, xHandle.transform.localPosition.z);
         }
+        //Setting up the y scale
         newScale.y = originalPosXY.y - yHandle.localPosition.z + 2f;
         if (newScale.y < 1.0f){
             newScale.y = 1.0f;
